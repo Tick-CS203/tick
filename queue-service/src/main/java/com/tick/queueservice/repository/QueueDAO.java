@@ -20,6 +20,7 @@ public class QueueDAO {
             HttpStatus.BAD_REQUEST,
             "missing fields"
         );
+
         template.opsForHash().put(HASH_KEY, queue.getId(), queue);
         return queue;
     }
