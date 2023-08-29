@@ -1,11 +1,15 @@
 package com.tick.venueservice;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import com.tick.venueservice.model.EventDate;
+import com.tick.venueservice.repository.EventDateRepository;
 
 @SpringBootApplication
 public class VenueServiceApplication {
@@ -15,7 +19,7 @@ public class VenueServiceApplication {
 	}
 
 	/* @Bean
-	CommandLineRunner runner(VenueRepository repository) {
+	CommandLineRunner runner(EventDateRepository repository) {
 		return args -> {
 			Map<String, Integer> rowsMap1 = new HashMap<String, Integer>();
 			rowsMap1.put("A", 30);
@@ -119,8 +123,8 @@ public class VenueServiceApplication {
 			categoryMap.put("CAT5", sectionMap5);
 			categoryMap.put("CAT6", sectionMap6);
 
-			Venue nationalStadium = new Venue("Singapore National Stadium", categoryMap);
-			repository.insert(nationalStadium);
+			EventDate ed = new EventDate("eventID1", "64ecb4ad17d89d593f3c5f2f", LocalDateTime.now(), categoryMap);
+			repository.insert(ed);
 		};
 	} */
 }

@@ -1,4 +1,4 @@
-package com.tick.venueservice;
+package com.tick.venueservice.controller;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.tick.venueservice.model.Venue;
+import com.tick.venueservice.service.VenueService;
 
 @RestController
 @RequestMapping("api/venue")

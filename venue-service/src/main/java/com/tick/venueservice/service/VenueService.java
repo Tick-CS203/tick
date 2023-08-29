@@ -1,10 +1,13 @@
-package com.tick.venueservice;
+package com.tick.venueservice.service;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.tick.venueservice.model.Venue;
+import com.tick.venueservice.repository.VenueRepository;
 
 @Service
 @AllArgsConstructor
