@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 // import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
 
 record Error(String error) {}
 record Token(String token) {}
@@ -27,7 +28,16 @@ public class TokenEndpoint {
         if (tokenstr.equals("")) return ResponseEntity.status(400).body(
                 new Error("No token supplied"));
 
-        return ResponseEntity.status(200).body(JwtTokenUtil.validate_tok(tokenstr));
+        String user;
+        try {
+            user = JwtTokenUtil.validate_tok(tokenstr, false);
+        } catch (ExpiredJwtException e) {
+            return ResponseEntity.status(400).body(new Error("The token has expired"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+
+        return ResponseEntity.status(200).body(user);
     }
 
     @GetMapping("/token")
@@ -41,18 +51,24 @@ public class TokenEndpoint {
     @PostMapping("/inter_token")
     public ResponseEntity<?> validate_inter_token(
             @RequestBody String jsonstr
-            ) throws IOException {
+        ) throws IOException {
         Token tok = new ObjectMapper().readValue(jsonstr, Token.class);
         String tokenstr = tok.token();
 
         if (tokenstr.equals("")) return ResponseEntity.status(400).body(
                 new Error("No token supplied"));
 
-        String user = JwtTokenUtil.validate_tok(tokenstr);
-        if (user == null)
+        String user;
+        try {
+            user = JwtTokenUtil.validate_tok(tokenstr, true);
+        } catch (ExpiredJwtException e) {
             return ResponseEntity.status(400).body(new Error("The token has expired"));
-        return ResponseEntity.status(200).body(JwtTokenUtil.validate_tok(tokenstr));
-    }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+
+        return ResponseEntity.status(200).body(user);
+        }
 
     @GetMapping("/inter_token")
     public ResponseEntity<?> create_inter_token(
@@ -60,5 +76,5 @@ public class TokenEndpoint {
             ) throws IOException {
         return ResponseEntity.status(200).body(
                 new Token(JwtTokenUtil.generate_tok(jsonstr, true)));
-    }
+            }
 }

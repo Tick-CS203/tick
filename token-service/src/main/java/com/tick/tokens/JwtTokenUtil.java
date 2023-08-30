@@ -5,6 +5,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.ExpiredJwtException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +33,20 @@ public class JwtTokenUtil {
             jwt.setExpiration(now);
         }
 
-        return jwt.signWith(SignatureAlgorithm.HS512, secret)
+        return jwt.claim("inter", inter)
+            .signWith(SignatureAlgorithm.HS512, secret)
             .compact();
     }
 
-    public static String validate_tok(String token) {
+    public static String validate_tok(String token, boolean inter)
+            throws RuntimeException {
         Claims claims = Jwts.parser()
             .setSigningKey(secret)
             .parseClaimsJws(token)
             .getBody();
-        if (claims.getExpiration().before(new Date())) {
-            return null;
+
+        if (claims.get("inter", Boolean.class) != inter) {
+            throw new RuntimeException("Wrong type of token supplied");
         }
 
         return claims.getSubject();
