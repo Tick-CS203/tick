@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 
 ### buffers and logs ###
-buildlog
+log
 *.swp
 
 ### STS ###
