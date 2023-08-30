@@ -1,2 +1,2 @@
 #!/bin/bash
-kill `ps | grep "java" | grep -o "^[0-9]*"`
+kill `ps | grep "java" | grep -Eo "^\s*[0-9]*"`
