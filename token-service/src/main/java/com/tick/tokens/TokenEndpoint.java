@@ -14,7 +14,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 
 record Error(String error) {}
 record Token(String token) {}
-record User(int id) {}
+record User(String id) {}
 
 @RestController
 public class TokenEndpoint {
@@ -34,10 +34,10 @@ public class TokenEndpoint {
         } catch (ExpiredJwtException e) {
             return ResponseEntity.status(400).body(new Error("The token has expired"));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(400).body(new Error(e.getMessage()));
         }
 
-        return ResponseEntity.status(200).body(user);
+        return ResponseEntity.status(200).body(new User(user));
     }
 
     @GetMapping("/token")
@@ -64,10 +64,10 @@ public class TokenEndpoint {
         } catch (ExpiredJwtException e) {
             return ResponseEntity.status(400).body(new Error("The token has expired"));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
+            return ResponseEntity.status(400).body(new Error(e.getMessage()));
         }
 
-        return ResponseEntity.status(200).body(user);
+        return ResponseEntity.status(200).body(new User(user));
         }
 
     @GetMapping("/inter_token")
