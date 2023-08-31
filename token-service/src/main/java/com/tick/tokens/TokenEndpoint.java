@@ -18,9 +18,10 @@ record User(String id) {}
 
 @RestController
 public class TokenEndpoint {
-    @PostMapping("/token")
+    @PostMapping("/token/{type}")
     public ResponseEntity<?> validate_token(
-            @RequestBody String jsonstr
+            @RequestBody String jsonstr,
+            @PathVariable String type
             ) throws IOException {
         Token tok = new ObjectMapper().readValue(jsonstr, Token.class);
         String tokenstr = tok.token();
@@ -30,7 +31,7 @@ public class TokenEndpoint {
 
         String user;
         try {
-            user = JwtTokenUtil.validate_tok(tokenstr, false);
+            user = JwtTokenUtil.validate_tok(tokenstr, type);
         } catch (ExpiredJwtException e) {
             return ResponseEntity.status(400).body(new Error("The token has expired"));
         } catch (RuntimeException e) {
@@ -40,41 +41,19 @@ public class TokenEndpoint {
         return ResponseEntity.status(200).body(new User(user));
     }
 
-    @GetMapping("/token")
+    @GetMapping("/token/{type}")
     public ResponseEntity<?> create_token(
-            @RequestParam(name = "User") String jsonstr
+            @RequestParam(name = "User") String user,
+            @PathVariable String type
             ) throws IOException {
-        return ResponseEntity.status(200).body(
-                new Token(JwtTokenUtil.generate_tok(jsonstr, false)));
-    }
-
-    @PostMapping("/inter_token")
-    public ResponseEntity<?> validate_inter_token(
-            @RequestBody String jsonstr
-        ) throws IOException {
-        Token tok = new ObjectMapper().readValue(jsonstr, Token.class);
-        String tokenstr = tok.token();
-
-        if (tokenstr.equals("")) return ResponseEntity.status(400).body(
-                new Error("No token supplied"));
-
-        String user;
+        String token;
         try {
-            user = JwtTokenUtil.validate_tok(tokenstr, true);
-        } catch (ExpiredJwtException e) {
-            return ResponseEntity.status(400).body(new Error("The token has expired"));
+            token = JwtTokenUtil.generate_tok(user, type);
         } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(new Error(e.getMessage()));
+            return ResponseEntity.status(400).body(
+                    new Error(e.getMessage()));
         }
-
-        return ResponseEntity.status(200).body(new User(user));
-        }
-
-    @GetMapping("/inter_token")
-    public ResponseEntity<?> create_inter_token(
-            @RequestParam(name = "User") String jsonstr
-            ) throws IOException {
         return ResponseEntity.status(200).body(
-                new Token(JwtTokenUtil.generate_tok(jsonstr, true)));
+                new Token(token));
             }
 }
