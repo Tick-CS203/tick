@@ -14,41 +14,56 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenUtil {
-    private static int inter_token_exp = 10 * 60 * 1000; //10 minutes
+    private static long inter_expiry;
+    private static long purchase_expiry;
     private static String secret;
 
     @Autowired
-    public JwtTokenUtil(@Value("${jwt.secret}") String secret) {
-        this.secret = secret;
+    public JwtTokenUtil(@Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiry.intermediate}") String inter_expiry,
+            @Value("${jwt.expiry.purchasing}") String purchase_expiry) {
+            this.secret = secret;
+            this.inter_expiry = Long.parseLong(inter_expiry) * 60 * 1000;
+            this.purchase_expiry = Long.parseLong(purchase_expiry) * 60 * 1000;
     }
 
-    public static String generate_tok(String username, boolean inter) {
-        Date now = new Date();
-        JwtBuilder jwt = Jwts.builder()
-            .setSubject(username)
-            .setIssuedAt(now);
-
-        if (inter) {
-            now.setTime(now.getTime() + inter_token_exp);
-            jwt.setExpiration(now);
-        }
-
-        return jwt.claim("inter", inter)
-            .signWith(SignatureAlgorithm.HS512, secret)
-            .compact();
-    }
-
-    public static String validate_tok(String token, boolean inter)
+    public static String generate_tok(String username, String type)
             throws RuntimeException {
-        Claims claims = Jwts.parser()
-            .setSigningKey(secret)
-            .parseClaimsJws(token)
-            .getBody();
+            Date now = new Date();
+            JwtBuilder jwt = Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(now)
+                .claim("type", type);
 
-        if (claims.get("inter", Boolean.class) != inter) {
-            throw new RuntimeException("Wrong type of token supplied");
-        }
+            long expiry = get_expiry(type);
 
-        return claims.getSubject();
+            if (expiry != 0) {
+                now.setTime(now.getTime() + expiry);
+                jwt.setExpiration(now);
+            }
+
+            return jwt.signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+    }
+
+    public static String validate_tok(String token, String type)
+            throws RuntimeException {
+            Claims claims = Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
+
+            if (claims.get("type", String.class) != type) {
+                throw new RuntimeException("Wrong type of token supplied");
+            }
+
+            return claims.getSubject();
+    }
+
+    public static long get_expiry(String type) throws RuntimeException {
+        if ("intermediate".equals(type)) return inter_expiry;
+        if ("purchasing".equals(type)) return purchase_expiry;
+        if ("access".equals(type)) return 0;
+        throw new RuntimeException("Invalid type");
     }
 }
