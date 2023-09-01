@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestScope;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.tick.ticketservice.model.RecaptchaObject;
@@ -55,15 +56,15 @@ public class TicketService {
         RecaptchaObject requestObj = new RecaptchaObject(recaptchaToken);
 
         return webClient.post()
-            .uri("https://www.google.com/recaptcha/api/siteverify")
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(Mono.just(requestObj), RecaptchaObject.class)
+            .uri("https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}",
+                requestObj.getSecret(), requestObj.getResponse()
+            )
             .retrieve()
             .toEntity(Object.class)
             .flatMap(responseEntity -> {
-                System.out.println("Created New Ticket: " + responseEntity.getBody());
+                System.out.println("Verified Recaptcha: " + responseEntity.getBody());
                 return Mono.just(responseEntity.getBody());
             }
-        );
+        ); 
     }
 }

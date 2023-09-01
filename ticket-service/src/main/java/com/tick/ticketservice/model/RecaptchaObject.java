@@ -1,10 +1,18 @@
 package com.tick.ticketservice.model;
 
-public class RecaptchaObject {
-    private String secret;
-    private final String response = "";
+import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public RecaptchaObject(String secret) {
-        this.secret = secret;
+@Data
+public class RecaptchaObject {
+
+    @JsonProperty("secret")
+    private final String secret = "";
+
+    @JsonProperty("response")
+    private String response;
+
+    public RecaptchaObject(String response) {
+        this.response = response;
     }
 }

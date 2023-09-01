@@ -14,6 +14,6 @@ public class TicketServiceApplication {
 
 	@Bean
    	public WebClient getWebClientBuilder() {
-		return WebClient.builder().baseUrl("http://localhost:8080").build();
+		return WebClient.builder().build();
    	}
 }
