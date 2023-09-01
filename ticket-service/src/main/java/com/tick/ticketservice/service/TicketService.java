@@ -2,10 +2,14 @@ package com.tick.ticketservice.service;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
+import reactor.core.publisher.Mono;
 
+import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import com.tick.ticketservice.model.RecaptchaObject;
 import com.tick.ticketservice.model.Ticket;
 import com.tick.ticketservice.repository.TicketRepository;
 
@@ -15,6 +19,9 @@ public class TicketService {
 
     @Autowired
     private final TicketRepository ticketRepository;
+
+    @Autowired
+    private final WebClient webClient;
 
     public Ticket addTicket(Ticket v) {
         return ticketRepository.save(v);
@@ -42,5 +49,21 @@ public class TicketService {
     public String deleteTicket(String ticketId) {
         ticketRepository.deleteById(ticketId);
         return ticketId + " ticket deleted successfully";
+    }
+
+    public Mono<Object> verifyRecaptcha(String recaptchaToken) {
+        RecaptchaObject requestObj = new RecaptchaObject(recaptchaToken);
+
+        return webClient.post()
+            .uri("https://www.google.com/recaptcha/api/siteverify")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(Mono.just(requestObj), RecaptchaObject.class)
+            .retrieve()
+            .toEntity(Object.class)
+            .flatMap(responseEntity -> {
+                System.out.println("Created New Ticket: " + responseEntity.getBody());
+                return Mono.just(responseEntity.getBody());
+            }
+        );
     }
 }

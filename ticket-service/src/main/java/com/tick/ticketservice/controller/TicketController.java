@@ -48,4 +48,9 @@ public class TicketController {
     public String deleteTicket(@PathVariable String id) {
         return ticketService.deleteTicket(id);
     }
+
+    @PostMapping("/{recaptchaToken}")
+    public Object verifyRecaptcha(@PathVariable String recaptchaToken) {
+        return ticketService.verifyRecaptcha(recaptchaToken);
+    }
 }
