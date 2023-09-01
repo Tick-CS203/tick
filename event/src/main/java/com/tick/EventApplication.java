@@ -1,4 +1,4 @@
-package com.tick.event;
+package com.tick;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
