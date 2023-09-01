@@ -1,7 +1,10 @@
 package com.tick.tokens;
 
+import com.tick.entity.*;
+
 import java.util.Date;
 import java.util.Map;
+import java.util.function.Function;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -26,7 +29,7 @@ public class JwtTokenUtil {
             this.expiry_map = expiry_map;
     }
 
-    public static String generate_tok(String username, String type)
+    public static Token generate_tok(String username, String type)
             throws RuntimeException {
             long expiry = get_expiry(type);
             Date now = new Date();
@@ -37,26 +40,34 @@ public class JwtTokenUtil {
 
 
             now.setTime(now.getTime() + expiry);
-            jwt.setExpiration(now);
-
-            return jwt.signWith(SignatureAlgorithm.HS512, secret)
+            String token = jwt.setExpiration(now)
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
+
+            return new Token(token);
     }
 
-    public static String validate_tok(String token, String type)
+    public static User validate_tok(String token, String type)
             throws RuntimeException {
             get_expiry(type);
 
-            Claims claims = Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
-
+            Claims claims = get_claims(token);
             if (!type.equals(claims.get("type", String.class))) {
                 throw new RuntimeException("Wrong type of token supplied");
             }
 
-            return claims.getSubject();
+            String subject = claims.getSubject();
+            token = generate_tok(subject, type).token();
+            long expiry = claims.getExpiration().getTime();
+
+            return new User(subject, token, expiry);
+    }
+
+    private static Claims get_claims(String token) {
+        return Jwts.parser()
+            .setSigningKey(secret)
+            .parseClaimsJws(token)
+            .getBody();
     }
 
     private static long get_expiry(String type) throws RuntimeException {

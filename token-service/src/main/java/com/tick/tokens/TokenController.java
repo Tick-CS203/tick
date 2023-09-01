@@ -8,26 +8,24 @@ import io.jsonwebtoken.ExpiredJwtException;
 
 public class TokenController {
     public ResponseEntity<?> perform(String input, String token_type,
-            Class<?> class_type, BiFunction<String, String, String> func) {
-        String value;
+            Class<?> class_type, BiFunction<String, String, Object> func) {
+        Object obj;
         int status = 400;
         Class<?> return_class = ErrorMessage.class;
 
         try {
-            value = func.apply(input, token_type);
+            obj = func.apply(input, token_type);
             status = 200;
             return_class = class_type;
         } catch (ExpiredJwtException e) {
-            value = "The token has expired";
+            obj = "The token has expired";
         } catch (RuntimeException e) {
-            value = e.getMessage();
+            obj = e.getMessage();
         }
 
         try {
             return ResponseEntity.status(status)
-                .body(return_class
-                        .getDeclaredConstructor(String.class)
-                        .newInstance(value));
+                .body(return_class.cast(obj));
         } catch (Exception e) {
             System.out.println("Exception met: " + e.getMessage());
             return null;
