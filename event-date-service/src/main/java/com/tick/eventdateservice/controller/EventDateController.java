@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.tick.eventdateservice.model.Ticket;
 import com.tick.eventdateservice.model.EventDate;
 import com.tick.eventdateservice.model.SelectedRow;
 import com.tick.eventdateservice.service.EventDateService;

@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import com.tick.eventdateservice.model.Ticket;
+import com.tick.eventdateservice.model.Event;
 import com.tick.eventdateservice.model.EventDate;
 import com.tick.eventdateservice.model.SelectedRow;
 import com.tick.eventdateservice.repository.EventDateRepository;
@@ -22,6 +24,7 @@ public class EventDateService {
 
     @Autowired
     private final EventDateRepository eventDateRepository;
+
     @Autowired
     private final WebClient webClient;
 
@@ -48,18 +51,14 @@ public class EventDateService {
     public Mono<Ticket> createTicket(Ticket ticket) {
         return webClient.post()
             .uri("/api/ticket")
-            .body(Mono.just(Ticket), Ticket.class)
+            .body(Mono.just(ticket), Ticket.class)
             .retrieve()
-            .onStatus(HttpStatusCode::is4xxClientError, response -> {
-                return Mono.just(new ApplicationException("Bad Request"));
-            })
-            .onStatus(HttpStatusCode::is5xxServerError, response -> {
-                return Mono.just(new ApplicationException("Server Error"));
-            })
             .toEntity(Ticket.class)
-            .subscribe(responseEntity -> {
+            .flatMap(responseEntity -> {
                 System.out.println("Created New Ticket: " + responseEntity.getBody());
-            });
+                return Mono.just(responseEntity.getBody()); // Return the Ticket
+            }
+        );
     }
 
     // [{category: "CAT1", section: "PC1", row: "C", quantity: 2}, {category: "CAT2", section: "140", row: "B", quantity: 1}]
@@ -71,7 +70,7 @@ public class EventDateService {
 
         Map<String, Map<String, Map<String, Integer>>> seatAvailability = eventDate.getSeatAvailability();
         
-        Event event = findEventById(eventDate.getEventID());
+        Event event = findEventById(eventDate.getEventID()).block();
         if (event == null)
             throw new Error("Event not found");
 

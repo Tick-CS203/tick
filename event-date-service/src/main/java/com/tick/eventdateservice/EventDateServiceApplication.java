@@ -13,7 +13,7 @@ public class EventDateServiceApplication {
 	}
 
    	@Bean
-   	public WebClient.Builder getWebClientBuilder() {
-		return WebClient.builder().baseURL("http://localhost:8080").build();
+   	public WebClient getWebClientBuilder() {
+		return WebClient.builder().baseUrl("http://localhost:8080").build();
    	}
 }
