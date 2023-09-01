@@ -1,6 +1,8 @@
 package com.tick.tokens;
 
 import java.util.Date;
+import java.util.Map;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.JwtBuilder;
@@ -14,20 +16,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenUtil {
-    private static long inter_expiry;
-    private static long purchase_expiry;
-    private static long access_expiry;
     private static String secret;
+    private static Map<String, Long> expiry_map;
 
     @Autowired
     public JwtTokenUtil(@Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiry.intermediate}") String inter_expiry,
-            @Value("${jwt.expiry.purchasing}") String purchase_expiry,
-            @Value("${jwt.expiry.access}") String access_expiry) {
+            @Value("#{${jwt.expiry.map}}") Map<String, Long> expiry_map) {
             this.secret = secret;
-            this.inter_expiry = Long.parseLong(inter_expiry) * 60 * 1000;
-            this.purchase_expiry = Long.parseLong(purchase_expiry) * 60 * 1000;
-            this.access_expiry = Long.parseLong(access_expiry) * 60 * 1000;
+            this.expiry_map = expiry_map;
     }
 
     public static String generate_tok(String username, String type)
@@ -64,9 +60,9 @@ public class JwtTokenUtil {
     }
 
     private static long get_expiry(String type) throws RuntimeException {
-        if ("intermediate".equals(type)) return inter_expiry;
-        if ("purchasing".equals(type)) return purchase_expiry;
-        if ("access".equals(type)) return access_expiry;
-        throw new RuntimeException("Invalid token type in query");
+        Long expiry = expiry_map.get(type);
+
+        if (expiry == null) throw new RuntimeException("Invalid token type in query");
+        return expiry * 60 * 1000;
     }
 }
