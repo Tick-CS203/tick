@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 @RestController
+@RequestMapping("/token")
 public class TokenEndpoint {
     TokenController ctl = new TokenController();
 
-    @PostMapping("/token/{type}")
+    @PostMapping("/{type}")
     public ResponseEntity<?> validate_token(
             @RequestBody String jsonstr,
             @PathVariable String type) throws IOException
@@ -19,7 +20,7 @@ public class TokenEndpoint {
         return ctl.perform(token, type, User.class, JwtTokenUtil::validate_tok);
     }
 
-    @GetMapping("/token/{type}")
+    @GetMapping("/{type}")
     public ResponseEntity<?> create_token(
             @RequestParam(name = "user") String user,
             @PathVariable String type) throws IOException
