@@ -1,4 +1,4 @@
-package com.tick.venueservice.service;
+package com.tick.eventdateservice.service;
 
 import java.util.Map;
 import java.util.ArrayList;
@@ -6,14 +6,14 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
-import com.tick.venueservice.model.EventDate;
-import com.tick.venueservice.model.SelectedRow;
-import com.tick.venueservice.model.Ticket;
-import com.tick.venueservice.repository.EventDateRepository;
-import com.tick.venueservice.repository.TicketRepository;
-import com.tick.venueservice.repository.VenueRepository;
+import com.tick.eventdateservice.model.EventDate;
+import com.tick.eventdateservice.model.SelectedRow;
+import com.tick.eventdateservice.repository.EventDateRepository;
 
 @Service
 @AllArgsConstructor
@@ -22,30 +22,62 @@ public class EventDateService {
     @Autowired
     private final EventDateRepository eventDateRepository;
     @Autowired
-    private final TicketRepository ticketRepository;
-    @Autowired
-    private final VenueRepository venueRepository;
+    private final WebClient webClient;
 
     private final Integer purchaseLimit = 4;
 
-    public EventDate addEventDate(EventDate ed) {
-        return eventDateRepository.save(ed);
+    public EventDate addEventDate(EventDate eventDate) {
+        return eventDateRepository.save(eventDate);
     }
     
     public Map<String, Map<String, Map<String, Integer>>> getSeatAvailability(String eventDateID) {
         return eventDateRepository.findById(eventDateID).get().getSeatAvailability();
     }
 
+    // Mono: single or empty value
+    // Flux: 0 to many values
+    public Mono<Event> findEventById(String eventID) {
+        return webClient.get()
+                .uri("/api/event/" + eventID)
+                .retrieve()
+                .onStatus(httpStatus -> HttpStatus.NOT_FOUND.equals(httpStatus), clientResponse -> Mono.empty())
+                .bodyToMono(Event.class);
+    }
+    
+    public Mono<Ticket> createTicket(Ticket ticket) {
+        ticket = new Ticket("64ed8da9d11f0b279d6f6a41","CAT4", "441", "A", 1, "Peter Pan");
+
+        return webClient.post()
+            .uri("/api/ticket")
+            .body(Mono.just(Ticket), Ticket.class)
+            .retrieve()
+            .onStatus(HttpStatusCode::is4xxClientError, response -> {
+                return Mono.just(new ApplicationException("Bad Request"));
+            })
+            .onStatus(HttpStatusCode::is5xxServerError, response -> {
+                return Mono.just(new ApplicationException("Server Error"));
+            })
+            .toEntity(Ticket.class)
+            .subscribe(responseEntity -> {
+                System.out.println("Created New Ticket: " + responseEntity.getBody());
+            });
+
+    }
+
     // [{category: "CAT1", section: "PC1", row: "C", quantity: 2}, {category: "CAT2", section: "140", row: "B", quantity: 1}]
     public List<Ticket> allocateSeats(String eventDateID, List<SelectedRow> selectedRows) {
 
-        EventDate ed = eventDateRepository.findById(eventDateID).get();
-        if (ed == null)
+        EventDate eventDate = eventDateRepository.findById(eventDateID).get();
+        if (eventDate == null)
             throw new Error("Event date not found");
 
-        Map<String, Map<String, Map<String, Integer>>> seatAvailability = ed.getSeatAvailability();
-        Map<String, Map<String, Map<String, Integer>>> seatMap = venueRepository.findById(ed.getVenueID())
-                .get().getSeatMap();
+        Map<String, Map<String, Map<String, Integer>>> seatAvailability = eventDate.getSeatAvailability();
+        
+        Event event = findEventById(eventDate.getEventID());
+        if (event == null)
+            throw new Error("Event not found");
+
+        Map<String, Map<String, Map<String, Integer>>> seatMap = event.getSeatMap();
 
         Integer totalQuantity = 0;
         for (SelectedRow rowObj : selectedRows) {
@@ -80,9 +112,9 @@ public class EventDateService {
             for (int i = 0; i < quantity; i++) {
                 Integer seatNumber = maxCapacity - currentAvailable + 1;
 
-                Ticket t = new Ticket(eventDateID, category, section, row, seatNumber, "PP", "Peter Pan");
+                Ticket t = new Ticket(eventDateID, category, section, row, seatNumber, "Peter Pan");
+                createTicket(t);
                 allocatedTickets.add(t);
-                ticketRepository.save(t);
                 currentAvailable--;
             }
 
@@ -91,8 +123,8 @@ public class EventDateService {
             sectionMap.put(row, currentAvailable);
         }
 
-        ed.setSeatAvailability(seatAvailability);
-        eventDateRepository.save(ed);
+        eventDate.setSeatAvailability(seatAvailability);
+        eventDateRepository.save(eventDate);
 
         return allocatedTickets;
     }

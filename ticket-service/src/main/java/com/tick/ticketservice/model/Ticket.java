@@ -1,4 +1,4 @@
-package com.tick.venueservice.model;
+package com.tick.ticketservice.model;
 
 import lombok.Data;
 
@@ -17,16 +17,14 @@ public class Ticket {
     private String row;
     private Integer seatNumber;
     private String userID;
-    private String userName;
 
     public Ticket(String eventDateID, String category, String section, String row, Integer seatNumber,
-            String userID, String userName) {
+            String userID) {
         this.eventDateID = eventDateID;
         this.category = category;
         this.section = section;
         this.row = row;
         this.seatNumber = seatNumber;
         this.userID = userID;
-        this.userName = userName;
     }
 }

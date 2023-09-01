@@ -31,7 +31,6 @@ public class VenueService {
     public Venue updateVenue(Venue venueRequest) {
         Venue existingVenue = venueRepository.findById(venueRequest.getId()).get();
         existingVenue.setName(venueRequest.getName());
-        existingVenue.setSeatMap(venueRequest.getSeatMap());
         return venueRepository.save(existingVenue);
     }
 

@@ -1,4 +1,4 @@
-package com.tick.venueservice.model;
+package com.tick.eventdateservice.model;
 
 import lombok.Data;
 

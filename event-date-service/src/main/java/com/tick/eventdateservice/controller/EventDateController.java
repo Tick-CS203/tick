@@ -1,4 +1,4 @@
-package com.tick.venueservice.controller;
+package com.tick.eventdateservice.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.tick.venueservice.model.Ticket;
-import com.tick.venueservice.model.EventDate;
-import com.tick.venueservice.model.SelectedRow;
-import com.tick.venueservice.service.EventDateService;
+import com.tick.eventdateservice.model.EventDate;
+import com.tick.eventdateservice.model.SelectedRow;
+import com.tick.eventdateservice.service.EventDateService;
 
 @RestController
 @RequestMapping("api/eventdate")
@@ -29,6 +28,11 @@ public class EventDateController {
     @ResponseStatus(HttpStatus.CREATED)
     public EventDate createEventDate(@RequestBody EventDate eventDate) {
         return eventDateService.addEventDate(eventDate);
+    }
+
+    @GetMapping
+    public Ticket testCreateTicket() {
+        return eventDateService.createTicket(null);
     }
 
     @GetMapping("/{id}")

@@ -1,12 +1,12 @@
-package com.tick.venueservice;
+package com.tick.ticketservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class VenueServiceApplication {
+public class TicketServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(VenueServiceApplication.class, args);
+		SpringApplication.run(TicketServiceApplication.class, args);
 	}
 }

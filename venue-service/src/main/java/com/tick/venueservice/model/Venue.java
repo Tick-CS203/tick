@@ -1,6 +1,5 @@
 package com.tick.venueservice.model;
 
-import java.util.Map;
 import lombok.Data;
 
 import org.springframework.data.annotation.Id;
@@ -16,10 +15,8 @@ public class Venue {
 
     @Indexed(unique = true)
     private String name;
-    private Map<String, Map<String, Map<String, Integer>>> seatMap;
 
-    public Venue(String name, Map<String, Map<String, Map<String, Integer>>> seatMap) {
+    public Venue(String name) {
         this.name = name;
-        this.seatMap = seatMap;
     }
 }
