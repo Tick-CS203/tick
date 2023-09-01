@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import com.tick.eventdateservice.model.Ticket;
 import com.tick.eventdateservice.model.EventDate;
 import com.tick.eventdateservice.model.SelectedRow;
 import com.tick.eventdateservice.repository.EventDateRepository;
@@ -45,8 +46,6 @@ public class EventDateService {
     }
     
     public Mono<Ticket> createTicket(Ticket ticket) {
-        ticket = new Ticket("64ed8da9d11f0b279d6f6a41","CAT4", "441", "A", 1, "Peter Pan");
-
         return webClient.post()
             .uri("/api/ticket")
             .body(Mono.just(Ticket), Ticket.class)
@@ -61,7 +60,6 @@ public class EventDateService {
             .subscribe(responseEntity -> {
                 System.out.println("Created New Ticket: " + responseEntity.getBody());
             });
-
     }
 
     // [{category: "CAT1", section: "PC1", row: "C", quantity: 2}, {category: "CAT2", section: "140", row: "B", quantity: 1}]

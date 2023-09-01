@@ -30,11 +30,6 @@ public class EventDateController {
         return eventDateService.addEventDate(eventDate);
     }
 
-    @GetMapping
-    public Ticket testCreateTicket() {
-        return eventDateService.createTicket(null);
-    }
-
     @GetMapping("/{id}")
     public Map<String, Map<String, Map<String, Integer>>> getSeatAvailability(@PathVariable String id) {
         return eventDateService.getSeatAvailability(id);

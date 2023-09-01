@@ -33,9 +33,9 @@ public class VenueController {
     public List<Venue> getVenues() {
         return venueService.findAllVenues();
     }
-
+ 
     @GetMapping("/{id}")
-    Venue getVenueById(@PathVariable String id) {
+    public Venue getVenueById(@PathVariable String id) {
         return venueService.getVenueById(id);
     }
 
