@@ -1,7 +1,3 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "java.project.sourcePaths": [
-        "event-date-service/src/main/java/com/tick/eventdateservice",
-        "event-date-service"
-    ]
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
