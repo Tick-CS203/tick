@@ -23,6 +23,10 @@ public class TokenController {
             obj = e.getMessage();
         }
 
+        if (obj instanceof String) {
+            obj = new ErrorMessage((String) obj);
+        }
+
         try {
             return ResponseEntity.status(status)
                 .body(return_class.cast(obj));
