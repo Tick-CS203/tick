@@ -9,6 +9,7 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
+import com.tick.sessionservice.entity.*;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,38 +27,41 @@ public class SocketModule {
         this.socketService = socketService;
         server.addConnectListener(onConnected());
         server.addDisconnectListener(onDisconnected());
-        server.addEventListener("enter_session", Message.class, onClientEnter());
-        server.addEventListener("exit_session", Message.class, onClientExit());
+        server.addEventListener("enter_session", UserData.class, onClientEnter());
+        server.addEventListener("exit_session", UserData.class, onClientExit());
 
     }
 
-    private DataListener<Message> onClientEnter() {
+    private DataListener<UserData> onClientEnter() {
         return (senderClient, data, ackSender) -> {
             log.info(data.toString());
             log.info(collection.toString());
 
             if (collection.size() < 3) {
                 collection.add(data.getUserId());
-                socketService.sendMessage(data.getRoom(), "enqueue", senderClient, data.getUserId() + " token" );
+                socketService.sendToken(data.getRoom(), data.getUserId(), senderClient, data.getUserId() + " token" );
             } else {
                 queue.add(data.getUserId());
-                socketService.sendMessage(data.getRoom(), "enqueue", senderClient, data.getUserId() + " entered queue");
                 socketService.sendQueueNo(data.getRoom(), data.getUserId(), senderClient, queue.indexOf(data.getUserId()));
             }
 
         };
     }
 
-    private DataListener<Message> onClientExit() {
+    private DataListener<UserData> onClientExit() {
         return (senderClient, data, ackSender) -> {
             log.info(data.toString());
 
-            collection.remove(data.getUserId());
+            if (data instanceof UserData) {
+                UserData userData = (UserData) data;
+                collection.remove(userData.getUserId());
+            }
+
             if (queue.size() > 0) {
                 String nextUserId = queue.remove(0);
                 collection.add(nextUserId);
 
-                socketService.sendMessage(data.getRoom(), nextUserId, senderClient, nextUserId + " token");
+                socketService.sendToken(data.getRoom(), nextUserId, senderClient, nextUserId + " token");
             }
 
             for (String userId : queue) {
