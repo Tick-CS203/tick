@@ -44,7 +44,7 @@ public class JwtTokenUtil {
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
 
-            return new Token(token);
+            return new Token(token, expiry);
     }
 
     public static User validate_tok(String token, String type)
