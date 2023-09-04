@@ -5,11 +5,13 @@ import java.util.HashSet;
 
 import org.springframework.stereotype.Component;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
 import com.tick.sessionservice.entity.*;
+import com.tick.sessionservice.repository.SessionDAO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +23,9 @@ public class SocketModule {
     private final SocketService socketService;
     private HashSet<String> collection = new HashSet<>();
     private ArrayList<String> queue = new ArrayList<>();
+
+    @Autowired
+    private SessionDAO dao;
 
     public SocketModule(SocketIOServer server, SocketService socketService) {
         this.server = server;
@@ -35,15 +40,32 @@ public class SocketModule {
     private DataListener<UserData> onClientEnter() {
         return (senderClient, data, ackSender) -> {
             log.info(data.toString());
-            log.info(collection.toString());
+
+            String room = senderClient.getHandshakeData().getSingleUrlParam("room");
+            Session session = dao.findSessionById(room);
+            if (session == null) session = new Session(room);
+
+            HashSet<String> collection = session.getUserSet();
 
             if (collection.size() < 3) {
                 collection.add(data.getUserId());
+                session.setUserSet(collection);
+                dao.save(session);
+
                 socketService.sendToken(data.getRoom(), data.getUserId(), senderClient, data.getUserId() + " token" );
+
             } else {
-                queue.add(data.getUserId());
-                socketService.sendQueueNo(data.getRoom(), data.getUserId(), senderClient, queue.indexOf(data.getUserId()));
+                ArrayList<String> userQueue = session.getUserQueue();
+                userQueue.add(data.getUserId());
+
+                session.setUserQueue(userQueue);
+                dao.save(session);
+
+                log.info(userQueue.toString());
+
+                socketService.sendQueueNo(data.getRoom(), data.getUserId(), senderClient, userQueue.indexOf(data.getUserId()));
             }
+
 
         };
     }
@@ -52,21 +74,27 @@ public class SocketModule {
         return (senderClient, data, ackSender) -> {
             log.info(data.toString());
 
-            if (data instanceof UserData) {
-                UserData userData = (UserData) data;
-                collection.remove(userData.getUserId());
-            }
+            String room = senderClient.getHandshakeData().getSingleUrlParam("room");
+            Session session = dao.findSessionById(room);
 
-            if (queue.size() > 0) {
-                String nextUserId = queue.remove(0);
+            HashSet<String> collection = session.getUserSet();
+            collection.remove(data.getUserId());
+
+            ArrayList<String> userQueue = session.getUserQueue();
+            if (userQueue.size() > 0) {
+                String nextUserId = userQueue.remove(0);
+                session.setUserQueue(userQueue);
+
                 collection.add(nextUserId);
-
                 socketService.sendToken(data.getRoom(), nextUserId, senderClient, nextUserId + " token");
             }
+            session.setUserSet(collection);
+            dao.save(session);
 
-            for (String userId : queue) {
-                socketService.sendQueueNo(data.getRoom(), userId, senderClient, queue.indexOf(userId));
+            for (String userId : userQueue) {
+                socketService.sendQueueNo(data.getRoom(), userId, senderClient, userQueue.indexOf(userId));
             }
+
         };
     }
 
