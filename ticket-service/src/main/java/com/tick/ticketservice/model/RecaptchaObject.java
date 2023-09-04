@@ -1,18 +1,22 @@
 package com.tick.ticketservice.model;
 
-import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Data
+@Component
 public class RecaptchaObject {
 
     @JsonProperty("secret")
-    private final String secret = "";
+    private static String secret;
 
-    @JsonProperty("response")
-    private String response;
+    @Autowired
+    public RecaptchaObject(@Value("${recaptcha.secret}") String secret) {
+        this.secret = secret;
+    }
 
-    public RecaptchaObject(String response) {
-        this.response = response;
+    public static String getSecret() {
+        return secret;
     }
 }
