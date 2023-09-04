@@ -35,29 +35,14 @@ public class SocketModule {
         return (senderClient, data, ackSender) -> {
             log.info(data.toString());
             log.info(collection.toString());
-            int size = collection.size();
-            if (size < 3) {
+
+            if (collection.size() < 3) {
                 collection.add(data.getUserId());
-                socketService.sendMessage(
-                    data.getRoom(),
-                    "enqueue", 
-                    senderClient, 
-                    data.getUserId() + " token" 
-                );
+                socketService.sendMessage(data.getRoom(), "enqueue", senderClient, data.getUserId() + " token" );
             } else {
                 queue.add(data.getUserId());
-                socketService.sendMessage(
-                    data.getRoom(),
-                    "enqueue", 
-                    senderClient, 
-                    data.getUserId() + " entered queue"
-                );
-                socketService.sendQueueNo(
-                    data.getRoom(),
-                    "enqueue", 
-                    senderClient, 
-                    queue.indexOf(data.getUserId())
-                );
+                socketService.sendMessage(data.getRoom(), "enqueue", senderClient, data.getUserId() + " entered queue");
+                socketService.sendQueueNo(data.getRoom(), data.getUserId(), senderClient, queue.indexOf(data.getUserId()));
             }
 
         };
