@@ -21,8 +21,6 @@ public class SocketModule {
 
     private final SocketIOServer server;
     private final SocketService socketService;
-    private HashSet<String> collection = new HashSet<>();
-    private ArrayList<String> queue = new ArrayList<>();
 
     @Autowired
     private SessionDAO dao;
