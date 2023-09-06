@@ -1,7 +1,6 @@
 package com.tick.bookmarks;
 
 import org.springframework.web.bind.annotation.*;
-import com.tick.repo.BookmarkRepository;
 import com.tick.entity.BookmarkPairs;
 import org.springframework.http.ResponseEntity;
 
