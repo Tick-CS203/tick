@@ -51,16 +51,19 @@ public class TicketController {
         return ticketService.updateTicket(ticket);
     }
 
+    //if user asks for a refund
     @PutMapping
     public List<Ticket> ticketsMadeAvailable(@RequestBody String userId) {
         return ticketService.ticketMadeAvailableAgain(userId);
     }
 
+    //if event is cancelled
     @DeleteMapping("/eventId/{eventId}") 
     public String deleteByEventId(@PathVariable String eventId) {
         return ticketService.deleteTicketByEvent(eventId);
     }
 
+    //delete after ticket object belonging to prev user after it has been transferred
     @DeleteMapping("/{ticketId}") 
     public String deleteByTicketId(@PathVariable String ticketId) {
         return ticketService.deleteTicketByTicketId(ticketId);

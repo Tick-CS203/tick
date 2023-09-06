@@ -57,7 +57,7 @@ public class TicketService {
     }
 
     //if user transfers ticket
-    //is it possible for user to get a refurn?
+    //is it possible for user to get a refund?
     public String deleteTicketByTicketId(String ticketId){
         ticketRepository.deleteById(ticketId); 
         return ticketId + "ticket has been deleted";
