@@ -35,14 +35,4 @@ public class TokenController {
             return null;
         }
     }
-
-    public String unwrap_token(String jsonstr) {
-        try {
-            Token tok = new ObjectMapper().readValue(jsonstr, Token.class);
-            return tok.token();
-        } catch (Exception e) {
-            System.out.println("Exception met: " + e.getMessage());
-            return null;
-        }
-    }
 }

@@ -3,6 +3,7 @@ package com.tick.tokens;
 import java.io.IOException;
 
 import com.tick.entity.*;
+import javax.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
@@ -13,11 +14,10 @@ public class TokenEndpoint {
 
     @PostMapping("/{type}")
     public ResponseEntity<?> validate_token(
-            @RequestBody String jsonstr,
+            @RequestBody @Valid Token token,
             @PathVariable String type) throws IOException
     {
-        String token = ctl.unwrap_token(jsonstr);
-        return ctl.perform(token, type, User.class, JwtTokenUtil::validate_tok);
+        return ctl.perform(token.token(), type, User.class, JwtTokenUtil::validate_tok);
     }
 
     @GetMapping("/{type}")
