@@ -17,20 +17,27 @@ public class BookmarkController {
     }
 
     @GetMapping
-    public Iterable<UserMarks> get_all_bookmarks()
+    public Iterable<User> get_all_bookmarks()
         throws IOException {
         return svc.findAll();
     }
 
     @GetMapping("/{id}")
-    public UserMarks user_bookmarks(
-            @PathVariable String id
-            ) throws IOException {
+    public User user_bookmarks(@PathVariable String id)
+        throws IOException {
         return svc.findUser(id);
-            }
+    }
+
+    @DeleteMapping("/{id}/{event}")
+    public User delete_bookmark(
+            @PathVariable String id,
+            @PathVariable long event)
+        throws IOException {
+        return svc.delete_bookmark(id, event);
+    }
 
     @PostMapping
-    public UserMarks add_bookmark(@RequestBody Bookmark bookmark)
+    public User add_bookmark(@RequestBody Bookmark bookmark)
         throws IOException {
         return svc.add_bookmark(bookmark);
     }

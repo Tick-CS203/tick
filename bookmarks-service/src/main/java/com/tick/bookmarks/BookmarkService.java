@@ -13,22 +13,30 @@ public class BookmarkService {
         this.repo = repo;
     }
 
-    public Iterable<UserMarks> findAll() {
+    public Iterable<User> findAll() {
         return repo.findAll();
     }
 
-    public UserMarks add_bookmark(Bookmark bookmark) {
+    public User add_bookmark(Bookmark bookmark) {
         String id = bookmark.user();
-        return repo.save(getUserMarks(id).map(
-                user -> {return user.addEvent(bookmark);}
-                ).orElse(new UserMarks(id).addEvent(bookmark)));
+        return repo.save(getUser(id).map(
+                user -> user.addEvent(bookmark)
+                ).orElse(new User(id).addEvent(bookmark)));
     }
 
-    public UserMarks findUser(String id) {
-        return getUserMarks(id).orElse(null);
+    public User delete_bookmark(String id, long event) {
+        return getUser(id).map(
+                user -> {
+                    user.removeEvent(event);
+                    return repo.save(user);
+                }).orElse(new User(id));
     }
 
-    private Optional<UserMarks> getUserMarks(String id) {
+    public User findUser(String id) {
+        return getUser(id).orElse(new User(id));
+    }
+
+    private Optional<User> getUser(String id) {
         return repo.findByUserID(id);
     }
 }

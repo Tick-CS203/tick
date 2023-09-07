@@ -5,17 +5,19 @@ import java.util.Set;
 import java.util.HashSet;
 
 @Entity
-public class UserMarks {
+@Table(name = "users")
+public class User {
     @Id
     private String userID;
     @ElementCollection
+    @CollectionTable(name = "users_event_list")
     private Set<Long> eventList = new HashSet<>();
 
-    public UserMarks(String userID) {
+    public User(String userID) {
         this.userID = userID;
     }
 
-    private UserMarks() {}
+    private User() {}
 
     public String getUserID() {
         return userID;
@@ -25,8 +27,17 @@ public class UserMarks {
         return eventList;
     }
 
-    public UserMarks addEvent(Bookmark mark) {
-        eventList.add(mark.event());
+    public User addEvent(Bookmark mark) {
+        return addEvent(mark.event());
+    }
+
+    public User addEvent(long event) {
+        eventList.add(event);
+        return this;
+    }
+
+    public User removeEvent(long event) {
+        eventList.remove(event);
         return this;
     }
 }
