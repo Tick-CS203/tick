@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 
 @Entity
 public class Bookmark {
+    // @GeneratedValue(strategy = GenerationType.AUTO)
+    // private long id;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
     private String userid;
     private long event;
 
