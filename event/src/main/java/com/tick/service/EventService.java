@@ -27,7 +27,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public List<Event> filterEvents(String category, double maxPrice) {
+    /* public List<Event> filterEvents(String category, double maxPrice) {
         Query query = new Query();
         List<Event> intermediaryEvents = new ArrayList<> ();
 
@@ -40,7 +40,7 @@ public class EventService {
             // how do i get all the events to check them in the first place?
             List<Event> allEvents = eventRepository.findAll();
             for (Event currEvent : allEvents) {
-                if (currEvent.eventHasAPriceLessThanOrEqualToMaxPrice(maxPrice)) {
+                if (eventHasAPriceLessThanOrEqualToMaxPrice(maxPrice)) {
                     intermediaryEvents.add(currEvent);
                 }
             }
@@ -52,7 +52,7 @@ public class EventService {
 
         //return mongoTemplate.find(query, Event.class);
         return filteredEvents;
-    }
+    } */
 
     public Event getEventByID(Integer eventID) {
         Event event = eventRepository.findById(eventID).get();
@@ -74,8 +74,8 @@ public class EventService {
         return eventID + " event deleted successfully";
     }
 
-    // does this go under event or event service?
-    public Boolean eventHasAPriceLessThanOrEqualToMaxPrice(Integer id, double maxPrice){
+/*     // does this go under event or event service?
+    public Boolean eventHasAPriceLessThanOrEqualToMaxPrice(Integer id, double maxPrice) {
         double[] prices = eventRepository.findById(id).get().getPrice();
         for (double currPrice : prices) {
             if (currPrice <= maxPrice) {
@@ -83,6 +83,5 @@ public class EventService {
             }
         }
         return false;
-    }
-
+    } */
 }

@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.web.bind.annotation.*;
 
 import com.tick.service.*;
@@ -24,13 +23,13 @@ public class EventController {
         return eventService.addEvent(event);
     }
 
-    @GetMapping
+ /*    @GetMapping
     public List<Event> getEvents (
         @RequestParam(name = "category") String category,
         @RequestParam(name = "maxPrice") double maxPrice
     ) {
         return eventService.filterEvents(category, maxPrice);
-    }
+    } */
 
     @GetMapping("/{id}")
     public Event getEventByID (@PathVariable Integer id) {
