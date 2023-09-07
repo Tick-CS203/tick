@@ -1,16 +1,14 @@
 package com.tick.service;
 
 import com.tick.model.Event;
+import com.tick.model.EventDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.tick.repository.*;
 
@@ -21,38 +19,44 @@ import lombok.AllArgsConstructor;
 public class EventService {
     @Autowired
     private EventRepository eventRepository;
-    private MongoTemplate mongoTemplate;
 
     public Event addEvent(Event event) {
         return eventRepository.save(event);
     }
 
-    /* public List<Event> filterEvents(String category, double maxPrice) {
-        Query query = new Query();
-        List<Event> intermediaryEvents = new ArrayList<> ();
+    public List<Event> filterEvents(String category, double maxPrice, EventDate date) {
+        if (category.isEmpty() && maxPrice == 0) {
+            return eventRepository.findAll();
+        }
 
-        // if (category != null) {
-        //     query.addCriteria(Criteria.where("category").is(category));
-        // }
+        List<Event> intermediaryEvents = eventRepository.findAll();
 
-        if (maxPrice != 0) {
-            // how to query for category starting from this filtered list alr?
-            // how do i get all the events to check them in the first place?
-            List<Event> allEvents = eventRepository.findAll();
-            for (Event currEvent : allEvents) {
-                if (eventHasAPriceLessThanOrEqualToMaxPrice(maxPrice)) {
-                    intermediaryEvents.add(currEvent);
+        if (!category.isEmpty()) {
+            for (Event currEvent : intermediaryEvents) {
+                if (!currEvent.getCategory().equals(category)) {
+                    intermediaryEvents.remove(currEvent);
                 }
             }
         }
 
-        List<Event> filteredEvents = intermediaryEvents.stream()
-                .filter(event -> event.getCategory().equals(category))
-                .collect(Collectors.toList());
+        if (maxPrice != 0) {
+            for (Event currEvent : intermediaryEvents) {
+                if (!eventHasAPriceLessThanOrEqualToMaxPrice(currEvent, maxPrice)) {
+                    intermediaryEvents.remove(currEvent);
+                }
+            }
+        }
 
-        //return mongoTemplate.find(query, Event.class);
-        return filteredEvents;
-    } */
+        if (!(date == null)){
+            for (Event currEvent : intermediaryEvents) {
+                if (!eventHasFilteredDate(currEvent, date)){
+                    intermediaryEvents.remove(currEvent);
+                }
+            }
+        }
+
+        return intermediaryEvents;
+    }
 
     public Event getEventByID(Integer eventID) {
         Event event = eventRepository.findById(eventID).get();
@@ -74,14 +78,23 @@ public class EventService {
         return eventID + " event deleted successfully";
     }
 
-/*     // does this go under event or event service?
-    public Boolean eventHasAPriceLessThanOrEqualToMaxPrice(Integer id, double maxPrice) {
-        double[] prices = eventRepository.findById(id).get().getPrice();
+    public Boolean eventHasAPriceLessThanOrEqualToMaxPrice(Event event, double maxPrice) {
+        double[] prices = event.getPrice();
         for (double currPrice : prices) {
             if (currPrice <= maxPrice) {
                 return true;
             }
         }
         return false;
-    } */
+    }
+
+    public Boolean eventHasFilteredDate(Event event, EventDate date) {
+        EventDate[] eventDates = event.getDate();
+        for (EventDate currEventDate : eventDates) {
+            if (currEventDate.equals(date)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
