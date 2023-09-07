@@ -3,7 +3,6 @@ package com.tick.bookmarks;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
@@ -18,14 +17,21 @@ public class BookmarkController {
     }
 
     @GetMapping
-    public Iterable<Bookmark> get_all_bookmarks()
+    public Iterable<UserMarks> get_all_bookmarks()
         throws IOException {
         return svc.findAll();
     }
 
+    @GetMapping("/{id}")
+    public UserMarks user_bookmarks(
+            @PathVariable String id
+            ) throws IOException {
+        return svc.findUser(id);
+            }
+
     @PostMapping
-    public Bookmark add_bookmark(@RequestBody Bookmark bookmark)
+    public UserMarks add_bookmark(@RequestBody Bookmark bookmark)
         throws IOException {
-        return svc.add(bookmark);
+        return svc.add_bookmark(bookmark);
     }
 }
