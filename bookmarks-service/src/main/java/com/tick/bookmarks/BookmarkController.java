@@ -1,8 +1,8 @@
 package com.tick.bookmarks;
 
 import org.springframework.web.bind.annotation.*;
-import com.tick.entity.BookmarkPairs;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
@@ -11,14 +11,19 @@ import java.io.IOException;
 public class BookmarkController {
     private BookmarkRepository repo;
 
+    @Autowired
+    public BookmarkController(BookmarkRepository repo) {
+        this.repo = repo;
+    }
+
     @GetMapping
-    public Iterable<BookmarkPairs> get_all_bookmarks()
+    public Iterable<Bookmark> get_all_bookmarks()
         throws IOException {
         return repo.findAll();
     }
 
     @PostMapping
-    public BookmarkPairs add_bookmark(@RequestBody BookmarkPairs bookmark)
+    public Bookmark add_bookmark(@RequestBody Bookmark bookmark)
         throws IOException {
         return repo.save(bookmark);
     }
