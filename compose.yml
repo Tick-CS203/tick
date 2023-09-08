@@ -1,0 +1,26 @@
+services:
+  bookmark:
+    image: 'bookmark:latest'
+    container_name: bookmark
+    depends_on:
+      - db
+      - token
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/bookmarks
+      - SPRING_DATASOURCE_USERNAME=bmks
+      - SPRING_DATASOURCE_PASSWORD=skram
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - '8081:8080'
+  token:
+    image: 'token:latest'
+    container_name: token
+    ports:
+      - '8080:8080'
+  db:
+    image: 'postgres:15-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_DB=bookmarks
+      - POSTGRES_USER=bmks
+      - POSTGRES_PASSWORD=skram
