@@ -52,7 +52,7 @@ public class TicketController {
     }
 
     //if user asks for a refund
-    @PutMapping
+    @PutMapping("/{userId}")
     public List<Ticket> ticketsMadeAvailable(@RequestBody String userId) {
         return ticketService.ticketMadeAvailableAgain(userId);
     }
