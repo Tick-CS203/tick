@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserData extends Message {
-    private String userId;
+    private String token;
 
-    public UserData(MessageType type, String room, String userId) {
+    public UserData(MessageType type, String room, String token) {
         super(type, room);
-        this.userId = userId;
+        this.token = token;
     }
 }

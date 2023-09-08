@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.springframework.stereotype.Component;
-
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
@@ -25,6 +27,9 @@ public class SocketModule {
     @Autowired
     private SessionDAO dao;
 
+    @Autowired
+    private WebClient webClient;
+
     public SocketModule(SocketIOServer server, SocketService socketService) {
         this.server = server;
         this.socketService = socketService;
@@ -39,29 +44,47 @@ public class SocketModule {
         return (senderClient, data, ackSender) -> {
             log.info(data.toString());
 
+            String token = data.getToken();
+            UserDataRequest userDataRequest = new UserDataRequest(token);
+            
+            UserDataResponse userDataResponse = webClient.post()
+                .uri("/token/access")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userDataRequest)
+                .retrieve()
+                .bodyToMono(UserDataResponse.class)
+                .block();
+
             String room = senderClient.getHandshakeData().getSingleUrlParam("room");
             Session session = dao.findSessionById(room);
             if (session == null) session = new Session(room);
 
             HashSet<String> collection = session.getUserSet();
 
-            if (collection.size() < 3) {
-                collection.add(data.getUserId());
+            String userId = userDataResponse.getId();
+            TokenResponse tokenResponse = webClient.get()
+                .uri("/token/purchasing?user=" + userId)
+                .retrieve()
+                .bodyToMono(TokenResponse.class)
+                .block();
+
+            if (collection.size() < 10) {
+                collection.add(userId);
                 session.setUserSet(collection);
                 dao.save(session);
 
-                socketService.sendToken(data.getRoom(), data.getUserId(), senderClient, data.getUserId() + " token" );
+                socketService.sendToken(data.getRoom(), userId, senderClient, tokenResponse.getToken());
 
             } else {
                 ArrayList<String> userQueue = session.getUserQueue();
-                userQueue.add(data.getUserId());
+                userQueue.add(userId);
 
                 session.setUserQueue(userQueue);
                 dao.save(session);
 
                 log.info(userQueue.toString());
 
-                socketService.sendQueueNo(data.getRoom(), data.getUserId(), senderClient, userQueue.indexOf(data.getUserId()));
+                socketService.sendQueueNo(data.getRoom(), userId, senderClient, userQueue.indexOf(userId));
             }
 
 
@@ -72,11 +95,22 @@ public class SocketModule {
         return (senderClient, data, ackSender) -> {
             log.info(data.toString());
 
+            String token = data.getToken();
+            UserDataRequest userDataRequest = new UserDataRequest(token);
+            
+            UserDataResponse userDataResponse = webClient.post()
+                .uri("/token/access")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userDataRequest)
+                .retrieve()
+                .bodyToMono(UserDataResponse.class)
+                .block();
+
             String room = senderClient.getHandshakeData().getSingleUrlParam("room");
             Session session = dao.findSessionById(room);
 
             HashSet<String> collection = session.getUserSet();
-            collection.remove(data.getUserId());
+            collection.remove(userDataResponse.getId());
 
             ArrayList<String> userQueue = session.getUserQueue();
             if (userQueue.size() > 0) {
@@ -84,7 +118,13 @@ public class SocketModule {
                 session.setUserQueue(userQueue);
 
                 collection.add(nextUserId);
-                socketService.sendToken(data.getRoom(), nextUserId, senderClient, nextUserId + " token");
+                TokenResponse tokenResponse = webClient.get()
+                    .uri("/token/purchasing?user=" + nextUserId)
+                    .retrieve()
+                    .bodyToMono(TokenResponse.class)
+                    .block();
+
+                socketService.sendToken(data.getRoom(), nextUserId, senderClient, tokenResponse.getToken());
             }
             session.setUserSet(collection);
             dao.save(session);
