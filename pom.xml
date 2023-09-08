@@ -48,9 +48,6 @@
 						<exclude>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<goals>
-                        		<defaultGoal>install</defaultGoal>
-                    		</goals>
 						</exclude>
 					</excludes>
 				</configuration>
