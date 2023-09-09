@@ -60,23 +60,23 @@ public class BookmarkController {
         return verify_token(svc::add_bookmark, token, event);
     }
 
-    private ResponseEntity<?> verify_token(Function<String, Object> func, String token) {
+    private ResponseEntity<?> verify_token(Function<String, User> func, String token) {
         String id;
         try {
             id = req.post(token);
-            Object obj = func.apply(id);
-            return ResponseEntity.ok().body(obj);
+            User usr = func.apply(id);
+            return ResponseEntity.ok().body(usr);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body(new ErrorMessage("Unauthorised"));
         }
     }
 
-    private ResponseEntity<?> verify_token(BiFunction<String, Long, Object> func, String token, long event) {
+    private ResponseEntity<?> verify_token(BiFunction<String, Long, User> func, String token, long event) {
         String id;
         try {
             id = req.post(token);
-            Object obj = func.apply(id, event);
-            return ResponseEntity.ok().body(obj);
+            User usr = func.apply(id, event);
+            return ResponseEntity.ok().body(usr);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body(new ErrorMessage("Unauthorised"));
         }
