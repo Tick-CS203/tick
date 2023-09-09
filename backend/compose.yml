@@ -13,8 +13,9 @@ services:
       - SPRING_DATASOURCE_USERNAME=bmks
       - SPRING_DATASOURCE_PASSWORD=skram
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - TOKEN=${TOKEN}
     ports:
-      - '8081:8080'
+      - '${BOOKMARK_PORTS}'
   token:
     build:
       context: token-service
@@ -22,7 +23,7 @@ services:
     image: 'token:latest'
     container_name: ${TOKEN}
     ports:
-      - '8080:8080'
+      - '${TOKEN_PORTS}'
   bookmark-db:
     image: 'postgres:15-alpine'
     container_name: ${BOOKMARK_DB}

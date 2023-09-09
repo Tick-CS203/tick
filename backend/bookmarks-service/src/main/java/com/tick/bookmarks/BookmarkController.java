@@ -12,10 +12,12 @@ import java.util.Map;
 @RequestMapping("/bookmarks")
 public class BookmarkController {
     private BookmarkService svc;
+    private TokenRequest req;
 
     @Autowired
-    public BookmarkController(BookmarkService svc) {
+    public BookmarkController(BookmarkService svc, TokenRequest req) {
         this.svc = svc;
+        this.req = req;
     }
 
     @GetMapping
@@ -31,7 +33,7 @@ public class BookmarkController {
         String token = headers.get("authorisation");
         String id;
         try {
-            id = TokenRequest.post(token);
+            id = req.post(token);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body(new ErrorMessage("Unauthorised"));
         }
