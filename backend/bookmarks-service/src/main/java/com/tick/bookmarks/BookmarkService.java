@@ -17,11 +17,10 @@ public class BookmarkService {
         return repo.findAll();
     }
 
-    public User add_bookmark(Bookmark bookmark) {
-        String id = bookmark.user();
+    public User add_bookmark(String id, long event) {
         return repo.save(getUser(id).map(
-                user -> user.addEvent(bookmark)
-                ).orElse(new User(id).addEvent(bookmark)));
+                user -> user.addEvent(event)
+                ).orElse(new User(id).addEvent(event)));
     }
 
     public User delete_bookmark(String id, long event) {

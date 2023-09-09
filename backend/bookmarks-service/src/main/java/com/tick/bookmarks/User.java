@@ -27,10 +27,6 @@ public class User {
         return eventList;
     }
 
-    public User addEvent(Bookmark mark) {
-        return addEvent(mark.event());
-    }
-
     public User addEvent(long event) {
         eventList.add(event);
         return this;

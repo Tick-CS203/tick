@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.BiFunction;
 
 @RestController
 @RequestMapping("/bookmarks")
@@ -29,29 +31,54 @@ public class BookmarkController {
     @GetMapping("/user")
     public ResponseEntity<?> user_bookmarks(
             @RequestHeader Map<String, String> headers
-            ) throws IOException {
+            ) throws IOException
+    {
         String token = headers.get("authorisation");
+
+        return verify_token(svc::findUser, token);
+    }
+
+    @DeleteMapping("/{event}")
+    public ResponseEntity<?> delete_bookmark(
+            @RequestHeader Map<String, String> headers,
+            @PathVariable long event
+            ) throws IOException
+    {
+        String token = headers.get("authorisation");
+
+        return verify_token(svc::delete_bookmark, token, event);
+    }
+
+    @PostMapping("/{event}")
+    public ResponseEntity<?> add_bookmark(
+            @RequestHeader Map<String, String> headers,
+            @PathVariable long event
+            ) throws IOException
+    {
+        String token = headers.get("authorisation");
+
+        return verify_token(svc::add_bookmark, token, event);
+    }
+
+    private ResponseEntity<?> verify_token(Function<String, Object> func, String token) {
         String id;
         try {
             id = req.post(token);
+            Object obj = func.apply(id);
+            return ResponseEntity.ok().body(obj);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body(new ErrorMessage("Unauthorised"));
         }
+    }
 
-        return ResponseEntity.ok().body(svc.findUser(id));
-            }
-
-    @DeleteMapping("/{id}/{event}")
-    public User delete_bookmark(
-            @PathVariable String id,
-            @PathVariable long event)
-            throws IOException {
-            return svc.delete_bookmark(id, event);
-            }
-
-    @PostMapping
-    public User add_bookmark(@RequestBody Bookmark bookmark)
-        throws IOException {
-        return svc.add_bookmark(bookmark);
+    private ResponseEntity<?> verify_token(BiFunction<String, Long, Object> func, String token, long event) {
+        String id;
+        try {
+            id = req.post(token);
+            Object obj = func.apply(id, event);
+            return ResponseEntity.ok().body(obj);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(401).body(new ErrorMessage("Unauthorised"));
+        }
     }
 }
