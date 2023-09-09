@@ -1,11 +1,10 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { Recaptcha } from "./pages/Recaptcha";
+import { AppRouter } from './Navigation/AppRouter'
 
 function App() {
   return (
     <div className="App">
-      <Recaptcha />
+      <AppRouter />
     </div>
   );
 }
