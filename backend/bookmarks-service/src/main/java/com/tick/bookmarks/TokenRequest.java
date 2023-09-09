@@ -28,12 +28,9 @@ public class TokenRequest {
 
         String url = "http://" + host + ":8080/token/access";
 
-        ResponseEntity<String> response = rest.postForEntity(url, entity, String.class);
-        int status = response.getStatusCode().value();
-        if (status != 200) throw new IllegalArgumentException();
-
         try {
-            return new ObjectMapper().readValue(response.getBody(), TokenResponse.class).id();
+            ResponseEntity<TokenResponse> response = rest.postForEntity(url, entity, TokenResponse.class);
+            return response.getBody().id();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new IllegalArgumentException();
