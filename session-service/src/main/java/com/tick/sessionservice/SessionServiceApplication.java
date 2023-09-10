@@ -12,16 +12,17 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RestController
 @RequestMapping("/session")
 public class SessionServiceApplication {
+    private String tokenHost;
+    private String tokenPort;
 
-    @Value("${token-service.host}")
-    private String socketHost;
-
-    @Value("${token-service.port}")
-    private Integer socketPort;
+    public SessionServiceApplication() {
+        tokenHost = System.getenv("TOKEN_HOST");
+        tokenPort = System.getenv("TOKEN_PORT");
+    }
 
     @Bean
    	public WebClient getWebClientBuilder() {
-		return WebClient.builder().baseUrl("http://" + socketHost + ":" + socketPort).build();
+		return WebClient.builder().baseUrl("http://" + tokenHost + ":" + tokenPort).build();
    	}
 
 	public static void main(String[] args) {

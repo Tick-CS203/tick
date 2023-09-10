@@ -1,18 +1,19 @@
 package com.tick.sessionservice.config;
 
 import com.corundumstudio.socketio.SocketIOServer;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SocketIOConfig {
 
-    @Value("${socket-server.host}")
     private String host;
-
-    @Value("${socket-server.port}")
     private Integer port;
+
+    public SocketIOConfig() {
+        host = System.getenv("SESSION_HOST");
+        port = Integer.parseInt(System.getenv("SESSION_PORT"));
+    }
 
     @Bean
     public SocketIOServer socketIOServer() {
