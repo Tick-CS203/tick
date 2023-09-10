@@ -82,3 +82,5 @@ public class BookmarkController {
         }
     }
 }
+
+record ErrorMessage(String error) {}
