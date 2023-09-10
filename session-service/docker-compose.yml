@@ -1,0 +1,19 @@
+version: "3"
+services:
+  redis:
+    container_name: redis
+    image: "redis"
+    ports:
+      - "6379:6379"
+  session-service:
+    build: .
+    links:
+      - redis
+    ports:
+      - "8085:8085"
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - SESSION_HOST=${SESSION_HOST}
+      - SESSION_PORT=${SESSION_PORT}
+      - TOKEN_HOST=${TOKEN_HOST}
+      - TOKEN_PORT=${TOKEN_PORT}
