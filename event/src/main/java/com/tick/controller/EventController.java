@@ -1,9 +1,10 @@
 package com.tick.controller;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import lombok.AllArgsConstructor;
 
-// import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import com.tick.model.*;
 @RequestMapping("/event")
 @AllArgsConstructor
 public class EventController {
-    //@Autowired
+    @Autowired
     private final EventService eventService;
 
     @PostMapping
@@ -23,20 +24,21 @@ public class EventController {
         return eventService.addEvent(event);
     }
 
- /*    @GetMapping
+    @GetMapping
     public List<Event> getEvents (
-        @RequestParam(name = "category") String category,
-        @RequestParam(name = "maxPrice") double maxPrice
+        @RequestParam(name = "category", required = false) String category,
+        @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+        @RequestParam(name = "eventDateTime", required = false) LocalDateTime eventDateTime
     ) {
-        return eventService.filterEvents(category, maxPrice);
-    } */
+        return eventService.filterEvents(category, maxPrice, eventDateTime);
+    }
 
     @GetMapping("/{id}")
     public Event getEventByID (@PathVariable Integer id) {
         return eventService.getEventByID(id);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public Event modifyEvent (@RequestBody Event e) {
         return eventService.updateEvent(e);
     }

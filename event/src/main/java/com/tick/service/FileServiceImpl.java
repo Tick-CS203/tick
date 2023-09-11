@@ -1,4 +1,4 @@
-package com.tick.controller;
+package com.tick.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
