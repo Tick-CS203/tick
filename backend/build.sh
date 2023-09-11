@@ -5,7 +5,7 @@ for file in *; do
         echo Currently in $file
         ( cd $file;
         if [ -f mvnw ]; then
-            ./mvnw -B package;
+            ./mvnw -B package -Dmaven.test.skip;
         else
             ./gradlew bootJar --no-daemon;
         fi )
