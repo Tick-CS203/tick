@@ -7,14 +7,10 @@
         <object id="svg" data="National Stadium.svg" type="image/svg+xml"></object>
     </div>
     <script>
-        const svg = document.getElementById("svg").getSVGDocument()
-        const path = svg.getElementsByTagName("path")
-        path.array.forEach(element => {
-            console.log(element)
-            element.addEventListener('onclick', (e) => {
-                alert(e.target)
-            })
-        });
+        const svg = document.getElementById("svg")
+        svg.addEventListener("click", function(e) {
+            console.log(e.target)
+        })
     </script>
 </body>
 

@@ -1,11 +1,10 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { Recaptcha } from "./pages/Recaptcha";
+import { NationalStadium } from "./pages/Seatmap/NationalStadium";
 
 function App() {
   return (
     <div className="App">
-      <Recaptcha />
+      <NationalStadium />
     </div>
   );
 }
