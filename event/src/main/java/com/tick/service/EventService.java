@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import com.tick.repository.*;
@@ -24,8 +25,8 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public List<Event> filterEvents(String category, double maxPrice, EventDate date) {
-        if (category.isEmpty() && maxPrice == 0) {
+    public List<Event> filterEvents(String category, Double maxPrice, LocalDateTime eventDateTime) {
+        if (category.isEmpty() && maxPrice == 0 && eventDateTime == null) {
             return eventRepository.findAll();
         }
 
@@ -47,9 +48,9 @@ public class EventService {
             }
         }
 
-        if (!(date == null)){
+        if (eventDateTime != null){
             for (Event currEvent : intermediaryEvents) {
-                if (!eventHasFilteredDate(currEvent, date)){
+                if (!eventHasFilteredDate(currEvent, eventDateTime)){
                     intermediaryEvents.remove(currEvent);
                 }
             }
@@ -78,7 +79,7 @@ public class EventService {
         return eventID + " event deleted successfully";
     }
 
-    public Boolean eventHasAPriceLessThanOrEqualToMaxPrice(Event event, double maxPrice) {
+    public Boolean eventHasAPriceLessThanOrEqualToMaxPrice(Event event, Double maxPrice) {
         double[] prices = event.getPrice();
         for (double currPrice : prices) {
             if (currPrice <= maxPrice) {
@@ -88,10 +89,10 @@ public class EventService {
         return false;
     }
 
-    public Boolean eventHasFilteredDate(Event event, EventDate date) {
+    public Boolean eventHasFilteredDate(Event event, LocalDateTime eventDate) {
         EventDate[] eventDates = event.getDate();
         for (EventDate currEventDate : eventDates) {
-            if (currEventDate.equals(date)){
+            if (currEventDate.getEventDateTime().equals(eventDate)){
                 return true;
             }
         }
