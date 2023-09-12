@@ -3,7 +3,7 @@ services:
     build:
       context: bookmarks-service
       dockerfile: ../Dockerfile
-    image: 'bookmark:latest'
+    image: bookmark
     container_name: ${BOOKMARK}
     depends_on:
       - bookmark-db
@@ -20,7 +20,7 @@ services:
     build:
       context: token-service
       dockerfile: ../Dockerfile
-    image: 'token:latest'
+    image: token-service
     container_name: ${TOKEN}
     ports:
       - '${TOKEN_PORTS}'
