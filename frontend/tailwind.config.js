@@ -5,10 +5,12 @@ module.exports = {
     extend: {
       colors: {
         "main-yellow": "#F6E902",
+        "main-blue": "#7DCCEC",
       },
       fontFamily: {
-        'inter': ['Inter', 'Helvetica'],
-        'lemon': ['Lemon'],
+        inter: ["Inter", "Helvetica"],
+        lemon: ["Lemon"],
+        mono: ["Azeret Mono"]
       },
     },
   },
