@@ -2,18 +2,17 @@ import "./App.css";
 import { Routes, Route } from 'react-router-dom';
 import { Navbar } from "./component/Navbar";
 import { Footer } from "./component/Footer";
-
-import { NationalStadium } from "./pages/Seatmap/NationalStadium";
-
+import { Home } from "./pages/Home";
 
 function App() {
   return (
     <div className="App">
       <Navbar />
-      <Routes>
-        <Route path="/" element={<p>HELLO</p>} />
-        <Route path="/seatmap" element={<NationalStadium />} />
-      </Routes>
+      <div className="bg-black px-8">
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </div>
       <Footer />
     </div>
   );
