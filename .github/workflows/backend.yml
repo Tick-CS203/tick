@@ -49,15 +49,16 @@ jobs:
         run: |
           echo Exporting to Amazon
           cd backend
-          images=$(ls -d */)
-          `docker images --format "{{.Repository}}@@{{.Tag}}@@{{.ID}}"`
-          echo "All images to push: ${images}"
-          for image in ${images}; do
-            imagename=${image%%@@*};
-            tag=`echo $image | grep -o "@@.*@@" | grep -o "[^@]*"`
-            id=${image##*@@};
-            repourl=$ECR_REGISTRY/$imagename:$id
+          folders=$(ls -d */)
+          echo "All images to push: ${folders}"
+          images=`docker images --format "{{.Repository}}@@{{.Tag}}"`
+          for image in ${folders}; do
+            image=${image%/}
+            line=echo images | grep $image
+            tag=${line##*@@};
+            repourl=$ECR_REGISTRY/$image
             echo "repourl=${repourl}"
-            docker tag $imagename:$tag $repourl
+            docker tag $image:$tag $repourl
             docker push $repourl
+            docker rmi $image:$tag $repourl
           done
