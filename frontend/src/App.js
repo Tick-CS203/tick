@@ -1,11 +1,17 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { Recaptcha } from "./pages/Recaptcha";
+import { Routes, Route } from 'react-router-dom';
+import { Navbar } from "./component/Navbar";
+import { Footer } from "./component/Footer";
+
 
 function App() {
   return (
     <div className="App">
-      <Recaptcha />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<p>HELLO</p>} />
+      </Routes>
+      <Footer />
     </div>
   );
 }
