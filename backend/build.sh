@@ -7,7 +7,7 @@ for file in *; do
         if [ -f mvnw ]; then
             ./mvnw -B package -Dmaven.test.skip;
         else
-            ./gradlew bootJar --no-daemon;
+            ./gradlew bootJar;
         fi )
         echo
     fi

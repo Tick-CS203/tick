@@ -54,11 +54,13 @@ jobs:
           images=`docker images --format "{{.Repository}}@@{{.Tag}}"`
           for image in ${folders}; do
             image=${image%/}
-            line=echo images | grep $image
+            echo "Uploading ${image}"
+            line=`echo $images | grep -o "$image@@[^ ]* "`
             tag=${line##*@@};
             repourl=$ECR_REGISTRY/$image
             echo "repourl=${repourl}"
             docker tag $image:$tag $repourl
             docker push $repourl
             docker rmi $image:$tag $repourl
+            echo "Removed images ${image}:${tag} and ${repourl}"
           done
