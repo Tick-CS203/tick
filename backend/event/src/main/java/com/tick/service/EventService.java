@@ -31,27 +31,33 @@ public class EventService {
         }
 
         List<Event> intermediaryEvents = eventRepository.findAll();
+        Iterator<Event> iter = intermediaryEvents.iterator();
 
-        if (!category.isEmpty()) {
-            for (Event currEvent : intermediaryEvents) {
+        if (category != null && !category.isEmpty()) {
+            while (iter.hasNext()) {
+                Event currEvent = iter.next();
                 if (!currEvent.getCategory().equals(category)) {
-                    intermediaryEvents.remove(currEvent);
+                    iter.remove();
                 }
             }
         }
 
+        iter = intermediaryEvents.iterator();
         if (maxPrice != 0) {
-            for (Event currEvent : intermediaryEvents) {
+            while (iter.hasNext()) {
+                Event currEvent = iter.next();
                 if (!eventHasAPriceLessThanOrEqualToMaxPrice(currEvent, maxPrice)) {
-                    intermediaryEvents.remove(currEvent);
+                    iter.remove();
                 }
             }
         }
 
+        iter = intermediaryEvents.iterator();
         if (eventDateTime != null){
-            for (Event currEvent : intermediaryEvents) {
+            while (iter.hasNext()) {
+                Event currEvent = iter.next();
                 if (!eventHasFilteredDate(currEvent, eventDateTime)){
-                    intermediaryEvents.remove(currEvent);
+                    iter.remove();
                 }
             }
         }
