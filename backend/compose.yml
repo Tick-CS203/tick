@@ -1,4 +1,12 @@
 services:
+  token:
+    build:
+      context: token-service
+      dockerfile: ../Dockerfile
+    image: token-service
+    container_name: ${TOKEN_HOST}
+    ports:
+      - '${TOKEN_PORTS}'
   bookmark:
     build:
       context: bookmarks-service
@@ -13,17 +21,21 @@ services:
       - SPRING_DATASOURCE_USERNAME=bmks
       - SPRING_DATASOURCE_PASSWORD=skram
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - TOKEN=${TOKEN}
+      - TOKEN_HOST=${TOKEN_HOST}
     ports:
       - '${BOOKMARK_PORTS}'
-  token:
-    build:
-      context: token-service
-      dockerfile: ../Dockerfile
-    image: token-service
-    container_name: ${TOKEN}
+    volumes:
+      - bookmark_db:/var/lib/postgresql/data
+  session-service:
+    build: .
+    links:
+      - redis
     ports:
-      - '${TOKEN_PORTS}'
+      - "8085:8085"
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - TOKEN_HOST=${TOKEN_HOST}
+      - TOKEN_PORT=${TOKEN_PORT}
   bookmark-db:
     image: 'postgres:15-alpine'
     container_name: ${BOOKMARK_DB}
@@ -31,3 +43,13 @@ services:
       - POSTGRES_DB=bookmarks
       - POSTGRES_USER=bmks
       - POSTGRES_PASSWORD=skram
+  redis:
+    container_name: redis
+    image: "redis"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_db:/data
+volumes:
+  bookmark_db:
+  redis_db:
