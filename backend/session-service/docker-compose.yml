@@ -13,7 +13,5 @@ services:
       - "8085:8085"
     environment:
       - REDIS_HOST=${REDIS_HOST}
-      - SESSION_HOST=${SESSION_HOST}
-      - SESSION_PORT=${SESSION_PORT}
       - TOKEN_HOST=${TOKEN_HOST}
       - TOKEN_PORT=${TOKEN_PORT}
