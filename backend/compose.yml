@@ -12,7 +12,7 @@ services:
       context: bookmarks-service
       dockerfile: ../Dockerfile
     image: bookmark
-    container_name: ${BOOKMARK}
+    container_name: ${BOOKMARK_HOST}
     depends_on:
       - bookmark-db
       - token
@@ -26,6 +26,22 @@ services:
       - '${BOOKMARK_PORTS}'
     volumes:
       - bookmark_db:/var/lib/postgresql/data
+  event:
+    build:
+      context: event-service
+      dockerfile: ../Dockerfile
+    image: event
+    container_name: ${EVENT_HOST}
+    depends_on:
+      - ${EVENT_DB}
+    environment:
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=event
+      - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${EVENT_DB}:27017/?retryWrites=true&w=majority
+      - SPRING_DATA_MONGODB_DATABASE=event
+    ports:
+      - '${EVENT_PORTS}'
+    volumes:
+      - event_db:/data/db
   session-service:
     build: .
     links:
@@ -50,6 +66,16 @@ services:
       - "6379:6379"
     volumes:
       - redis_db:/data
+  mongo:
+    image: mongo
+    container_name: ${EVENT_DB}
+    environment:
+      - MONGO_INITDB_ROOT_DB=event
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    ports:
+      - '27017:27017'
 volumes:
   bookmark_db:
   redis_db:
+  event_db:
