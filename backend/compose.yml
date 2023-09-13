@@ -1,0 +1,33 @@
+services:
+  bookmark:
+    build:
+      context: bookmarks-service
+      dockerfile: ../Dockerfile
+    image: bookmark
+    container_name: ${BOOKMARK}
+    depends_on:
+      - bookmark-db
+      - token
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${BOOKMARK_DB}:5432/bookmarks
+      - SPRING_DATASOURCE_USERNAME=bmks
+      - SPRING_DATASOURCE_PASSWORD=skram
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - TOKEN=${TOKEN}
+    ports:
+      - '${BOOKMARK_PORTS}'
+  token:
+    build:
+      context: token-service
+      dockerfile: ../Dockerfile
+    image: token-service
+    container_name: ${TOKEN}
+    ports:
+      - '${TOKEN_PORTS}'
+  bookmark-db:
+    image: 'postgres:15-alpine'
+    container_name: ${BOOKMARK_DB}
+    environment:
+      - POSTGRES_DB=bookmarks
+      - POSTGRES_USER=bmks
+      - POSTGRES_PASSWORD=skram
