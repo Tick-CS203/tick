@@ -2,6 +2,8 @@ package com.tick.sessionservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisClusterConfiguration;
+import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,9 +16,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
     @Bean
     public JedisConnectionFactory connectionFactory() {
-        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setHostName(System.getenv("REDIS_HOST"));
-        configuration.setPort(6379);
+        RedisClusterConfiguration configuration = new RedisClusterConfiguration();
+        configuration.addClusterNode(new RedisNode(System.getenv("REDIS_HOST"), 6379));
         return new JedisConnectionFactory(configuration);
     }
 
