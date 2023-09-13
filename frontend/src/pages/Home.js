@@ -11,7 +11,9 @@ import { Event } from "../component/homepage/Event";
 export const Home = () => {
   return (
     <>
-      <p className="font-inter font-black text-main-yellow italic text-xl py-5 relative">YOUR UPCOMING CONCERTS</p>
+      <p className="font-inter font-black text-main-yellow italic text-xl py-5 relative">
+        YOUR UPCOMING CONCERTS
+      </p>
       <p className="font-inter font-black text-main-blue italic text-xl py-5 relative">
         <img
           className="absolute left-[256px]"
