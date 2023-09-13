@@ -1,14 +1,14 @@
-import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import * as React from "react"
+import { Route, Redirect } from "react-router-dom"
 
-// Helpers
-import { validateToken } from '../Utils/Helpers';
+/** Helpers */
+import { validateToken } from "../Utils/Helpers"
 
-// Constants
-import { AUTH_USER_TOKEN_KEY } from '../Utils/constants';
+/** Constants */
+import { AUTH_USER_TOKEN_KEY } from "../Utils/constants"
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY));
+  const checkUserAuth = validateToken(localStorage.getItem(AUTH_USER_TOKEN_KEY))
 
   return (
     <Route
@@ -17,13 +17,15 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         return checkUserAuth ? (
           <Component {...props} />
         ) : (
-          <Navigate
-            to="/login"
+          <Redirect
+            to={{
+              pathname: "/login"
+            }}
           />
-        );
+        )
       }}
     />
-  );
-};
+  )
+}
 
-export default PrivateRoute;
+export default PrivateRoute

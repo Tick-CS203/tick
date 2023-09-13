@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import { Form } from 'antd';
+import styled from "styled-components"
+import { Form } from "antd"
 
 /** App Theme */
-import { colors } from '../Themes/Colors';
+import { colors } from "../../Themes/Colors"
 
 const EmailConfirmFormWrapper = styled(Form)`
   display: flex;
@@ -18,7 +18,7 @@ const EmailConfirmFormWrapper = styled(Form)`
   input {
     text-align: center;
   }
-`;
+`
 
-export default EmailConfirmFormWrapper;
+export default EmailConfirmFormWrapper
 

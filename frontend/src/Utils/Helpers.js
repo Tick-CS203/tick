@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode';
+const jwtDecode = require("jwt-decode")
 
 /**
  * helper method to validate  user token
@@ -6,14 +6,15 @@ import jwtDecode from 'jwt-decode';
  * @param {*} token
  * @returns {boolean}
  */
-export const validateToken = (token) => {
+export const validateToken = token => {
   if (!token) {
-    return false;
+    return false
   }
   try {
-    const decodedJwt = jwtDecode(token);
-    return decodedJwt.exp >= Date.now() / 1000;
+    const decodedJwt = jwtDecode(token)
+    return decodedJwt.exp >= Date.now() / 1000
   } catch (e) {
-    return false;
+    return false
   }
-};
+}
+
