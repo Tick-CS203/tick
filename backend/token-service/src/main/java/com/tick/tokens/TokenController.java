@@ -1,38 +1,29 @@
 package com.tick.tokens;
 
+import java.io.IOException;
+
 import com.tick.entity.*;
-import java.util.function.BiFunction;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.ExpiredJwtException;
 
+@RestController
+@RequestMapping("/token")
 public class TokenController {
-    public ResponseEntity<?> perform(String input, String token_type,
-            Class<?> class_type, BiFunction<String, String, Object> func) {
-        Object obj;
-        int status = 400;
-        Class<?> return_class = ErrorMessage.class;
+    TokenService svc = new TokenService();
 
-        try {
-            obj = func.apply(input, token_type);
-            status = 200;
-            return_class = class_type;
-        } catch (ExpiredJwtException e) {
-            obj = "The token has expired";
-        } catch (RuntimeException e) {
-            obj = e.getMessage();
-        }
+    @PostMapping("/{type}")
+    public ResponseEntity<?> validate_token(
+            @RequestBody Token token,
+            @PathVariable String type) throws IOException
+    {
+        return svc.perform(token.token(), type, User.class, JwtTokenUtil::validate_tok);
+    }
 
-        if (obj instanceof String) {
-            obj = new ErrorMessage((String) obj);
-        }
-
-        try {
-            return ResponseEntity.status(status)
-                .body(return_class.cast(obj));
-        } catch (Exception e) {
-            System.out.println("Exception met: " + e.getMessage());
-            return null;
-        }
+    @GetMapping("/{type}")
+    public ResponseEntity<?> create_token(
+            @RequestParam(name = "user") String user,
+            @PathVariable String type) throws IOException
+    {
+        return svc.perform(user, type, Token.class, JwtTokenUtil::generate_tok);
     }
 }
