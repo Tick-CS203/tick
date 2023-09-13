@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("/token")
 public class TokenController {
     TokenService svc = new TokenService();
+
+    @GetMapping
+    public String health_check() {
+        return "Service is up";
+    }
 
     @PostMapping("/{type}")
     public ResponseEntity<?> validate_token(
