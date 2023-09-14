@@ -30,7 +30,7 @@ services:
     build:
       context: event-service
       dockerfile: ../Dockerfile
-    image: event
+    image: event-service
     container_name: ${EVENT_HOST}
     depends_on:
       - ${EVENT_DB}
