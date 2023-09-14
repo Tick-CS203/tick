@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import { Navbar } from "./component/Navbar";
 import { Footer } from "./component/Footer";
 import { Home } from "./pages/Home";
-import { NationalStadium } from "./pages/Seatmap/NationalStadium";
+import { SeatSelection } from "./pages/SeatSelection";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <div className="bg-black px-8">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/seatmap" element={<NationalStadium />} />
+          <Route path="/seatmap" element={<SeatSelection />} />
         </Routes>
       </div>
       <Footer />
