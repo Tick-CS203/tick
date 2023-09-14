@@ -46,7 +46,7 @@ export const SignUp = () => {
       
       <div className='flex justify-between items-end py-2'>
         <label className="text-white font-inter font-bold text-xs ">Username</label>
-        <input className= 'bg-black border-b-[1px] border-main-yellow w-4/5' type="text"
+        <input className= 'bg-black border-b-[1px] border-main-yellow text-white w-4/5' type="text"
             onChange={(event) => {
               setEnteredUsername(event.target.value);
               }} />
@@ -54,7 +54,7 @@ export const SignUp = () => {
 
       <div className='flex justify-between items-end py-2'>
         <label className="text-white font-inter font-bold text-xs ">Email</label>
-        <input className= 'bg-black border-b-[1px] border-main-yellow w-4/5' type="email"
+        <input className= 'bg-black border-b-[1px] border-main-yellow text-white w-4/5' type="email"
             onChange={(event) => {
               setEnteredEmail(event.target.value);
               }} />
@@ -62,7 +62,7 @@ export const SignUp = () => {
     
       <div className='flex justify-between items-end py-2'>
         <label className="text-white font-inter font-bold text-xs">Password</label>
-        <input className= 'bg-black border-b-[1px] border-main-yellow w-4/5' type="password"
+        <input className= 'bg-black border-b-[1px] border-main-yellow text-white w-4/5' type="password"
             onChange={(event) => {
               setEnteredPassword(event.target.value);
               }} />
@@ -70,7 +70,7 @@ export const SignUp = () => {
 
       <div className='flex justify-between items-end py-2'>
         <label className="text-white font-inter font-bold text-xs ">Confirm Password</label>
-        <input className= 'bg-black border-b-[1px] border-main-yellow w-4/5' type="password"
+        <input className= 'bg-black border-b-[1px] border-main-yellow text-white w-4/5' type="password"
             onChange={(event) => {
               setEnteredConfirmPassword(event.target.value);
               }} />

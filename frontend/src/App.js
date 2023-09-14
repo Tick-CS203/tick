@@ -8,7 +8,6 @@ import { SeatSelection } from "./pages/SeatSelection";
 import { SignUp } from "./pages/SignUp";
 import { Login } from "./pages/Login";
 import { ConfirmSignUp } from "./pages/ConfirmSignUp";
-import PhoneNumberValidation from "./component/signup/PhoneNumberValidation";
 
 function App() {
   return (
@@ -23,7 +22,6 @@ function App() {
             <Route path="/seatmap" element={<SeatSelection />} />
         </Routes>
       </div>
-      <PhoneNumberValidation/>
       <Footer />
     </div>
   );
