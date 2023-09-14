@@ -8,6 +8,7 @@ import { SeatSelection } from "./pages/SeatSelection";
 import { SignUp } from "./pages/SignUp";
 import { Login } from "./pages/Login";
 import { ConfirmSignUp } from "./pages/ConfirmSignUp";
+import PhoneNumberValidation from "./component/signup/PhoneNumberValidation";
 
 function App() {
   return (
@@ -15,13 +16,14 @@ function App() {
       <Navbar />
       <div className="bg-black px-8">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/confirmsignup" element={<ConfirmSignUp />} />
-          <Route path="/seatmap" element={<SeatSelection />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/confirmsignup" element={<ConfirmSignUp />} />
+            <Route path="/seatmap" element={<SeatSelection />} />
         </Routes>
       </div>
+      <PhoneNumberValidation/>
       <Footer />
     </div>
   );

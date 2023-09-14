@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export const Navbar = () => {
   return (
     <nav className="bg-black">
@@ -8,7 +10,7 @@ export const Navbar = () => {
           className="bg-black placeholder-main-yellow text-main-yellow rounded p-1 border-solid border-main-yellow text-sm"
         />
         <button className="bg-main-yellow text-black px-3 py-1 rounded-xl font-inter text-sm font-semibold">
-          Login/Signup
+          <Link to="/login">Login/Signup</Link>
         </button>
       </div>
     </nav>

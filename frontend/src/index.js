@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ConfigProvider, theme } from "antd";
 
 import { Amplify } from 'aws-amplify';
-import awsconfig from './aws-exports';
+import awsconfig from './aws-exports-example';
 Amplify.configure(awsconfig);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
