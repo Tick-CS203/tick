@@ -18,53 +18,56 @@ import com.tick.ticketsservice.model.Ticket;
 import com.tick.ticketsservice.service.TicketService;
 
 @RestController
-@RequestMapping("/tickets")
 public class TicketController {
 
     @Autowired
     private TicketService ticketService;
 
-    @PostMapping
+    @GetMapping
+    public String health_check() {
+        return "Service is running";
+    }
+
+    @GetMapping("/tickets")
+    public List<Ticket> getAllTickets() {
+        return ticketService.getAllTickets();
+    }
+
+    @PostMapping("/tickets")
     @ResponseStatus(HttpStatus.CREATED)
     public Ticket createTicket(@RequestBody Ticket ticket) {
         return ticketService.addTicket(ticket);
     }
 
-    @GetMapping
-    public List<Ticket> getAllTickets() {
-        return ticketService.getAllTickets();
-
-    }   
-
-    @GetMapping("/{ticketId}")
-    public Ticket getTicket(@PathVariable String ticketId) {
-        return ticketService.getTicketByTicketId(ticketId);
-    }
-
-    @GetMapping("/userId/{userId}")
-    public List<Ticket> getTicketByUserId(@PathVariable String userId) {
-        return ticketService.getTicketByUserId(userId);
-    }
-    
-    @PutMapping
+    @PutMapping("/tickets")
     public Ticket modifyTicket(@RequestBody Ticket ticket) {
         return ticketService.updateTicket(ticket);
     }
 
+    @GetMapping("/tickets/{ticketId}")
+    public Ticket getTicket(@PathVariable String ticketId) {
+        return ticketService.getTicketById(ticketId);
+    }
+
+    @GetMapping("/tickets/userId/{userId}")
+    public List<Ticket> getTicketByUserId(@PathVariable String userId) {
+        return ticketService.getTicketByUserId(userId);
+    }
+
     //if user asks for a refund
-    @PutMapping("/{userId}")
+    @PutMapping("/tickets/{userId}")
     public List<Ticket> ticketsMadeAvailable(@RequestBody String userId) {
-        return ticketService.ticketMadeAvailableAgain(userId);
+        return ticketService.releaseTicket(userId);
     }
 
     //if event is cancelled
-    @DeleteMapping("/eventId/{eventId}") 
+    @DeleteMapping("/tickets/eventId/{eventId}")
     public String deleteByEventId(@PathVariable String eventId) {
         return ticketService.deleteTicketByEvent(eventId);
     }
 
     //delete after ticket object belonging to prev user after it has been transferred
-    @DeleteMapping("/{ticketId}") 
+    @DeleteMapping("/tickets/{ticketId}")
     public String deleteByTicketId(@PathVariable String ticketId) {
         return ticketService.deleteTicketByTicketId(ticketId);
     }
