@@ -17,13 +17,18 @@ public class EventController {
     @Autowired
     private final EventService eventService;
 
+    @GetMapping
+    public String health_check() {
+        return "Service is running";
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) 
     public Event createEvent (@RequestBody Event event) {
         return eventService.addEvent(event);
     }
 
-    @GetMapping
+    @GetMapping("/event")
     public List<Event> getEvents (
         @RequestParam(name = "category", required = false) String category,
         @RequestParam(name = "maxPrice", required = false) Double maxPrice,
