@@ -49,6 +49,8 @@ services:
     image: session-service
     container_name: ${SESSION_HOST}
     depends_on:
+      token:
+        condition: service_started
       redis-cluster:
         condition: service_completed_successfully
     ports:
