@@ -26,13 +26,10 @@ public class EventService {
     }
 
     public List<Event> filterEvents(String category, Double maxPrice, LocalDateTime eventDateTime) {
-        if (category.isEmpty() && maxPrice == 0 && eventDateTime == null) {
-            return eventRepository.findAll();
-        }
+        List<Event> intermediaryEvents = eventRepository.findAll();
 
         List<Event> intermediaryEvents = eventRepository.findAll();
         Iterator<Event> iter = intermediaryEvents.iterator();
-
         if (category != null && !category.isEmpty()) {
             while (iter.hasNext()) {
                 Event currEvent = iter.next();
@@ -43,7 +40,7 @@ public class EventService {
         }
 
         iter = intermediaryEvents.iterator();
-        if (maxPrice != 0) {
+        if (maxPrice != null && maxPrice != 0) {
             while (iter.hasNext()) {
                 Event currEvent = iter.next();
                 if (!eventHasAPriceLessThanOrEqualToMaxPrice(currEvent, maxPrice)) {
