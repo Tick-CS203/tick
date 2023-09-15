@@ -15,7 +15,7 @@ public class TokenController {
         return "Service is up";
     }
 
-    @PostMapping("/{type}")
+    @PostMapping("/token/{type}")
     public ResponseEntity<?> validate_token(
             @RequestBody Token token,
             @PathVariable String type) throws IOException
@@ -23,7 +23,7 @@ public class TokenController {
         return svc.perform(token.token(), type, User.class, JwtTokenUtil::validate_tok);
     }
 
-    @GetMapping("/{type}")
+    @GetMapping("/token/{type}")
     public ResponseEntity<?> create_token(
             @RequestParam(name = "user") String user,
             @PathVariable String type) throws IOException
