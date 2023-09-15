@@ -12,7 +12,7 @@ services:
       context: bookmarks-service
       dockerfile: ../Dockerfile
     image: bookmark
-    container_name: ${BOOKMARK}
+    container_name: ${BOOKMARK_HOST}
     depends_on:
       - bookmark-db
       - token
@@ -26,10 +26,31 @@ services:
       - '${BOOKMARK_PORTS}'
     volumes:
       - bookmark_db:/var/lib/postgresql/data
-  session-service:
-    build: .
-    links:
-      - redis
+  event:
+    build:
+      context: event-service
+      dockerfile: ../Dockerfile
+    image: event-service
+    container_name: ${EVENT_HOST}
+    depends_on:
+      - ${EVENT_DB}
+    environment:
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=event
+      - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${EVENT_DB}:27017/?retryWrites=true&w=majority
+      - SPRING_DATA_MONGODB_DATABASE=event
+    ports:
+      - '${EVENT_PORTS}'
+    volumes:
+      - event_db:/data/db
+  session:
+    build:
+      context: session-service
+      dockerfile: ../Dockerfile
+    image: session-service
+    container_name: ${SESSION_HOST}
+    depends_on:
+      redis-cluster:
+        condition: service_completed_successfully
     ports:
       - "8085:8085"
     environment:
@@ -43,13 +64,67 @@ services:
       - POSTGRES_DB=bookmarks
       - POSTGRES_USER=bmks
       - POSTGRES_PASSWORD=skram
-  redis:
+  redis-node-1:
+    image: redis
+    container_name: node-1
+    command: bash -c "${redis_command}"
+    ports:
+      - '7001:6379'
+  redis-node-2:
+    image: redis
+    container_name: node-2
+    command: bash -c "${redis_command}"
+    ports:
+      - '7002:6379'
+  redis-node-3:
+    image: redis
+    container_name: node-3
+    command: bash -c "${redis_command}"
+    ports:
+      - '7003:6379'
+  redis-node-4:
+    image: redis
+    container_name: node-4
+    command: bash -c "${redis_command}"
+    ports:
+      - '7004:6379'
+  redis-node-5:
+    image: redis
+    container_name: node-5
+    command: bash -c "${redis_command}"
+    ports:
+      - '7005:6379'
+  redis-node-6:
+    image: redis
+    container_name: node-6
+    command: bash -c "${redis_command}"
+    ports:
+      - '7006:6379'
+  redis-cluster:
     container_name: redis
     image: "redis"
     ports:
       - "6379:6379"
+    command: bash -c "echo yes | redis-cli --cluster create node-1:6379 node-2:6379 node-3:6379 node-4:6379 node-5:6379 node-6:6379 --cluster-replicas 1; sleep 5"
+    depends_on:
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+      - redis-node-5
+      - redis-node-6
     volumes:
       - redis_db:/data
+  mongo:
+    image: mongo
+    container_name: ${EVENT_DB}
+    environment:
+      - MONGO_INITDB_ROOT_DB=event
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    ports:
+      - '27017:27017'
 volumes:
   bookmark_db:
   redis_db:
+  event_db:
