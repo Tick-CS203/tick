@@ -22,7 +22,7 @@ public class EventController {
         return "Service is running";
     }
 
-    @PostMapping
+    @PostMapping("/event")
     @ResponseStatus(HttpStatus.CREATED) 
     public Event createEvent (@RequestBody Event event) {
         return eventService.addEvent(event);

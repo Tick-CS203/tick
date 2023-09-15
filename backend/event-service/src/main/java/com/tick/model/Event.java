@@ -2,6 +2,7 @@ package com.tick.model;
 
 import java.time.*;
 import java.util.Map;
+import java.util.List;
 import lombok.Data;
 
 import org.springframework.data.annotation.Id;
@@ -16,15 +17,16 @@ public class Event {
     private String name;
     private String category;
     private String banner;
+    private String artist;
     private LocalDateTime lastUpdated;
-    private double[] price;
+    private List<Double> price;
     private int ticketLimit;
     private String venueID;
     private Map<String, Map<String, Map<String, Integer>>> seatMap;
-    private EventDate[] date;
+    private List<EventDate> date;
 
-    public Event(String name, String category, String banner, LocalDateTime lastUpdated, double[] price,
-            int ticketLimit, String venueID, Map<String, Map<String, Map<String, Integer>>> seatMap, EventDate[] date) {
+    public Event(String name, String category, String banner, LocalDateTime lastUpdated, List<Double> price,
+            int ticketLimit, String venueID, Map<String, Map<String, Map<String, Integer>>> seatMap, List<EventDate> date) {
         this.name = name;
         this.category = category;
         this.banner = banner;

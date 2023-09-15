@@ -28,7 +28,6 @@ public class EventService {
     public List<Event> filterEvents(String category, Double maxPrice, LocalDateTime eventDateTime) {
         List<Event> intermediaryEvents = eventRepository.findAll();
 
-        List<Event> intermediaryEvents = eventRepository.findAll();
         Iterator<Event> iter = intermediaryEvents.iterator();
         if (category != null && !category.isEmpty()) {
             while (iter.hasNext()) {
@@ -63,18 +62,18 @@ public class EventService {
     }
 
     public Event getEventByID(Integer eventID) {
-        Event event = eventRepository.findById(eventID).get();
-        if (event == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found");
-        }
-        return eventRepository.findById(eventID).get();
+        return eventRepository.findById(eventID).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found")
+                );
     }
 
     public Event updateEvent(Event eventRequest) {
-        Event existingEvent = eventRepository.findById(eventRequest.getEventID()).get();
-        existingEvent.setName(eventRequest.getName());
-        existingEvent.setSeatMap(eventRequest.getSeatMap());
-        return eventRepository.save(existingEvent);
+        return eventRepository.findById(eventRequest.getEventID()).map(
+                event -> {
+                    event.setName(eventRequest.getName());
+                    event.setSeatMap(eventRequest.getSeatMap());
+                    return eventRepository.save(event);
+                }).orElse(null);
     }
 
     public String deleteEvent(Integer eventID) {
@@ -83,7 +82,7 @@ public class EventService {
     }
 
     public Boolean eventHasAPriceLessThanOrEqualToMaxPrice(Event event, Double maxPrice) {
-        double[] prices = event.getPrice();
+        List<Double> prices = event.getPrice();
         for (double currPrice : prices) {
             if (currPrice <= maxPrice) {
                 return true;
@@ -93,7 +92,7 @@ public class EventService {
     }
 
     public Boolean eventHasFilteredDate(Event event, LocalDateTime eventDate) {
-        EventDate[] eventDates = event.getDate();
+        List<EventDate> eventDates = event.getDate();
         for (EventDate currEventDate : eventDates) {
             if (currEventDate.getEventDateTime().equals(eventDate)){
                 return true;
