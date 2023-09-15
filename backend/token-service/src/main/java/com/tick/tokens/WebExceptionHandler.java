@@ -15,6 +15,6 @@ public class WebExceptionHandler {
 
     @ExceptionHandler(HttpMessageConversionException.class)
     public ResponseEntity<?> no_body() {
-        return ResponseEntity.status(400).body(new ErrorMessage("Missing request body"));
+        return ResponseEntity.status(400).body(new ErrorMessage("Missing or malformed request body"));
     }
 }
