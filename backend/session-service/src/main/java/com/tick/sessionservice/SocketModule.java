@@ -6,6 +6,7 @@ import java.util.HashSet;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import com.corundumstudio.socketio.SocketIOServer;
@@ -16,6 +17,7 @@ import com.tick.sessionservice.entity.*;
 import com.tick.sessionservice.repository.SessionDAO;
 
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
@@ -52,6 +54,10 @@ public class SocketModule {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(userDataRequest)
                 .retrieve()
+                .onStatus(httpStatus -> HttpStatus.BAD_REQUEST.equals(httpStatus), clientResponse -> {
+                    log.error("Error: Token has expired");
+                    return Mono.empty();
+                })
                 .bodyToMono(UserDataResponse.class)
                 .block();
 
