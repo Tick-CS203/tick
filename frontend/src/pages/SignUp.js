@@ -83,7 +83,7 @@ export const SignUp = () => {
       
       <div className="flex items-start justify-between mt-16">
         <button type="submit" className="bg-main-yellow text-black font-inter font-semibold rounded-lg w-52 h-9">
-          Next
+        <Link to="/confirmsignup">Next</Link>
         </button>
         <div className="flex flex-row">
           <p className="text-white font-inter mr-1">Already have an account?</p>
