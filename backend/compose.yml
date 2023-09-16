@@ -24,8 +24,6 @@ services:
       - TOKEN_HOST=${TOKEN_HOST}
     ports:
       - '${BOOKMARK_PORTS}'
-    volumes:
-      - bookmark_db:/var/lib/postgresql/data
   event:
     build:
       context: event-service
@@ -71,13 +69,6 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - TOKEN_HOST=${TOKEN_HOST}
       - TOKEN_PORT=${TOKEN_PORT}
-  bookmark-db:
-    image: 'postgres:15-alpine'
-    container_name: ${BOOKMARK_DB}
-    environment:
-      - POSTGRES_DB=bookmarks
-      - POSTGRES_USER=bmks
-      - POSTGRES_PASSWORD=skram
   redis-node-1:
     image: redis
     container_name: node-1
@@ -151,6 +142,15 @@ services:
       - '27017:27017'
     volumes:
       - ticket_db:/data/db
+  bookmark-db:
+    image: 'postgres:15-alpine'
+    container_name: ${BOOKMARK_DB}
+    environment:
+      - POSTGRES_DB=bookmarks
+      - POSTGRES_USER=bmks
+      - POSTGRES_PASSWORD=skram
+    volumes:
+      - bookmark_db:/var/lib/postgresql/data
 volumes:
   bookmark_db:
   redis_db:
