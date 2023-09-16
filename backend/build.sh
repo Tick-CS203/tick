@@ -2,10 +2,14 @@
 build() {
     cd $1;
     if [ -f mvnw ] ; then
-        ./mvnw -B package -Dmaven.test.skip;
+        if ! ./mvnw -B package -Dmaven.test.skip; then
+            exit 1;
+        fi
         cp target/*.jar app.jar;
     elif [ -f gradlew ] ; then
-        ./gradlew bootJar;
+        if ! ./gradlew bootJar; then
+            exit 1;
+        fi
         cp build/libs/*.jar app.jar;
     else
         echo "No executable found";
