@@ -14,6 +14,7 @@ build() {
     else
         echo "No executable found";
     fi
+    cd ..;
 }
 
 if [ $# -ne 0 ]; then

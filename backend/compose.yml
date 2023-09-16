@@ -6,7 +6,7 @@ services:
     image: token-service
     container_name: ${TOKEN_HOST}
     ports:
-      - '${TOKEN_PORTS}'
+      - '${TOKEN_PORT}:8080'
   bookmark:
     build:
       context: bookmarks-service
@@ -23,7 +23,7 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - TOKEN_HOST=${TOKEN_HOST}
     ports:
-      - '${BOOKMARK_PORTS}'
+      - '${BOOKMARK_PORT}:8080'
   event:
     build:
       context: event-service
@@ -37,7 +37,7 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${EVENT_DB}:27017/?retryWrites=true&w=majority
       - SPRING_DATA_MONGODB_DATABASE=event
     ports:
-      - '${EVENT_PORTS}'
+      - '${EVENT_PORT}:8080'
   ticket:
     build:
       context: ticket-service
@@ -45,13 +45,14 @@ services:
     image: ticket-service
     container_name: ${TICKET_HOST}
     depends_on:
+      - event
       - ${TICKET_DB}
     environment:
       - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=ticket
       - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${TICKET_DB}:27017/?retryWrites=true&w=majority
       - SPRING_DATA_MONGODB_DATABASE=ticket
     ports:
-      - '${TICKET_PORTS}'
+      - '${TICKET_PORT}:8080'
   session:
     build:
       context: session-service
@@ -64,7 +65,7 @@ services:
       redis-cluster:
         condition: service_completed_successfully
     ports:
-      - "8085:8085"
+      - "${SESSION_PORT}:8085"
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - TOKEN_HOST=${TOKEN_HOST}
@@ -128,7 +129,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
     ports:
-      - '27017:27017'
+      - '${EVENT_DB_PORT}:27017'
     volumes:
       - event_db:/data/db
   ticket-db:
@@ -139,7 +140,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
     ports:
-      - '27017:27017'
+      - '${TICKET_DB_PORT}:27017'
     volumes:
       - ticket_db:/data/db
   bookmark-db:
@@ -149,6 +150,8 @@ services:
       - POSTGRES_DB=bookmarks
       - POSTGRES_USER=bmks
       - POSTGRES_PASSWORD=skram
+    ports:
+      - '${BOOKMARK_DB_PORT}:5432'
     volumes:
       - bookmark_db:/var/lib/postgresql/data
 volumes:
