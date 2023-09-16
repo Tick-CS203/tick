@@ -6,8 +6,11 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.tick.ticketsservice.model.Ticket;
+import com.tick.ticketsservice.model.Ticket.CompositeKey;
 
-public interface TicketRepository extends MongoRepository<Ticket, String>{
+public interface TicketRepository extends MongoRepository<Ticket, Ticket.CompositeKey>{
     List<Ticket> findByUserId(String userId);
-    Optional<Ticket> findById(String Id);
+    void deleteByEventDateId(String eventDateId);
+    Optional<Ticket> findByKey(CompositeKey key);
+    void deleteByKey(CompositeKey key);
 }

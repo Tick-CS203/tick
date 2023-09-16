@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tick.ticketsservice.model.Ticket;
+import com.tick.ticketsservice.model.Ticket.CompositeKey;
 import com.tick.ticketsservice.service.TicketService;
 
 @RestController
@@ -44,9 +45,9 @@ public class TicketController {
         return ticketService.updateTicket(ticket);
     }
 
-    @GetMapping("/tickets/{ticketId}")
-    public Ticket getTicket(@PathVariable String ticketId) {
-        return ticketService.getTicketById(ticketId);
+    @GetMapping("/tickets/{key}")
+    public Ticket getTicket(@RequestBody CompositeKey key) {
+        return ticketService.getTicketById(key);
     }
 
     @GetMapping("/tickets/userId/{userId}")
@@ -56,7 +57,7 @@ public class TicketController {
 
     //if user asks for a refund
     @PutMapping("/tickets/{userId}")
-    public List<Ticket> ticketsMadeAvailable(@RequestBody String userId) {
+    public List<Ticket> ticketsMadeAvailable(@PathVariable String userId) {
         return ticketService.releaseTicket(userId);
     }
 
@@ -67,8 +68,8 @@ public class TicketController {
     }
 
     //delete after ticket object belonging to prev user after it has been transferred
-    @DeleteMapping("/tickets/{ticketId}")
-    public String deleteByTicketId(@PathVariable String ticketId) {
-        return ticketService.deleteTicketByTicketId(ticketId);
+    @DeleteMapping("/tickets")
+    public String deleteByTicketId(@RequestBody CompositeKey key) {
+        return ticketService.deleteTicketByTicketId(key);
     }
 }
