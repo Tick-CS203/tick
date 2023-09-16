@@ -16,7 +16,7 @@ public class TokenRequest {
     private String host;
 
     public TokenRequest() {
-        host = System.getenv("TOKEN");
+        host = System.getenv("TOKEN_HOST");
     }
 
     public String post(String token) throws IllegalArgumentException {

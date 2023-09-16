@@ -18,8 +18,8 @@ services:
       - token
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://${BOOKMARK_DB}:5432/bookmarks
-      - SPRING_DATASOURCE_USERNAME=bmks
-      - SPRING_DATASOURCE_PASSWORD=skram
+      - SPRING_DATASOURCE_USERNAME=${MONGO_USER}
+      - SPRING_DATASOURCE_PASSWORD=${MONGO_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - TOKEN_HOST=${TOKEN_HOST}
     ports:
@@ -148,8 +148,8 @@ services:
     container_name: ${BOOKMARK_DB}
     environment:
       - POSTGRES_DB=bookmarks
-      - POSTGRES_USER=bmks
-      - POSTGRES_PASSWORD=skram
+      - POSTGRES_USER=${MONGO_USER}
+      - POSTGRES_PASSWORD=${MONGO_PASSWORD}
     ports:
       - '${BOOKMARK_DB_PORT}:5432'
     volumes:

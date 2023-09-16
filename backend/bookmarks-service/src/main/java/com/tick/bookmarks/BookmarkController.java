@@ -33,7 +33,7 @@ public class BookmarkController {
             @RequestHeader Map<String, String> headers
             ) throws IOException
     {
-        String token = headers.get("authorisation");
+        String token = headers.get("authorization");
 
         return verify_token(svc::findUser, token);
     }
@@ -44,7 +44,7 @@ public class BookmarkController {
             @PathVariable long event
             ) throws IOException
     {
-        String token = headers.get("authorisation");
+        String token = headers.get("authorization");
 
         return verify_token(svc::delete_bookmark, token, event);
     }
@@ -55,7 +55,7 @@ public class BookmarkController {
             @PathVariable long event
             ) throws IOException
     {
-        String token = headers.get("authorisation");
+        String token = headers.get("authorization");
 
         return verify_token(svc::add_bookmark, token, event);
     }
