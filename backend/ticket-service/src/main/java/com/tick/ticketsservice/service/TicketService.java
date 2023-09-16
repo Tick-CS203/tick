@@ -50,8 +50,12 @@ public class TicketService {
 
     //if event is cancelled
     public String deleteTicketByEvent(String eventId){
-        ticketRepository.deleteByEventDateId(eventId);
-        return "event" + eventId + "'s tickets have been deleted";
+        List<Ticket> tickets = ticketRepository.findAll();
+        for (Ticket ticket : tickets) {
+            CompositeKey key = ticket.getKey();
+            if (eventId.equals(key.getEventDateId())) ticketRepository.deleteByKey(key);
+        }
+        return "event " + eventId + "'s tickets have been deleted";
     }
 
     //if user transfers ticket

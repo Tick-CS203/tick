@@ -10,7 +10,6 @@ import com.tick.ticketsservice.model.Ticket.CompositeKey;
 
 public interface TicketRepository extends MongoRepository<Ticket, Ticket.CompositeKey>{
     List<Ticket> findByUserId(String userId);
-    void deleteByEventDateId(String eventDateId);
     Optional<Ticket> findByKey(CompositeKey key);
     void deleteByKey(CompositeKey key);
 }
