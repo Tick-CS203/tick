@@ -16,12 +16,14 @@ services:
     depends_on:
       - bookmark-db
       - token
+      - event
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://${BOOKMARK_DB}:5432/bookmarks
       - SPRING_DATASOURCE_USERNAME=${MONGO_USER}
       - SPRING_DATASOURCE_PASSWORD=${MONGO_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - TOKEN_HOST=${TOKEN_HOST}
+      - EVENT_HOST=${EVENT_HOST}
     ports:
       - '${BOOKMARK_PORT}:8080'
   event:

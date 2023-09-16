@@ -1,5 +1,6 @@
 package com.tick.bookmarks;
 
+import com.tick.exceptions.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,10 @@ import java.util.function.BiFunction;
 @RequestMapping("/bookmarks")
 public class BookmarkController {
     private BookmarkService svc;
-    private TokenRequest req;
+    private Request req;
 
     @Autowired
-    public BookmarkController(BookmarkService svc, TokenRequest req) {
+    public BookmarkController(BookmarkService svc, Request req) {
         this.svc = svc;
         this.req = req;
     }
@@ -63,7 +64,7 @@ public class BookmarkController {
     private ResponseEntity<?> verify_token(Function<String, User> func, String token) {
         String id;
         try {
-            id = req.post(token);
+            id = req.post(Host.TOKEN, token);
             User usr = func.apply(id);
             return ResponseEntity.ok().body(usr);
         } catch (IllegalArgumentException e) {
@@ -74,11 +75,14 @@ public class BookmarkController {
     private ResponseEntity<?> verify_token(BiFunction<String, Long, User> func, String token, long event) {
         String id;
         try {
-            id = req.post(token);
+            id = req.post(Host.TOKEN, token);
+            req.post(Host.EVENT, event);
             User usr = func.apply(id, event);
             return ResponseEntity.ok().body(usr);
-        } catch (IllegalArgumentException e) {
+        } catch (UnauthorisedException e) {
             return ResponseEntity.status(401).body(new ErrorMessage("Unauthorised"));
+        } catch (EventNotFoundException e) {
+            return ResponseEntity.status(404).body(new ErrorMessage("Event not found"));
         }
     }
 }
