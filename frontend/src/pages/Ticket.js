@@ -9,7 +9,7 @@ const TicketHeader = ({ title }) => (
 // Order Details Component
 const OrderDetails = ({ orderId, orderDateTime }) => (
   <div className="flex flex-col">
-    <p className="text-white font-semibold text-sm">Order ID: {orderId}</p>
+    <p className="text-white font-semibold text-sm">Order ID1: {orderId}</p>
     <p className="text-white font-semibold text-sm">Order DateTime: {orderDateTime}</p>
   </div>
 );
