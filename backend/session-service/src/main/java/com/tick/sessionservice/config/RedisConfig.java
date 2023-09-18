@@ -16,9 +16,21 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
     @Bean
     public JedisConnectionFactory connectionFactory() {
-        RedisClusterConfiguration configuration = new RedisClusterConfiguration();
-        configuration.addClusterNode(new RedisNode(System.getenv("REDIS_HOST"), 6379));
-        return new JedisConnectionFactory(configuration);
+        if (Boolean.parseBoolean(System.getenv("CLUSTER_MODE"))) {
+            RedisClusterConfiguration configuration = new RedisClusterConfiguration();
+            configuration.addClusterNode(
+                new RedisNode(System.getenv("REDIS_HOST"), Integer.parseInt(System.getenv("REDIS_PORT")))
+            );
+            return new JedisConnectionFactory(configuration);
+        } else {
+            RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(
+                System.getenv("REDIS_HOST"), 
+                Integer.parseInt(System.getenv("REDIS_PORT"))
+            );
+            configuration.setUsername(System.getenv("REDIS_USER"));
+            configuration.setPassword(System.getenv("REDIS_PW"));
+            return new JedisConnectionFactory(configuration);
+        }
     }
 
     @Bean
