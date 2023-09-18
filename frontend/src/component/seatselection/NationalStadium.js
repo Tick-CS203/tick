@@ -9,17 +9,14 @@ export const NationalStadium = () => {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       x="0px"
       y="0px"
-      width="1167px"
-      height="736px"
-      viewBox="0 0 1167 736"
-      enableBackground="new 0 0 1167 736"
+      className="h-fit w-full"
+      viewBox="0 0 1150 700"
+      enableBackground="new 0 0 1150 700"
       xmlSpace="preserve"
     >
       <image
         overflow="visible"
         enableBackground="new"
-        width="1167"
-        height="736"
         xlinkHref={NationalStadiumJPG}
         transform="matrix(0.9293 0 0 0.9293 40.7939 26.019)"
         alt="national stadium"
