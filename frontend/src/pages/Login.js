@@ -61,15 +61,23 @@ export const Login = () => {
               }} />
       </div>
       
-      <div className="flex items-start justify-between mt-16">
+      <div className="flex items-end justify-between mt-16">
         <button type="submit" className="bg-main-yellow text-black font-inter font-semibold rounded-lg w-52 h-9">
           Login
         </button>
+
+        <div>
         <div className="flex flex-row">
           <p className="text-white font-inter mr-1">Don't have an account?</p>
-          <button type="submit" className="text-main-yellow font-inter">
+          <button type="button" className="text-main-yellow font-inter">
             <Link to="/signup">Sign Up</Link>
           </button>
+        </div>
+            <div className="flex justify-end">
+              <button type="button" className="text-main-yellow font-inter">
+              <Link to="/forgotpassword">Forgot Password</Link>
+              </button>
+            </div>
         </div>
       </div>
     </form>

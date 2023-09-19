@@ -107,7 +107,7 @@ export const SignUp = () => {
         </button>
         <div className="flex flex-row">
           <p className="text-white font-inter mr-1">Already have an account?</p>
-          <button type="submit" className="text-main-yellow font-inter">
+          <button type="button" className="text-main-yellow font-inter">
           <Link to="/login">Login</Link>
           </button>
         </div>
