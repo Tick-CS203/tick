@@ -1,8 +1,21 @@
 import { Steps, Select } from "antd";
 import { NationalStadium } from "../component/seatselection/NationalStadium";
 import { RowData } from "../component/seatselection/RowData";
+import { axiosInstance } from "../api/axios";
 
 export const SeatSelection = () => {
+  const startCheckoutHandler = async () => {
+    const redirectURL = await axiosInstance.post("/api/payment/create-checkout-session",JSON.stringify([{
+        quantity: 2,
+        priceID: ""
+    },
+    {
+        quantity: 1,
+        priceID: ""
+    }]))
+    window.location.href = redirectURL.data;
+  }
+
   return (
     <>
       <p className="font-inter font-black text-white italic text-xl py-5 relative uppercase">
@@ -78,7 +91,7 @@ export const SeatSelection = () => {
             </tr>
           </tbody>
         </table>
-        <button className="bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto">
+        <button className="bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto" onClick={startCheckoutHandler}>
           Next
         </button>
       </div>
