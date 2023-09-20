@@ -1,25 +1,33 @@
 package com.tick.ticketsservice.service;
 
 import java.util.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import reactor.core.publisher.Mono;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.tick.ticketsservice.model.Ticket;
+import com.tick.ticketsservice.model.RecaptchaObject;
 import com.tick.ticketsservice.model.Ticket.CompositeKey;
 import com.tick.ticketsservice.repository.TicketRepository;
 
 @Service
+@AllArgsConstructor
 public class TicketService {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private final WebClient webClient;
 
     public List<Ticket> getAllTickets(){
         return ticketRepository.findAll();
     }
 
     public Ticket addTicket(Ticket ticket) {
+        // check that event date ID is valid
         return ticketRepository.save(ticket);
     }
 
@@ -60,8 +68,22 @@ public class TicketService {
 
     //if user transfers ticket
     //is it possible for user to get a refund?
-    public String deleteTicketByTicketId(CompositeKey key){
+    public String deleteTicketByTicketId(CompositeKey key) {
         ticketRepository.deleteByKey(key);
         return key + "ticket has been deleted";
+    }
+    
+    public Mono<Object> verifyRecaptcha(String recaptchaToken) {
+        return webClient.post()
+            .uri("https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}",
+                RecaptchaObject.getSecret(), recaptchaToken
+            )
+            .retrieve()
+            .toEntity(Object.class)
+            .flatMap(responseEntity -> {
+                System.out.println("Verified Recaptcha: " + responseEntity.getBody());
+                return Mono.just(responseEntity.getBody());
+            }
+        ); 
     }
 }

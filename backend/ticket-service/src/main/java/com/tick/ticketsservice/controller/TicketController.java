@@ -72,4 +72,9 @@ public class TicketController {
     public String deleteByTicketId(@RequestBody CompositeKey key) {
         return ticketService.deleteTicketByTicketId(key);
     }
+
+    @PostMapping("/{recaptchaToken}")
+    public Object verifyRecaptcha(@PathVariable String recaptchaToken) {
+        return ticketService.verifyRecaptcha(recaptchaToken);
+    }
 }
