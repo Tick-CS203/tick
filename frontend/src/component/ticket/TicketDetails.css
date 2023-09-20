@@ -53,24 +53,30 @@
 }
 
 .grey-dotted-line {
-    width: 1px;
     height: 100%;
     background-color: transparent;
-    border-left: 1px dotted grey;
-    margin-right: 10px;
+    border-left: 1px dashed grey;
 }
 
 .test-text-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px; /* Set as needed */
-    height: 30px; /* Set as needed */
+    width: 50px;
 }
 
 .test-text {
-    white-space: nowrap; /* Prevent wrapping */
-    transform: rotate(270deg);
+    white-space: nowrap;
+    transform: rotate(90deg);
+    color: grey;
+    font-size: 10px;
+}
+
+.semi-circle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
 }
 
 .semi-circle {
