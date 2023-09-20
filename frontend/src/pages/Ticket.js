@@ -28,39 +28,45 @@ const TicketMenu = () => {
 
 
 // Ticket Details Component
-const TicketDetails = ({ orderId, orderDateTime }) => {
+const TicketDetails = ({ 
+    imageUrl, 
+    eventName, 
+    location, 
+    time, 
+    day, 
+    date, 
+    month, 
+    year, 
+    orderId, 
+    orderDateTime 
+  }) => {
     return (
       <div className="ticket-container bg-white shadow-md rounded-lg flex relative font-inter">
         {/* Image Section */}
         <div className="ticket-image-container">
-          <img src={"https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg"} alt="Band" className="h-full object-cover" />
+          <img src={imageUrl} alt="Band" className="h-full object-cover" />
         </div>
         {/* Details Section */}
         <div className="ticket-details-container-top p-4 flex flex-row">
-          <h1 className="ticket-name text-xl font-bold font-lemon">ATEEZ WORLD TOUR (THE FELLOWSHIP: BREAK THE WALL) IN SINGAPORE 2023</h1>
-          <div class="text-container">
-              <div class="text-left">
+          <h1 className="ticket-name text-xl font-bold font-lemon">{eventName}</h1>
+          <div className="text-container">
+              <div className="text-left">
                   <p>
                     <img src="https://cdn-icons-png.flaticon.com/128/535/535239.png" alt="Location" className="inline-block h-4 mr-2" />
-                    <span className="text-sm">Singapore Indoor Stadium</span>
+                    <span className="text-sm">{location}</span>
                   </p>
                   <p>
                     <img src="https://cdn-icons-png.flaticon.com/128/3114/3114812.png" alt="Time" className="inline-block h-4 mr-2" />
-                    <span className="text-sm">Time</span>
+                    <span className="text-sm">{time}</span>
                   </p>
               </div>
-              <div class="text-right">
-                <p>Friday</p>
-                <p className="text-4xl font-bold">15</p>
-                <p>November 2023</p>
+              <div className="text-right">
+                <p>{day}</p>
+                <p className="text-4xl font-bold">{date}</p>
+                <p>{`${month} ${year}`}</p>
             </div>
           </div>
         </div>
-        {/* <div className="details-section-right flex">
-            <div className="grey-dotted-line"></div>
-            <h3 className="test-text -rotate--270">admit one</h3>
-        </div>
-        <div className="semi-circle"></div> */}
         <div className="details-section-right flex">
             <div className="grey-dotted-line"></div>
             <div className="test-text-container">
@@ -83,11 +89,21 @@ export const Ticket = ({ background }) => {
           <TicketHeader title="My Tickets" />
           <OrderDetails orderId="1234567890" orderDateTime="2023-09-17 12:00:00" />
         </header>
-        <div className="flex items-stretch"> {/* Added items-stretch for alignment */}
-          <TicketDetails />
+        <div className="flex items-stretch">
+          <TicketDetails 
+            imageUrl="https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg"
+            eventName="ATEEZ WORLD TOUR (THE FELLOWSHIP: BREAK THE WALL) IN SINGAPORE 2023"
+            location="Singapore Indoor Stadium"
+            time="19:30 SGT - 23:00 SGT"
+            day="Friday"
+            date="15"
+            month="November"
+            year="2023"
+            orderId="1234567890"
+            orderDateTime="2023-09-17 12:00:00"
+          />
           <TicketMenu />
         </div>
-        
       </div>
     );
   };
