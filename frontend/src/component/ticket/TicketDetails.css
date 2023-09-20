@@ -113,12 +113,14 @@
     border-radius: 5px;
     color: #F6E902;
     /* Hardcoded yellow */
+    background-color: transparent; /* Set initial background color to transparent */
     border: 2px solid #F6E902;
     /* Hardcoded yellow */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Add color transition */
 }
 
 .menu-button:hover {
-    background-color: var(--main-blue);
+    background-color: #F6E902; /* Change background color to yellow on hover */
+    color: #000; /* Change font color to black on hover */
 }
