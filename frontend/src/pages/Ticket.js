@@ -9,7 +9,7 @@ const TicketHeader = ({ title }) => (
 // Order Details Component
 const OrderDetails = ({ orderId, orderDateTime }) => (
   <div className="flex flex-col">
-    <p className="text-white font-semibold text-sm">Order ID1: {orderId}</p>
+    <p className="text-white font-semibold text-sm">Order ID: {orderId}</p>
     <p className="text-white font-semibold text-sm">Order DateTime: {orderDateTime}</p>
   </div>
 );
@@ -36,9 +36,24 @@ const TicketDetails = ({ orderId, orderDateTime }) => {
           <img src={"https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg"} alt="Band" className="h-full object-cover" />
         </div>
         {/* Details Section */}
-        <div className="ticket-details-container p-4 flex flex-col justify-between">
-          <h1 className="text-xl font-bold">My Ticket</h1>
+        <div className="ticket-details-container-top p-4 flex flex-row">
+          <h1 className="ticket-name text-xl font-bold">My Ticket</h1>
+          <div class="text-container">
+              <div class="text-left">
+                  <p>Singapore Indoor Stadium</p>
+                  <p>Time</p>
+              </div>
+              <div class="text-right">
+                  <p>Day</p>
+                  <p>Date</p>
+                  <p>Month and Year</p>
+              </div>
+          </div>
         </div>
+        <div class="details-section-right">
+            <h3 class="test-text">test</h3>
+        </div>
+        <div class="semi-circle"></div>
       </div>
     );
   };
@@ -56,12 +71,12 @@ export const Ticket = ({ background }) => {
           <TicketDetails />
           <TicketMenu />
         </div>
+        
       </div>
     );
   };
   
 export default Ticket;
-
 
 
 
