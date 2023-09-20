@@ -50,10 +50,18 @@ const TicketDetails = ({ orderId, orderDateTime }) => {
               </div>
           </div>
         </div>
-        <div class="details-section-right">
-            <h3 class="test-text">test</h3>
+        {/* <div className="details-section-right flex">
+            <div className="grey-dotted-line"></div>
+            <h3 className="test-text -rotate--270">admit one</h3>
         </div>
-        <div class="semi-circle"></div>
+        <div className="semi-circle"></div> */}
+        <div className="details-section-right flex">
+            <div className="grey-dotted-line"></div>
+            <div className="test-text-container">
+                <h3 className="test-text">admit one</h3>
+            </div>
+            <div className="semi-circle"></div>
+        </div>
       </div>
     );
   };
