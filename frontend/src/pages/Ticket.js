@@ -83,32 +83,62 @@ const TicketDetails = ({
 
 // Main Ticket Component
 export const Ticket = ({ background }) => {
+    const tickets = [
+      {
+        imageUrl: "https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg",
+        eventName: "ATEEZ WORLD TOUR (THE FELLOWSHIP: BREAK THE WALL) IN SINGAPORE 2023",
+        location: "Singapore Indoor Stadium",
+        time: "19:30 SGT - 23:00 SGT",
+        day: "Friday",
+        date: "15",
+        month: "November",
+        year: "2023",
+        orderId: "1234567890",
+        orderDateTime: "2023-09-17 12:00:00"
+      },
+      {
+        imageUrl: "https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg",
+        eventName: "ATEEZ WORLD TOUR (THE FELLOWSHIP: BREAK THE WALL) IN SINGAPORE 2023",
+        location: "Singapore Indoor Stadium",
+        time: "19:30 SGT - 23:00 SGT",
+        day: "Friday",
+        date: "15",
+        month: "November",
+        year: "2023",
+        orderId: "1234567890",
+        orderDateTime: "2023-09-17 12:00:00"
+      },
+      {
+        imageUrl: "https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg",
+        eventName: "ATEEZ WORLD TOUR (THE FELLOWSHIP: BREAK THE WALL) IN SINGAPORE 2023",
+        location: "Singapore Indoor Stadium",
+        time: "19:30 SGT - 23:00 SGT",
+        day: "Friday",
+        date: "15",
+        month: "November",
+        year: "2023",
+        orderId: "1234567890",
+        orderDateTime: "2023-09-17 12:00:00"
+      },
+    ];
+  
     return (
       <div className={`bg-${background} p-4`}>
-        <header className="flex flex-col justify-between">
-          <TicketHeader title="My Tickets" />
-          <OrderDetails orderId="1234567890" orderDateTime="2023-09-17 12:00:00" />
-        </header>
-        <div className="flex items-stretch">
-          <TicketDetails 
-            imageUrl="https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg"
-            eventName="ATEEZ WORLD TOUR (THE FELLOWSHIP: BREAK THE WALL) IN SINGAPORE 2023"
-            location="Singapore Indoor Stadium"
-            time="19:30 SGT - 23:00 SGT"
-            day="Friday"
-            date="15"
-            month="November"
-            year="2023"
-            orderId="1234567890"
-            orderDateTime="2023-09-17 12:00:00"
-          />
-          <TicketMenu />
-        </div>
+        <TicketHeader title="My Tickets" />
+        {tickets.map((ticket, index) => (
+          <div className="ticket-block mb-12" key={index}>
+            <OrderDetails orderId={ticket.orderId} orderDateTime={ticket.orderDateTime} />
+            <div className="flex items-stretch">
+              <TicketDetails {...ticket} />
+              <TicketMenu />
+            </div>
+          </div>
+        ))}
       </div>
     );
   };
   
-export default Ticket;
+  export default Ticket;
 
 
 
