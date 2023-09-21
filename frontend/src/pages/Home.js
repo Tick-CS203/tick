@@ -7,10 +7,16 @@ import MusicalImage from "../assets/sudan-ouyang-UQuka_ruWxQ-unsplash.jpg";
 
 import { Category } from "../component/homepage/Category";
 import { Event } from "../component/homepage/Event";
+import { Carousel } from "../component/homepage/Carousel";
+
 
 export const Home = () => {
+
+  const images = [ClassicalImage, TheatreImage, ConcertImage, DanceImage, ComedyImage, MusicalImage];
   return (
     <>
+      <></>
+      <Carousel images={images} />
       <p className="font-inter font-black text-main-yellow italic text-xl py-5 relative uppercase">
         Your Upcoming Concerts
       </p>
