@@ -4,14 +4,12 @@ import com.tick.entity.*;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.function.Function;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,31 +17,35 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenUtil {
-    private static String secret;
     private static Map<String, Long> expiry_map;
+    private static Map<String, Algorithm> key_map = new HashMap<>();
 
     @Autowired
-    public JwtTokenUtil(@Value("${jwt.secret}") String secret,
-            @Value("#{${jwt.expiry.map}}") Map<String, Long> expiry_map) {
-            this.secret = secret;
+    public JwtTokenUtil(@Value("${jwt.key}") String key,
+            @Value("${jwt.keyURL}") String keyURL,
+            @Value("#{${jwt.expiry.map}}") Map<String, Long> expiry_map) throws Exception {
             this.expiry_map = expiry_map;
+            try {
+                key_map.put("access", Algorithm.RSA256(new KeyProvider(keyURL)));
+                key_map.put("purchasing", Algorithm.HMAC256(key));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     public static Token generate_tok(String username, String type)
             throws RuntimeException {
+            if (type.equals("access")) throw new RuntimeException(
+                    "Unable to generate access tokens from this endpoint");
             long expiry = get_expiry(type);
             Date now = new Date();
-            JwtBuilder jwt = Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(now)
-                .claim("type", type);
-
-
-            now.setTime(now.getTime() + expiry);
-            String token = jwt.setExpiration(now)
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
-
+            Date expiresAt = new Date(now.getTime() + expiry);
+            String token = JWT.create()
+                .withIssuedAt(now)
+                .withSubject(username)
+                .withClaim("token_use", type)
+                .withExpiresAt(expiresAt)
+                .sign(key_map.get(type));
             return new Token(token, expiry);
     }
 
@@ -51,23 +53,30 @@ public class JwtTokenUtil {
             throws RuntimeException {
             get_expiry(type);
 
-            Claims claims = get_claims(token);
-            if (!type.equals(claims.get("type", String.class))) {
+            Map<String, Claim> claims = get_claims(token, type);
+            if (!type.equals(claims.get("token_use").asString())) {
                 throw new RuntimeException("Wrong type of token supplied");
             }
 
-            String subject = claims.getSubject();
-            token = generate_tok(subject, type).token();
-            long expiry = claims.getExpiration().getTime();
+            String subject = claims.get("sub").asString();
+            long expiry = claims.get("exp").asLong();
 
-            return new User(subject, token, expiry);
+            return new User(subject, expiry);
     }
 
-    private static Claims get_claims(String token) {
-        return Jwts.parser()
-            .setSigningKey(secret)
-            .parseClaimsJws(token)
-            .getBody();
+    private static Map<String, Claim> get_claims(String token, String type) {
+        try {
+            Algorithm algo = key_map.get(type);
+            if (algo == null) throw new RuntimeException("Invalid token type in query");
+            return JWT.require(algo)
+                .withClaimPresence("token_use")
+                .withClaimPresence("sub")
+                .build().verify(token)
+                .getClaims();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException("This token is invalid");
+        }
     }
 
     private static long get_expiry(String type) throws RuntimeException {
