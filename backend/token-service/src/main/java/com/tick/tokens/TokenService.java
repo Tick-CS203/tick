@@ -18,11 +18,6 @@ public class TokenService {
             obj = new ErrorMessage(e.getMessage());
         }
 
-        try {
-            return ResponseEntity.status(status).body(obj);
-        } catch (Exception e) {
-            System.out.println("Exception met: " + e.getMessage());
-            return null;
-        }
+        return ResponseEntity.status(status).body(obj);
     }
 }
