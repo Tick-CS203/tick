@@ -30,7 +30,6 @@ public class KeyProvider implements RSAKeyProvider {
             KeyList list = new ObjectMapper().readValue(content, KeyList.class);
             for (JWKS keySet : list.keys()) {
                 if (ID.equals(keySet.kid())) {
-                    System.out.println("Modulus = " + keySet.n() + ", exponent = " + keySet.e());
                     BigInteger modulus = new BigInteger(1, Base64.getUrlDecoder().decode(keySet.n()));
                     BigInteger exponent = new BigInteger(1, Base64.getUrlDecoder().decode(keySet.e()));
 
