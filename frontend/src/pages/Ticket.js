@@ -17,11 +17,11 @@ const OrderDetails = ({ orderId, orderDateTime }) => (
 // Ticket Menu Component
 const TicketMenu = () => {
     return (
-      <div className="ticket-menu h-full flex flex-col justify-between font-inter">
-        <button className="menu-button text-main-yellow border-2 border-main-yellow h-full">My QR Code</button>
-        <button className="menu-button text-main-yellow border-2 border-main-yellow h-full">Download</button>
-        <button className="menu-button text-main-yellow border-2 border-main-yellow h-full">Event Details</button>
-        <button className="menu-button text-main-yellow border-2 border-main-yellow h-full">Transfer Ticket to another</button>
+        <div className="ticket-menu h-full flex flex-col justify-between font-inter">
+        <button className="menu-button inverted-button h-full font-bold px-10">My QR Code</button>
+        <button className="menu-button text-main-yellow border-2 border-main-yellow h-full font-bold px-10">Download</button>
+        <button className="menu-button text-main-yellow border-2 border-main-yellow h-full font-bold px-10">Event Details</button>
+        <button className="menu-button text-main-yellow border-2 border-main-yellow h-full font-bold px-10">Transfer Ticket</button>
       </div>
     );
 };
@@ -41,13 +41,13 @@ const TicketDetails = ({
     orderDateTime 
   }) => {
     return (
-      <div className="ticket-container bg-white shadow-md rounded-lg flex relative font-inter">
+      <div className="ticket-container bg-white shadow-md rounded-2xl flex relative font-inter">
         {/* Image Section */}
         <div className="ticket-image-container">
           <img src={imageUrl} alt="Band" className="h-full object-cover" />
         </div>
         {/* Details Section */}
-        <div className="ticket-details-container-top p-4 flex flex-row">
+        <div className="ticket-details-container-top p-6 flex flex-row">
           <h1 className="ticket-name text-xl font-bold font-lemon">{eventName}</h1>
           <div className="text-container">
               <div className="text-left">
@@ -67,6 +67,7 @@ const TicketDetails = ({
             </div>
           </div>
         </div>
+        {/* Admit One Section */}
         <div className="details-section-right flex">
             <div className="grey-dotted-line"></div>
             <div className="test-text-container">
@@ -123,20 +124,22 @@ export const Ticket = ({ background }) => {
     ];
   
     return (
-      <div className={`bg-${background} p-4`}>
-        <TicketHeader title="My Tickets" />
-        {tickets.map((ticket, index) => (
-          <div className="ticket-block mb-12" key={index}>
-            <OrderDetails orderId={ticket.orderId} orderDateTime={ticket.orderDateTime} />
-            <div className="flex items-stretch">
-              <TicketDetails {...ticket} />
-              <TicketMenu />
+        <div className={`bg-${background} p-4`}>
+          <TicketHeader title="My Tickets" />
+          {tickets.map((ticket, index) => (
+            <div className="ticket-block mb-12" key={index}>
+              <div style={{ marginBottom: '20px' }}>
+                <OrderDetails orderId={ticket.orderId} orderDateTime={ticket.orderDateTime} />
+              </div>
+              <div className="flex items-stretch">
+                <TicketDetails {...ticket} />
+                <TicketMenu />
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
+          ))}
+        </div>
+      );
+    };
   
   export default Ticket;
 

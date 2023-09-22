@@ -14,10 +14,18 @@
     overflow: hidden;
 }
 
-.ticket-details-container-top {
+/* .ticket-details-container-top {
     width: 700px;
     display: flex;
     flex-direction: column;
+} */
+
+.ticket-details-container-top {
+    width: 100%; /* Set the width to 100% to occupy the available space */
+    display: flex;
+    flex-direction: column;
+    padding: 60; /* Remove padding */
+    margin: 60; /* Remove margin */
 }
 
 .ticket-name {
@@ -63,7 +71,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50px;
+    width: 35px;
 }
 
 .test-text {
@@ -97,31 +105,46 @@
 .ticket-menu {
     height: 200px;
     /* You can set this to match the height of your TicketDetails component */
-}
-
-.ticket-menu {
+  }
+  
+  .ticket-menu {
     margin-left: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     /* Or any other value that suits your design */
-}
-
-.menu-button {
+  }
+  
+  .menu-button {
     flex-grow: 1;
     text-align: center;
     gap: 5px;
-    border-radius: 5px;
-    color: #F6E902;
-    /* Hardcoded yellow */
+    border-radius: 12.5px; /* Increase border-radius for more rounded buttons */
+    color: #F6E902; /* Hardcoded yellow */
     background-color: transparent; /* Set initial background color to transparent */
-    border: 2px solid #F6E902;
-    /* Hardcoded yellow */
+    border: 2px solid #F6E902; /* Hardcoded yellow */
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease; /* Add color transition */
-}
+  }
 
 .menu-button:hover {
     background-color: #F6E902; /* Change background color to yellow on hover */
     color: #000; /* Change font color to black on hover */
+}
+
+.inverted-button {
+    flex-grow: 1;
+    text-align: center;
+    gap: 5px;
+    border-radius: 12.5px;
+    color: black; /* Set font color to black */
+    background-color: #F6E902; /* Background color inverted to yellow */
+    border: 2px solid #F6E902; /* Border color inverted to yellow */
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Add color transition */
+  }
+  
+.inverted-button:hover {
+    color: #F6E902; /* Text color becomes yellow on hover */
+    background-color: transparent; /* Background becomes transparent on hover */
 }
