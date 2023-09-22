@@ -12,7 +12,6 @@ function App() {
       <div className="bg-black px-8">
         <Routes>
             <Route path="/" element={<Home />} />
-            
         </Routes>
       </div>
       <Footer />
