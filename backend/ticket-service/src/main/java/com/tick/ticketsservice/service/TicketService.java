@@ -32,10 +32,10 @@ public class TicketService {
     }
 
     public List<Ticket> getTicketByUserId(String userId) {
-        return ticketRepository.findByUserId(userId);
+        return ticketRepository.findByUser(userId);
     }
 
-    public Ticket getTicketById(CompositeKey key){
+    public Ticket getTicketByKey(CompositeKey key){
         return ticketRepository.findByKey(key).orElse(null);
     }
 
@@ -48,10 +48,8 @@ public class TicketService {
 
     //if user deactivates account
     public List<Ticket> releaseTicket(String userId) {
-         List<Ticket> tickets = ticketRepository.findByUserId(userId);
-         for(Ticket ticket : tickets) {
-            ticket.setUserId(null);
-         }
+         List<Ticket> tickets = ticketRepository.findByUser(userId);
+         tickets.forEach(ticket -> ticket.setUser(null));
 
          return ticketRepository.saveAll(tickets);
     }
@@ -59,10 +57,10 @@ public class TicketService {
     //if event is cancelled
     public String deleteTicketByEvent(String eventId){
         List<Ticket> tickets = ticketRepository.findAll();
-        for (Ticket ticket : tickets) {
+        tickets.forEach(ticket -> {
             CompositeKey key = ticket.getKey();
-            if (eventId.equals(key.getEventDateId())) ticketRepository.deleteByKey(key);
-        }
+            if (eventId.equals(key.getEventDate())) ticketRepository.deleteByKey(key);
+        });
         return "event " + eventId + "'s tickets have been deleted";
     }
 
@@ -72,7 +70,7 @@ public class TicketService {
         ticketRepository.deleteByKey(key);
         return key + "ticket has been deleted";
     }
-    
+
     public Mono<Object> verifyRecaptcha(String recaptchaToken) {
         return webClient.post()
             .uri("https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}",
