@@ -17,7 +17,7 @@ const OrderDetails = ({ orderId, orderDateTime }) => (
 // Ticket Menu Component
 const TicketMenu = () => {
     return (
-        <div className="ticket-menu h-full flex flex-col justify-between font-inter">
+        <div className="ticket-menu h-full flex flex-col justify-between font-inter" style={{ marginLeft: '20px' }}>
         <button className="menu-button inverted-button h-full font-bold px-10">My QR Code</button>
         <button className="menu-button text-main-yellow border-2 border-main-yellow h-full font-bold px-10">Download</button>
         <button className="menu-button text-main-yellow border-2 border-main-yellow h-full font-bold px-10">Event Details</button>
@@ -25,7 +25,6 @@ const TicketMenu = () => {
       </div>
     );
 };
-
 
 // Ticket Details Component
 const TicketDetails = ({ 
