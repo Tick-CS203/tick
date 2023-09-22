@@ -5,6 +5,7 @@ import { Footer } from "./component/Footer";
 import { Home } from "./pages/Home";
 import { EventDetails } from "./pages/EventDetails";
 
+import React from "react";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <Navbar />
       <div className="bg-black px-8">
         <Routes>
-          <Route path="/" element={<EventDetails />} />
+          <Route path="/event/:id" element={<EventDetails/>}/>
         </Routes>
       </div>
       <Footer />

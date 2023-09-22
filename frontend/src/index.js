@@ -5,11 +5,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ConfigProvider, theme } from "antd";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
       <ConfigProvider
         theme={{
           token: {
@@ -20,7 +25,9 @@ root.render(
         }}
       >
         <App />
+        <ReactQueryDevtools />
       </ConfigProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
