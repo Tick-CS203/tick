@@ -1,8 +1,13 @@
 import LauvConcertDetailsImage from "../assets/dgszkvmg0llbhkxivzhm.jpg";
+import { useEventQuery } from '../api/events.query.js'
 
 <script src="https://kit.fontawesome.com/12bbdb3ccf.js" crossorigin="anonymous"></script>
 
 export const EventDetails = () => {
+
+  const { data: event } = useEventQuery();
+  console.log(event);
+
   return (
     <>
       <img class="flex justify-center" src={LauvConcertDetailsImage} width="1920" height="768"></img>
