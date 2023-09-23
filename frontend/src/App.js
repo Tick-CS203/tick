@@ -1,9 +1,15 @@
 import "./App.css";
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./component/Navbar";
 import { Footer } from "./component/Footer";
 import { Home } from "./pages/Home";
 import { Ticket } from "./pages/Ticket";
+import { SeatSelection } from "./pages/SeatSelection";
+import { SignUp } from "./pages/SignUp";
+import { Login } from "./pages/Login";
+import { ConfirmSignUp } from "./pages/ConfirmSignUp";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { ResetPassword } from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -13,6 +19,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/ticket" element={<Ticket />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/confirmsignup" element={<ConfirmSignUp />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/resetpassword" element={<ResetPassword />}></Route>
+          <Route path="/seatmap" element={<SeatSelection />} />
         </Routes>
       </div>
       <Footer />
