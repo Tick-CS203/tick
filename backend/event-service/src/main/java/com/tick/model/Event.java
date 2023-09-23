@@ -15,6 +15,7 @@ public class Event {
     @Id
     private int eventID;
     private String name;
+    private String description;
     private String category;
     private String banner;
     private String artist;
@@ -25,9 +26,10 @@ public class Event {
     private Map<String, Map<String, Map<String, Integer>>> seatMap;
     private List<EventDate> date;
 
-    public Event(String name, String category, String banner, LocalDateTime lastUpdated, List<Double> price,
+    public Event(String name, String description, String category, String banner, LocalDateTime lastUpdated, List<Double> price,
             int ticketLimit, String venueID, Map<String, Map<String, Map<String, Integer>>> seatMap, List<EventDate> date) {
         this.name = name;
+        this.description = description;
         this.category = category;
         this.banner = banner;
         this.lastUpdated = lastUpdated;
