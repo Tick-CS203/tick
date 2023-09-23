@@ -5,6 +5,10 @@ services:
       dockerfile: ../Dockerfile
     image: token-service
     container_name: ${TOKEN_HOST}
+    environment:
+      - jwt.keyURL=
+      - jwt.key=
+      - jwt.expiry.map={access:'120',purchasing:'5'}
     ports:
       - '${TOKEN_PORT}:8080'
   bookmark:
