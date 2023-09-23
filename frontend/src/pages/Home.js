@@ -8,20 +8,10 @@ import MusicalImage from "../assets/sudan-ouyang-UQuka_ruWxQ-unsplash.jpg";
 import { Category } from "../component/homepage/Category";
 import { Event } from "../component/homepage/Event";
 import { Carousel } from "../component/homepage/Carousel";
-import { useEventQuery } from "../api/events.query";
 
 import React from 'react';
 
 export const Home = () => {
-  const { data: events } = useEventQuery();
-  const arrayEvents = events.map((event) => (
-    <Event
-    imageURL={event.banner}
-    eventName={event.name}
-    eventDate={event.date}
-    />
-  ));
-
   const images = [ClassicalImage, TheatreImage, ConcertImage, DanceImage, ComedyImage, MusicalImage];
   return (
     <>
@@ -38,11 +28,11 @@ export const Home = () => {
         />
         Top Picks Of The Month
       </p>
-
-      <div className="flex flex-wrap">
-        {arrayEvents}
-      </div>
-
+      <Event
+        imageURL={ConcertImage}
+        eventName="LEE YOUNGJI 1st ASIA TOUR ‘THE MAIN CHARACTER’ - SINGAPORE"
+        eventDate="20 Oct 2023"
+      />
       <p className="font-inter font-black text-main-yellow italic text-xl py-10 uppercase">
         Explore Different Categories
       </p>
