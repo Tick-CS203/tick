@@ -1,4 +1,4 @@
-package com.tick.bookmarks;
+package com.tick.bookmarks.controller;
 
 import org.springframework.web.bind.annotation.*;
 

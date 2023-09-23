@@ -1,3 +1,3 @@
-package com.tick.exceptions;
+package com.tick.bookmarks.exceptions;
 
 public class EventNotFoundException extends RuntimeException {}
