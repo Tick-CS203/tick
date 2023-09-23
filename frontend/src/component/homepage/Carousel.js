@@ -1,50 +1,68 @@
-import { useState } from 'react'
-import { CgChevronRight, CgChevronLeft } from 'react-icons/cg';
+import { useState, useEffect } from 'react';
 import { RxDotFilled } from 'react-icons/rx';
+import "./Carousel.css"
 
 export const Carousel = ({ images }) => { // Accept 'images' as a prop
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const prevImageIndex = (currentIndex - 1 + images.length) % images.length;
+  const nextImageIndex = (currentIndex + 1) % images.length;
+
   const prevImage = () => {
-    const isFirstImage = currentIndex === 0;
-    const newIndex = isFirstImage ? images.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
+    setCurrentIndex(prevImageIndex);
   };
 
   const nextImage = () => {
-    const isLastImage = currentIndex === images.length - 1;
-    const newIndex = isLastImage ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
+    setCurrentIndex(nextImageIndex);
   };
 
   const goToImage = (imageIndex) => {
     setCurrentIndex(imageIndex);
   };
 
+  // Auto-scroll interval (change image every 3 seconds)
+  useEffect(() => {
+    const interval = setInterval(nextImage, 3500); 
+    return () => clearInterval(interval); 
+  }, [currentIndex]);
+
   return (
-    <div className='max-w-[1400px] h-[780px] w-full m-auto py-16 px-4 relative group'>
+    <div className='flex-cols'>
+      <div className='max-w-[1400px] h-[400px] w-full m-auto pt-4 relative group carousel-container'>
+
+        {/* Right Panel */}
+      <div 
+        style={{ backgroundImage: `url(${images[prevImageIndex]})` }}
+        className='w-1/6 h-full bg-center bg-cover duration-500 mr-10 cursor-pointer' 
+        onClick={prevImage}>
+      </div>
+      
       <div
         style={{ backgroundImage: `url(${images[currentIndex]})` }}
-        className='w-full h-full rounded-2xl bg-center bg-cover duration-500'
+        className='w-5/6 h-full justify-center bg-center bg-cover duration-500'
       ></div>
-      {/* Left Arrow */}
-      <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
-        <CgChevronLeft onClick={prevImage} size={30} />
-      </div>
-      {/* Right Arrow */}
-      <div className='hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-2 bg-black/20 text-white cursor-pointer'>
-        <CgChevronRight onClick={nextImage} size={30} color='white'/>
+
+      {/* Left Panel */}
+      <div 
+        style={{ backgroundImage: `url(${images[nextImageIndex]})` }}
+        className='w-1/6 h-full bg-center bg-cover duration-500 ml-10 cursor-pointer' 
+        onClick={nextImage}>
       </div>
 
-      <div className='flex top-4 justify-center py-2'>
+      </div>
+      
+    
+      <div className='flex top-4 justify-center py-4 '>
         {images.map((image, imageIndex) => (
           <div
-            key={imageIndex}
-            onClick={() => goToImage(imageIndex)}
-            className='text-2xl cursor-pointer'
+          key={imageIndex}
+          onClick={() => goToImage(imageIndex)}
+          className={`carousel-dot ${
+            imageIndex === currentIndex ? 'active-dot' : ''
+          }`}
           >
-            <RxDotFilled/>
-          </div>
+          <RxDotFilled />
+        </div>
         ))}
       </div>
     </div>

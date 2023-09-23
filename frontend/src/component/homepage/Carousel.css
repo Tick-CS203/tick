@@ -1,0 +1,33 @@
+.carousel-dot {
+  display: inline-block;
+  width: 30px; 
+  height: 8px; 
+  margin-right: 10px; 
+  background-color: gray; 
+  cursor: pointer;
+  border-radius: 5px;
+}
+  
+.active-dot {
+  width: 80px; 
+  background-color: white; 
+}
+
+.carousel-dots-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* Adjust the margin to control the spacing */
+}
+
+.carousel-container {
+  display: flex;
+  justify-content: center; /* Center the carousel horizontally */
+  align-items: center; /* Center the carousel vertically */
+  overflow: hidden; /* Hide overflow content (for cases when images are larger) */
+  width: 100%; /* Ensure the carousel takes the full width */
+  
+}
+
+  
+
