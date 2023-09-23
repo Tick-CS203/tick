@@ -14,7 +14,28 @@ export const SignUp = () => {
   const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
   const [enteredMobileNumber, setEnteredMobileNumber] = useState("");
+  const [passwordValidationMessage, setPasswordValidationMessage] = useState("");
+  const [confirmPasswordMessage, setConfirmPasswordMessage] = useState("");
 
+  function validatePassword(password) {
+    const minLength = 8;
+    const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+    if (password.length < minLength) {
+      return "Password is too short. It must be at least 8 characters.";
+    } else if (!hasSpecialCharacter) {
+      return "Password must contain at least one special character.";
+    } else {
+      return "";
+    }
+  }
+
+  function passwordMatch(password, confirmPassword) {
+    if (password != confirmPassword) {
+      return "Passwords do not match.";
+    }
+  }
+  
   async function signUp(event) {
     event.preventDefault();
 
@@ -101,27 +122,41 @@ export const SignUp = () => {
           <label className="text-white font-inter font-bold text-xs">
             Password
           </label>
-          <input
-            className="bg-black border-b-[1px] border-main-yellow text-white w-4/5"
-            type="password"
-            onChange={(event) => {
-              setEnteredPassword(event.target.value);
-            }}
-          />
-        </div>
 
+          <div className="w-4/5">
+            <input
+              className="bg-black border-b-[1px] border-main-yellow text-white w-full"
+              type="password"
+              onChange={(event) => {
+                setEnteredPassword(event.target.value);
+                setPasswordValidationMessage(validatePassword(event.target.value))
+              }}
+            />
+            {passwordValidationMessage && (
+            <p className="text-red-500 text-xs font-inter mt-2 flex"> {passwordValidationMessage}</p>
+          )}
+          </div>
+        </div>
+        
         <div className="flex justify-between items-end py-2">
           <label className="text-white font-inter font-bold text-xs ">
             Confirm Password
           </label>
-          <input
-            className="bg-black border-b-[1px] border-main-yellow text-white w-4/5"
-            type="password"
-            onChange={(event) => {
-              setEnteredConfirmPassword(event.target.value);
-            }}
-          />
+          <div className="w-4/5">
+            <input
+              className="bg-black border-b-[1px] border-main-yellow text-white w-full"
+              type="password"
+              onChange={(event) => {
+                setEnteredConfirmPassword(event.target.value);
+                setConfirmPasswordMessage(passwordMatch(enteredPassword, event.target.value))
+              }}
+            />
+            {confirmPasswordMessage && (
+            <p className="text-red-500 text-xs font-inter ">{confirmPasswordMessage}</p>
+          )}
+          </div>
         </div>
+        
 
         <div className="flex justify-between items-end py-2">
           <label className="text-white font-inter font-bold text-xs ">

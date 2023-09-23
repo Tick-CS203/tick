@@ -29,7 +29,7 @@ export const ForgotPassword = () => {
 
 
   return (
-    <div className="grid grid-cols-1 h-screen w-full">
+    <div className="grid grid-cols-1 h-screen w-full relative">
 
         <img
           className="absolute left-[128px]top-[128px]"
@@ -52,14 +52,17 @@ export const ForgotPassword = () => {
       
         <form className="flex flex-col justify-center max-w-[650px] w-full mx-auto" onSubmit={forgotPassword}>
           <h2 className="text-main-yellow font-inter italic font-extrabold text-4xl">RESET PASSWORD</h2>
-          <div className='flex justify-between items-end py-2'>
+          <div className='flex justify-between items-end py-4'>
             <label className="text-white font-inter font-bold text-xs ">Username</label>
             <input className= 'bg-black border-b-[1px] border-main-yellow text-white w-4/5' type="text"
               onChange={(event) => {
                 setEnteredUsername(event.target.value);
                 }} />
           </div>
-          <button type="submit">Send verification link</button>
+
+          <div className= "flex justify-center my-10">
+          <button type="submit" className="bg-main-yellow text-black font-inter font-semibold rounded-lg w-52 h-9">Send verification link</button>
+          </div>
         </form>
     </div>
   );

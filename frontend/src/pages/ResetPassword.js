@@ -11,6 +11,27 @@ export const ResetPassword = () => {
   const [enteredCode, setEnteredCode] = useState("");
   const [enteredNewPassword, setEnteredNewPassword] = useState("");
   const [enteredConfirmNewPassword, setEnteredConfirmNewPassword] = useState("");
+  const [passwordValidationMessage, setPasswordValidationMessage] = useState("");
+  const [confirmPasswordMessage, setConfirmPasswordMessage] = useState("");
+
+  function validatePassword(password) {
+    const minLength = 8;
+    const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+    if (password.length < minLength) {
+      return "Password is too short. It must be at least 8 characters.";
+    } else if (!hasSpecialCharacter) {
+      return "Password must contain at least one special character.";
+    } else {
+      return "";
+    }
+  }
+
+  function passwordMatch(password, confirmPassword) {
+    if (password != confirmPassword) {
+      return "Passwords do not match.";
+    }
+  }
 
   // Collect confirmation code and new password
   async function forgotPasswordSubmit(event) {
@@ -59,19 +80,36 @@ export const ResetPassword = () => {
 
           <div className='flex justify-between items-end py-2'>
             <label className="text-white font-inter font-bold text-xs">Password</label>
-            <input className= 'bg-black border-b-[1px] border-main-yellow text-white w-4/5' type="password"
+
+            <div className="w-4/5">
+              <input className= 'bg-black border-b-[1px] border-main-yellow text-white w-full' type="password"
                 onChange={(event) => {
                   setEnteredNewPassword(event.target.value);
+                  setPasswordValidationMessage(validatePassword(event.target.value))
                 }} />
+
+              {passwordValidationMessage && (
+              <p className="text-red-500 text-xs font-inter mt-2 flex"> {passwordValidationMessage}</p>
+              )}
+            </div>
           </div>
+
+          
           
           <div className='flex justify-between items-end py-2'>
             <label className="text-white font-inter font-bold text-xs ">Confirm Password</label>
-           <input className= 'bg-black border-b-[1px] border-main-yellow text-white w-4/5' type="password"
-             onChange={(event) => {
-              setEnteredConfirmNewPassword(event.target.value);
-                }} />
+            <div className="w-4/5">
+              <input className= 'bg-black border-b-[1px] border-main-yellow text-white w-full' type="password"
+                onChange={(event) => {
+                  setEnteredConfirmNewPassword(event.target.value);
+                  setConfirmPasswordMessage(passwordMatch(enteredNewPassword, event.target.value));
+                  }} />
+              {confirmPasswordMessage && (
+              <p className="text-red-500 text-xs font-inter mt-2">{confirmPasswordMessage}</p>
+              )}
+            </div>
           </div>
+          
 
           <div className="flex justify-center my-10">
             <button type="submit" className="bg-main-yellow text-black font-inter font-semibold rounded-lg w-52 h-9"> Reset password</button>
