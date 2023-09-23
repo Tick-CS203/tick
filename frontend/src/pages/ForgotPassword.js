@@ -1,23 +1,27 @@
 import { Auth } from "aws-amplify";
 import { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from "react-redux";
+import { setUsername } from "../store/userSlice";
 
 export const ForgotPassword = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [stage, setStage] = useState(1); // 1 = email stage, 2 = code stage
   const [enteredUsername, setEnteredUsername] = useState("");
   const [enteredCode, setEnteredCode] = useState("");
   const [enteredNewPassword, setEnteredNewPassword] = useState("");
   const [enteredConfirmNewPassword, setEnteredConfirmNewPassword] = useState("");
 
   // Send confirmation code to user's email
-  async function forgotPassword(enteredUsername) {
+  async function forgotPassword(event) {
+    event.preventDefault();
+
     try {
       const data = await Auth.forgotPassword(enteredUsername);
       console.log(data);
-      navigate("/resetpassword");
+      dispatch(setUsername(enteredUsername));
+      navigate("/resetpassword")
     } catch(err) {
       console.log(err);
     }
@@ -55,7 +59,7 @@ export const ForgotPassword = () => {
                 setEnteredUsername(event.target.value);
                 }} />
           </div>
-          <button type="submit"><Link to="/resetPassword">Send verification code</Link></button>
+          <button type="submit">Send verification link</button>
         </form>
     </div>
   );

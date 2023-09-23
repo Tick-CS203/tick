@@ -1,20 +1,23 @@
 import { Auth } from "aws-amplify";
 import { useState } from "react";
-import { Link, useNavigate } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from "react-redux";
 
 export const ResetPassword = () => {
   const navigate = useNavigate();
 
-  const [enteredUsername, setEnteredUsername] = useState("");
+  const { username } = useSelector((state) => state.user);
+
   const [enteredCode, setEnteredCode] = useState("");
   const [enteredNewPassword, setEnteredNewPassword] = useState("");
   const [enteredConfirmNewPassword, setEnteredConfirmNewPassword] = useState("");
 
   // Collect confirmation code and new password
-  async function forgotPasswordSubmit(enteredUsername, enteredCode, enteredNewPassword) {
+  async function forgotPasswordSubmit(event) {
+    event.preventDefault();
+
     try {
-      const data = await Auth.forgotPasswordSubmit(enteredUsername, enteredCode, enteredNewPassword);
+      const data = await Auth.forgotPasswordSubmit(username, enteredCode, enteredNewPassword);
       console.log(data);
       navigate("/login");
     } catch(err) {
