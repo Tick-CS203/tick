@@ -9,10 +9,17 @@ import { Category } from "../component/homepage/Category";
 import { Event } from "../component/homepage/Event";
 import { Carousel } from "../component/homepage/Carousel";
 
-import React from 'react';
+import React from "react";
 
 export const Home = () => {
-  const images = [ClassicalImage, TheatreImage, ConcertImage, DanceImage, ComedyImage, MusicalImage];
+  const images = [
+    ClassicalImage,
+    TheatreImage,
+    ConcertImage,
+    DanceImage,
+    ComedyImage,
+    MusicalImage,
+  ];
   return (
     <>
       <Carousel images={images} />
