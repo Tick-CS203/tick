@@ -15,7 +15,6 @@ export const Home = () => {
   const images = [ClassicalImage, TheatreImage, ConcertImage, DanceImage, ComedyImage, MusicalImage];
   return (
     <>
-      <></>
       <Carousel images={images} />
       <p className="font-inter font-black text-main-yellow italic text-xl py-5 relative uppercase">
         Your Upcoming Concerts
