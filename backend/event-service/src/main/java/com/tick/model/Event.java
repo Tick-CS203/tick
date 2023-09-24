@@ -24,7 +24,7 @@ class Links {
 public class Event {
 
     @Id
-    private int eventId;
+    private int eventID;
     private String name;
     private String description;
     private String category;
@@ -38,9 +38,10 @@ public class Event {
     private List<EventDate> date;
     private Links links;
 
-    public Event(String name, String category, String banner, LocalDateTime lastUpdated, List<Price> prices,
+    public Event(String name, String description, String category, String banner, LocalDateTime lastUpdated, List<Price> prices,
             int ticketLimit, String venueId, Map<String, Map<String, Map<String, Integer>>> seatMap, List<EventDate> date, Links links) {
         this.name = name;
+        this.description = description;
         this.category = category;
         this.banner = banner;
         this.lastUpdated = lastUpdated;
