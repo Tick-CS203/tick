@@ -26,7 +26,7 @@ function App() {
           <Route path="/confirmsignup" element={<ConfirmSignUp />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
-          <Route path="/seatmap" element={<SeatSelection />} />
+          <Route path="/seatmap/:id" element={<SeatSelection />} />
         </Routes>
       </div>
       <Footer />
