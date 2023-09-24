@@ -26,6 +26,7 @@ public class Event {
     @Id
     private int eventId;
     private String name;
+    private String description;
     private String category;
     private String banner;
     private String artist;
