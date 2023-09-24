@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import com.tick.repository.*;
+import com.tick.model.*;
 
 import lombok.AllArgsConstructor;
 
@@ -82,9 +83,9 @@ public class EventService {
     }
 
     public Boolean eventHasAPriceLessThanOrEqualToMaxPrice(Event event, Double maxPrice) {
-        List<Double> prices = event.getPrice();
-        for (double currPrice : prices) {
-            if (currPrice <= maxPrice) {
+        List<Price> prices = event.getPrices();
+        for (Price currPrice : prices) {
+            if (currPrice.getPrice() <= maxPrice) {
                 return true;
             }
         }
