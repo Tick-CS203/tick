@@ -72,4 +72,11 @@ public class TicketController {
     public String deleteByTicketId(@RequestBody CompositeKey key) {
         return ticketService.deleteTicketByTicketId(key);
     }
+
+    @PostMapping("/allocate/{id}")
+    public List<Ticket> allocateSeats( @PathVariable String id, @RequestBody List<SelectedRow> selectedRows,
+            @RequestHeader Map<String, String> headers) {
+            String token = headers.get("authorization");
+            return eventDateService.allocateSeats(id, selectedRows, token);
+    }
 }
