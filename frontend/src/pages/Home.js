@@ -8,7 +8,12 @@ import MusicalImage from "../assets/sudan-ouyang-UQuka_ruWxQ-unsplash.jpg";
 import { Category } from "../component/homepage/Category";
 import { Event } from "../component/homepage/Event";
 
+import { useEventsQuery } from "../api/events.query";
+
 export const Home = () => {
+  const { data: events } = useEventsQuery();
+  console.log(events);
+
   return (
     <>
       <p className="font-inter font-black text-main-yellow italic text-xl py-5 relative uppercase">
@@ -23,11 +28,17 @@ export const Home = () => {
         Top Picks Of The Month
       </p>
 
-      <Event
-        imageURL={ConcertImage}
-        eventName="LEE YOUNGJI 1st ASIA TOUR ‘THE MAIN CHARACTER’ - SINGAPORE"
-        eventDate="20 Oct 2023"
-      />
+      {events &&
+        events.map((event) => {
+          return (
+            <Event
+              eventId={event.eventID}
+              imageURL={event.banner}
+              eventName={event.name}
+              eventDates={event.date}
+            />
+          );
+        })}
       <p className="font-inter font-black text-main-yellow italic text-xl py-10 uppercase">
         Explore Different Categories
       </p>
