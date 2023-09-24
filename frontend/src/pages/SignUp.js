@@ -21,11 +21,17 @@ export const SignUp = () => {
   function validatePassword(password) {
     const minLength = 8;
     const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
   
     if (password.length < minLength) {
       return "Password is too short. It must be at least 8 characters.";
     } else if (!hasSpecialCharacter) {
       return "Password must contain at least one special character.";
+    } else if (!hasUppercase) {
+      return "Password must contain at least one uppercase character.";
+    } else if (!hasNumber) {
+      return "Password must contain at least one number.";
     } else {
       return "";
     }
