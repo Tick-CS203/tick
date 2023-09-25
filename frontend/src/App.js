@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <div className="bg-black px-8">
+      <div className="bg-black px-8 pb-8">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/event/:id" element={<EventDetails />} />
@@ -26,7 +26,7 @@ function App() {
           <Route path="/confirmsignup" element={<ConfirmSignUp />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
-          <Route path="/seatmap" element={<SeatSelection />} />
+          <Route path="/seatmap/:id" element={<SeatSelection />} />
         </Routes>
       </div>
       <Footer />
