@@ -107,16 +107,16 @@ export const Ticket = ({ background }) => {
         orderDateTime: "2023-09-17 12:00:00"
       },
       {
-        imageUrl: "https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg",
-        eventName: "ATEEZ WORLD TOUR (THE FELLOWSHIP: BREAK THE WALL) IN SINGAPORE 2023",
-        location: "Singapore Indoor Stadium",
-        time: "19:30 SGT - 23:00 SGT",
-        day: "Friday",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNQdS0QEfy8MA8kmeK_r2oxKwqbEkvVs54pA&usqp=CAU",
+        eventName: "NBA Finals 2023",
+        location: "Ball Arena, Denver, Colorado",
+        time: "8:30 PM ET",
+        day: "Thursday",
         date: "15",
-        month: "November",
+        month: "June",
         year: "2023",
         orderId: "1234567890",
-        orderDateTime: "2023-09-17 12:00:00"
+        orderDateTime: "2023-09-25 17:04:18"
       },
     ];
   
