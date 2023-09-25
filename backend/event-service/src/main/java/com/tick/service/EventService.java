@@ -72,10 +72,10 @@ public class EventService {
         if (eventRequest.getEventID() == null) 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "eventID field must be provided");
         return eventRepository.findById(eventRequest.getEventID()).map(
-                event -> {
-                    event.setDate(eventRequest.getDate());
-                    return eventRepository.save(event);
-                }).orElse(null);
+            event -> {
+                event.setDate(eventRequest.getDate());
+                return eventRepository.save(event);
+            }
         ).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
     }
 
