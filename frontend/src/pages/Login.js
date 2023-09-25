@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setTokens, setUsername } from "../store/userSlice";
 
-export const Login = () => {
+export const Login = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -25,6 +25,7 @@ export const Login = () => {
         })
       );
       dispatch(setUsername(enteredUsername));
+      props.updateAuthStatus(true);
       navigate("/");
     } catch (error) {
       console.log(error);
