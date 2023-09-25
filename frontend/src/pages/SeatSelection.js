@@ -2,6 +2,20 @@ import { Steps, Select } from "antd";
 import { useState, useEffect } from "react";
 import { NationalStadium } from "../component/seatselection/NationalStadium";
 import { RowData } from "../component/seatselection/RowData";
+import { axiosInstance } from "../api/axios";
+
+export const SeatSelection = () => {
+  const startCheckoutHandler = async () => {
+    const redirectURL = await axiosInstance.post("/api/payment/create-checkout-session",JSON.stringify([{
+        quantity: 2,
+        priceID: ""
+    },
+    {
+        quantity: 1,
+        priceID: ""
+    }]))
+    window.location.href = redirectURL.data;
+  }
 import { useParams } from "react-router-dom";
 import { useEventQuery } from "../api/events.query";
 import { useSelector } from "react-redux";
@@ -165,7 +179,6 @@ export const SeatSelection = () => {
               <p className="font-inter font-black text-main-yellow italic text-xl py-4 uppercase">
                 Selected Seats
               </p>
-
               <div className="flex flex-col items-center">
                 <table className="w-11/12 text-center my-4">
                   <thead>
@@ -194,6 +207,7 @@ export const SeatSelection = () => {
                 <button
                   className="bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto"
                   disabled={items.length === 0}
+                  onClick={startCheckoutHandler}
                 >
                   Next
                 </button>
