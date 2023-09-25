@@ -69,9 +69,11 @@ public class EventService {
     }
 
     public Event updateEvent(Event eventRequest) {
+        if (eventRequest.getEventID() == null) 
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "eventID field must be provided");
         return eventRepository.findById(eventRequest.getEventID()).map(
             event -> { return eventRepository.save(eventRequest); }
-        ).orElse(null);
+        ).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
     }
 
     public String deleteEvent(String eventID) {

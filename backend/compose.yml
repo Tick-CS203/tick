@@ -24,6 +24,7 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - TOKEN_HOST=${TOKEN_HOST}
       - EVENT_HOST=${EVENT_HOST}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${BOOKMARK_PORT}:8080'
   event:
@@ -38,6 +39,7 @@ services:
       - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=event
       - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${EVENT_DB}:27017/?retryWrites=true&w=majority
       - SPRING_DATA_MONGODB_DATABASE=event
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${EVENT_PORT}:8080'
   ticket:
@@ -53,6 +55,7 @@ services:
       - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=ticket
       - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${TICKET_DB}:27017/?retryWrites=true&w=majority
       - SPRING_DATA_MONGODB_DATABASE=ticket
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${TICKET_PORT}:8080'
   session:
@@ -72,6 +75,7 @@ services:
       - REDIS_HOST=${REDIS_HOST}
       - TOKEN_HOST=${TOKEN_HOST}
       - TOKEN_PORT=${TOKEN_PORT}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
   redis-node-1:
     image: redis
     container_name: node-1
@@ -130,6 +134,7 @@ services:
       - MONGO_INITDB_ROOT_DB=event
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${EVENT_DB_PORT}:27017'
     volumes:
@@ -141,6 +146,7 @@ services:
       - MONGO_INITDB_ROOT_DB=ticket
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${TICKET_DB_PORT}:27017'
     volumes:
@@ -152,6 +158,7 @@ services:
       - POSTGRES_DB=bookmarks
       - POSTGRES_USER=${MONGO_USER}
       - POSTGRES_PASSWORD=${MONGO_PASSWORD}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${BOOKMARK_DB_PORT}:5432'
     volumes:
