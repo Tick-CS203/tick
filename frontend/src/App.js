@@ -13,6 +13,7 @@ import { ResetPassword } from "./pages/ResetPassword";
 import { EventDetails } from "./pages/EventDetails";
 import { Auth } from "./component/signup/Auth"
 import { Navigate } from "react-router-dom";
+import { Queue } from "./pages/Queue"
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
           <Route path="/seatmap/:id" element={<Auth><SeatSelection /></Auth>} />
+          <Route path="/queue/:id" element={<Queue />} />
           <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
       </div>
