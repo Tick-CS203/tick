@@ -15,57 +15,61 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tick.ticketsservice.model.Ticket;
+import com.tick.ticketsservice.model.Ticket.CompositeKey;
 import com.tick.ticketsservice.service.TicketService;
 
 @RestController
-@RequestMapping("/tickets")
 public class TicketController {
 
     @Autowired
     private TicketService ticketService;
 
-    @PostMapping
+    @GetMapping
+    public String health_check() {
+        return "Service is running";
+    }
+
+    @GetMapping("/tickets")
+    public List<Ticket> getAllTickets() {
+        return ticketService.getAllTickets();
+    }
+
+    @PostMapping("/tickets")
     @ResponseStatus(HttpStatus.CREATED)
     public Ticket createTicket(@RequestBody Ticket ticket) {
         return ticketService.addTicket(ticket);
     }
 
-    @GetMapping
-    public List<Ticket> getAllTickets() {
-        return ticketService.getAllTickets();
-
-    }   
-
-    @GetMapping("/{ticketId}")
-    public Ticket getTicket(@PathVariable String ticketId) {
-        return ticketService.getTicketByTicketId(ticketId);
-    }
-
-    @GetMapping("/userId/{userId}")
-    public List<Ticket> getTicketByUserId(@PathVariable String userId) {
-        return ticketService.getTicketByUserId(userId);
-    }
-    
-    @PutMapping
+    @PutMapping("/tickets")
     public Ticket modifyTicket(@RequestBody Ticket ticket) {
         return ticketService.updateTicket(ticket);
     }
 
+    @GetMapping("/tickets/{key}")
+    public Ticket getTicket(@RequestBody CompositeKey key) {
+        return ticketService.getTicketById(key);
+    }
+
+    @GetMapping("/tickets/userId/{userId}")
+    public List<Ticket> getTicketByUserId(@PathVariable String userId) {
+        return ticketService.getTicketByUserId(userId);
+    }
+
     //if user asks for a refund
-    @PutMapping("/{userId}")
-    public List<Ticket> ticketsMadeAvailable(@RequestBody String userId) {
-        return ticketService.ticketMadeAvailableAgain(userId);
+    @PutMapping("/tickets/{userId}")
+    public List<Ticket> ticketsMadeAvailable(@PathVariable String userId) {
+        return ticketService.releaseTicket(userId);
     }
 
     //if event is cancelled
-    @DeleteMapping("/eventId/{eventId}") 
+    @DeleteMapping("/tickets/eventId/{eventId}")
     public String deleteByEventId(@PathVariable String eventId) {
         return ticketService.deleteTicketByEvent(eventId);
     }
 
     //delete after ticket object belonging to prev user after it has been transferred
-    @DeleteMapping("/{ticketId}") 
-    public String deleteByTicketId(@PathVariable String ticketId) {
-        return ticketService.deleteTicketByTicketId(ticketId);
+    @DeleteMapping("/tickets")
+    public String deleteByTicketId(@RequestBody CompositeKey key) {
+        return ticketService.deleteTicketByTicketId(key);
     }
 }
