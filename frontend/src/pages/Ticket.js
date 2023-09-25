@@ -1,12 +1,15 @@
 import React from 'react';
 import '../component/ticket/TicketDetails.css';
 
-// Header Component
+// TicketHeader Component for displaying the title
+// Props: title - The title to be displayed
 const TicketHeader = ({ title }) => (
   <h1 className="text-white font-extrabold text-3xl mb-4 font-inter italic">{title}</h1>
 );
 
-// Order Details Component
+// OrderDetails Component for displaying order information
+// Props: orderId - ID of the order
+//        orderDateTime - Date and time the order was placed
 const OrderDetails = ({ orderId, orderDateTime }) => (
   <div className="flex flex-col font-inter">
     <p className="text-white font-semibold text-sm">Order ID: {orderId}</p>
@@ -14,7 +17,7 @@ const OrderDetails = ({ orderId, orderDateTime }) => (
   </div>
 );
 
-// Ticket Menu Component
+// TicketMenu Component for displaying the ticket menu options
 const TicketMenu = () => {
     return (
         <div className="ticket-menu h-full flex flex-col justify-between font-inter" style={{ marginLeft: '20px' }}>
@@ -26,7 +29,10 @@ const TicketMenu = () => {
     );
 };
 
-// Ticket Details Component
+// TicketDetails Component for displaying detailed ticket information
+// Props: imageUrl - URL of the event image
+//        eventName - Name of the event
+//        ...other event details
 const TicketDetails = ({ 
     imageUrl, 
     eventName, 
@@ -81,6 +87,7 @@ const TicketDetails = ({
 
 // Main Ticket Component
 export const Ticket = ({ background }) => {
+    // Sample ticket data (to be updated with real data)
     const tickets = [
       {
         imageUrl: "https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg",
@@ -122,16 +129,20 @@ export const Ticket = ({ background }) => {
   
     return (
         <div className={`bg-${background} p-4`}>
-          <TicketHeader title="My Tickets" />
-          {tickets.map((ticket, index) => (
-            <div className="ticket-block mb-12" key={index}>
-              <div style={{ marginBottom: '20px' }}>
-                <OrderDetails orderId={ticket.orderId} orderDateTime={ticket.orderDateTime} />
-              </div>
-              <div className="flex items-stretch">
-                <TicketDetails {...ticket} />
-                <TicketMenu />
-              </div>
+            {/* Displaying TicketHeader component */}
+            <TicketHeader title="My Tickets" />
+            {/* Mapping through the tickets array and displaying each ticket */}
+            {tickets.map((ticket, index) => (
+                <div className="ticket-block mb-12" key={index}>
+                <div style={{ marginBottom: '20px' }}>
+                    {/* Displaying OrderDetails component */}
+                    <OrderDetails orderId={ticket.orderId} orderDateTime={ticket.orderDateTime} />
+                </div>
+                <div className="flex items-stretch">
+                    {/* Displaying TicketDetails and TicketMenu components */}
+                    <TicketDetails {...ticket} />
+                    <TicketMenu />
+                </div>
             </div>
           ))}
         </div>
@@ -139,8 +150,3 @@ export const Ticket = ({ background }) => {
     };
   
   export default Ticket;
-
-
-
-
-
