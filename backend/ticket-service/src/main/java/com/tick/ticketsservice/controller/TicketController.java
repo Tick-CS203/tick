@@ -79,8 +79,8 @@ public class TicketController {
     }
 
     @PostMapping("/recaptcha")
-    public Object verifyRecaptcha(@RequestBody String recaptchaToken) {
-        return ticketService.verifyRecaptcha(recaptchaToken);
+    public Object verifyRecaptcha(@RequestBody RecaptchaRequest recaptchaRequest) {
+        return ticketService.verifyRecaptcha(recaptchaRequest);
     }
 
     @PostMapping("/allocate/{id}/{date}")

@@ -1,7 +1,6 @@
 package com.tick.ticketsservice.service;
 
 import java.util.*;
-import lombok.AllArgsConstructor;
 import reactor.core.publisher.Mono;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.*;
@@ -180,10 +179,10 @@ public class TicketService {
         return allocatedTickets;
     }
 
-    public Mono<Object> verifyRecaptcha(String recaptchaToken) {
+    public Mono<Object> verifyRecaptcha(RecaptchaRequest recaptchaRequest) {
         return WebClient.create().post()
             .uri("https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}",
-                    RecaptchaObject.getSecret(), recaptchaToken
+                    RecaptchaObject.getSecret(), recaptchaRequest.getRecaptchaToken()
                 )
             .retrieve()
             .toEntity(Object.class)
