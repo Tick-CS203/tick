@@ -36,8 +36,6 @@ const TicketDetails = ({
     date, 
     month, 
     year, 
-    orderId, 
-    orderDateTime 
   }) => {
     return (
       <div className="ticket-container bg-white shadow-md rounded-2xl flex relative font-inter">
