@@ -13,50 +13,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Ticket {
     @Id
     private CompositeKey key;
-    private String userId;
+    private String user;
     private String category;
 
     @Data
+    @AllArgsConstructor
     public static class CompositeKey implements Serializable {
-        private String eventDateId;
+        private String eventDate;
         private String section;
         private String row;
         private int seatNumber;
-    }
-
-    public String getEventDateId() {
-        return key.getEventDateId();
-    }
-
-    public void setEventDateId(String eventDate) {
-        key.setEventDateId(eventDate);
-    }
-
-    public String getSection() {
-        return key.getSection();
-    }
-
-    public void setSection(String section) {
-        key.setSection(section);
-    }
-
-    public String getRow() {
-        return key.getRow();
-    }
-
-    public void setRow(String row) {
-        key.setRow(row);
-    }
-
-    public int getSeatNumber() {
-        return key.getSeatNumber();
-    }
-
-    public void setSeatNumber(int seatNumber) {
-        key.setSeatNumber(seatNumber);
     }
 }
