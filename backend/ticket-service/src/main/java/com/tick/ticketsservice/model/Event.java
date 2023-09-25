@@ -34,7 +34,7 @@ public class Event {
     private LocalDateTime lastUpdated;
     private List<Price> prices;
     private int ticketLimit;
-    private String venueId;
+    private String venueID;
     private Map<String, Map<String, Map<String, Integer>>> seatMap;
     private List<EventDate> date;
     private Links links;
@@ -48,7 +48,7 @@ public class Event {
         this.lastUpdated = lastUpdated;
         this.prices = prices;
         this.ticketLimit = ticketLimit;
-        this.venueId = venueId;
+        this.venueID = venueID;
         this.seatMap = seatMap;
         this.date = date;
         this.links = links;

@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class EventDate {
 
     @Id
-    private String id;
+    private String ID;
 
     private String eventID;
     private LocalDateTime eventDateTime;

@@ -80,9 +80,9 @@ public class TicketService {
 
     // [{category: "CAT1", section: "PC1", row: "C", quantity: 2}, {category: "CAT2", section: "140", row: "B", quantity: 1}]
     public List<Ticket> allocateSeats(String eventID, String eventDate, List<SelectedRow> selectedRows, String token) {
-        Event event = null;
+        Event event;
         String user;
-        System.out.println(event_host + "eventID: " + eventID);
+
         try {
             event = WebClient.create("http://" + event_host + ":8080/event/" + eventID)
                 .get().exchangeToMono(response -> {
@@ -90,8 +90,9 @@ public class TicketService {
                         return response.createError();
                     return response.bodyToMono(Event.class);
                 }).block();
-            user = WebClient.create("http://" + token_host + ":8080/access/purchasing")
-                .post().bodyValue("{\"token\":"+token+'}')
+            user  = WebClient.create("http://" + token_host + ":8080/token/purchasing")
+                .post().body(Mono.just("{\"token\":\""+token+"\"}"), String.class)
+                .header("Content-Type", "application/json")
                 .exchangeToMono(response -> {
                     if (response.statusCode().value() == 400)
                         return response.createError();
@@ -104,12 +105,9 @@ public class TicketService {
         }
 
         EventDate date = null;
-        List<EventDate> dateList = event.getDate();
-        for (int i = 0; i < dateList.size(); i++) {
-            EventDate d = dateList.get(i);
+        for (EventDate d : event.getDate()) {
             if (d.getEventID().toString().equals(eventDate)) {
                 date = d;
-                dateList.remove(i);
                 break;
             }
         }
@@ -124,7 +122,8 @@ public class TicketService {
         for (SelectedRow rowObj : selectedRows) {
             totalQuantity += rowObj.getQuantity();
         }
-        if (totalQuantity >= event.getTicketLimit())
+
+        if (totalQuantity > event.getTicketLimit())
             throw new Error("Selected quantity is above purchase limit");
 
         List<Ticket> allocatedTickets = new ArrayList<>();
@@ -135,13 +134,13 @@ public class TicketService {
             String row = rowObj.getRow();
             Integer quantity = rowObj.getQuantity();
 
+            // error prone, to fix in security
             Integer currentAvailable = seatAvailability.get(category).get(section).get(row);
             if (currentAvailable == null)
                 throw new Error("Invalid seat selection");
 
+            // error prone, to fix in security
             Integer maxCapacity = seatMap.get(category).get(section).get(row);
-            // if (maxCapacity == null)
-            //     throw new Error("Invalid seat selection");
 
             if (currentAvailable == 0)
                 throw new Error("No more seats available");
@@ -163,14 +162,10 @@ public class TicketService {
             sectionMap.put(row, currentAvailable);
         }
 
-        date.setSeatAvailability(seatAvailability);
-        dateList.add(date);
-        event.setDate(dateList);
-
         try {
-            WebClient.create("http://" + event_host + ":8080/event")
-                .put().bodyValue(event).retrieve()
-                .bodyToMono(Object.class)
+            WebClient.create("http://" + event_host + ":8080/event").put()
+                .body(Mono.just(event), Event.class).retrieve()
+                .bodyToMono(String.class)
                 .block();
         } catch (WebClientResponseException e) {
             throw new EventUpdateException();

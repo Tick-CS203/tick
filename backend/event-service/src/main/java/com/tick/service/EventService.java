@@ -71,7 +71,7 @@ public class EventService {
     public Event updateEvent(Event eventRequest) {
         return eventRepository.findById(eventRequest.getEventID()).map(
                 event -> {
-                    event.setSeatMap(eventRequest.getSeatMap());
+                    event.setDate(eventRequest.getDate());
                     return eventRepository.save(event);
                 }).orElse(null);
     }
