@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import com.tick.repository.*;
+import com.tick.model.*;
 
 import lombok.AllArgsConstructor;
 
@@ -61,30 +62,29 @@ public class EventService {
         return intermediaryEvents;
     }
 
-    public Event getEventByID(Integer eventID) {
+    public Event getEventByID(String eventID) {
         return eventRepository.findById(eventID).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found")
-                );
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found")
+        );
     }
 
     public Event updateEvent(Event eventRequest) {
+        if (eventRequest.getEventID() == null) 
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "eventID field must be provided");
         return eventRepository.findById(eventRequest.getEventID()).map(
-                event -> {
-                    event.setName(eventRequest.getName());
-                    event.setSeatMap(eventRequest.getSeatMap());
-                    return eventRepository.save(event);
-                }).orElse(null);
+            event -> { return eventRepository.save(eventRequest); }
+        ).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
     }
 
-    public String deleteEvent(Integer eventID) {
+    public String deleteEvent(String eventID) {
         eventRepository.deleteById(eventID);
         return eventID + " event deleted successfully";
     }
 
     public Boolean eventHasAPriceLessThanOrEqualToMaxPrice(Event event, Double maxPrice) {
-        List<Double> prices = event.getPrice();
-        for (double currPrice : prices) {
-            if (currPrice <= maxPrice) {
+        List<Price> prices = event.getPrices();
+        for (Price currPrice : prices) {
+            if (currPrice.getPrice() <= maxPrice) {
                 return true;
             }
         }
