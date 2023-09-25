@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET).permitAll();
                 })
         .csrf(csrf -> csrf.disable())
-            .cors(Customizer.withDefaults());
+            .cors(cors -> cors.configurationSource(CorsFilter.config()));
         return http.build();
     }
 }

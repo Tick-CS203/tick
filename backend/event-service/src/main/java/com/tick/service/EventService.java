@@ -75,8 +75,8 @@ public class EventService {
                 event -> {
                     event.setDate(eventRequest.getDate());
                     return eventRepository.save(event);
-                }).orElse(null);
-        ).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+                }).orElseThrow(() ->
+                    new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
     }
 
     public String deleteEvent(String eventID) {
