@@ -5,12 +5,12 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
-public class CustomAuthentication implements Authentication {
+public class TokenAuthentication implements Authentication {
     private boolean authenticated;
     private String principal;
     private String name;
 
-    public CustomAuthentication(String name) {
+    public TokenAuthentication(String name) {
         this.name = name;
     }
 

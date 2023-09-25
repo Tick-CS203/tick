@@ -32,7 +32,7 @@ public class BookmarkController {
     }
 
     @GetMapping("/user")
-    public Bookmark user_bookmarks(CustomAuthentication auth) throws IOException
+    public Bookmark user_bookmarks(TokenAuthentication auth) throws IOException
     {
         String id = (String) auth.getPrincipal();
 
@@ -41,7 +41,7 @@ public class BookmarkController {
 
     @DeleteMapping("/{event}")
     public Bookmark delete_bookmark(@PathVariable long event,
-            CustomAuthentication auth
+            TokenAuthentication auth
             ) throws IOException
     {
         verify_event(event);
@@ -52,7 +52,7 @@ public class BookmarkController {
 
     @PostMapping("/{event}")
     public Bookmark add_bookmark(@PathVariable long event,
-            CustomAuthentication auth
+            TokenAuthentication auth
             ) throws IOException
     {
         verify_event(event);
