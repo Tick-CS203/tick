@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.tick.ticketsservice.model.Ticket;
+import com.tick.ticketsservice.model.*;
 import com.tick.ticketsservice.model.Ticket.CompositeKey;
 import com.tick.ticketsservice.service.TicketService;
 
@@ -78,15 +78,17 @@ public class TicketController {
         return ticketService.deleteTicketByEvent(eventId);
     }
 
-    @PostMapping("/{recaptchaToken}")
-    public Object verifyRecaptcha(@PathVariable String recaptchaToken) {
+    @PostMapping("/recaptcha")
+    public Object verifyRecaptcha(@RequestBody String recaptchaToken) {
         return ticketService.verifyRecaptcha(recaptchaToken);
     }
 
-    @PostMapping("/allocate/{id}")
-    public List<Ticket> allocateSeats( @PathVariable String id, @RequestBody List<SelectedRow> selectedRows,
+    @PostMapping("/allocate/{id}/{date}")
+    public List<Ticket> allocateSeats(@PathVariable String id,
+            @PathVariable String date,
+            @RequestBody List<SelectedRow> selectedRows,
             @RequestHeader Map<String, String> headers) {
             String token = headers.get("authorization");
-            return eventDateService.allocateSeats(id, selectedRows, token);
+            return ticketService.allocateSeats(id, date, selectedRows, token);
     }
 }

@@ -1,9 +1,9 @@
-package com.tick.model;
+package com.tick.ticketsservice.model;
 
 import java.time.*;
 import java.util.Map;
 import java.util.List;
-import lombok.Data;
+import lombok.*;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,6 +21,7 @@ class Links {
 
 @Document
 @Data
+@NoArgsConstructor
 public class Event {
 
     @Id

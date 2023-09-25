@@ -1,8 +1,9 @@
-package com.tick.model;
+package com.tick.ticketsservice.model;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
 public class Price {
     private String category;
     private String priceID; // id from stripe

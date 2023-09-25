@@ -165,6 +165,10 @@ services:
       - bookmark_db:/var/lib/postgresql/data
 volumes:
   bookmark_db:
+    name: "bookmark-db"
   redis_db:
+    name: "redis-db"
   event_db:
+    name: "event-db"
   ticket_db:
+    name: "ticket-db"
