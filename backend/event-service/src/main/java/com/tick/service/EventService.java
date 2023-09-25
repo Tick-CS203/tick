@@ -62,22 +62,19 @@ public class EventService {
         return intermediaryEvents;
     }
 
-    public Event getEventByID(Integer eventID) {
+    public Event getEventByID(String eventID) {
         return eventRepository.findById(eventID).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found")
-                );
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found")
+        );
     }
 
     public Event updateEvent(Event eventRequest) {
         return eventRepository.findById(eventRequest.getEventID()).map(
-                event -> {
-                    event.setName(eventRequest.getName());
-                    event.setSeatMap(eventRequest.getSeatMap());
-                    return eventRepository.save(event);
-                }).orElse(null);
+            event -> { return eventRepository.save(eventRequest); }
+        ).orElse(null);
     }
 
-    public String deleteEvent(Integer eventID) {
+    public String deleteEvent(String eventID) {
         eventRepository.deleteById(eventID);
         return eventID + " event deleted successfully";
     }
