@@ -9,13 +9,24 @@ import { Category } from "../component/homepage/Category";
 import { Event } from "../component/homepage/Event";
 
 import { useEventsQuery } from "../api/events.query";
+import { Carousel } from "../component/homepage/Carousel";
 
 export const Home = () => {
+  const images = [
+    ClassicalImage,
+    TheatreImage,
+    ConcertImage,
+    DanceImage,
+    ComedyImage,
+    MusicalImage,
+  ];
+  
   const { data: events } = useEventsQuery();
   console.log(events);
 
   return (
     <>
+      <Carousel images={images} />
       <p className="font-inter font-black text-main-yellow italic text-xl py-5 relative uppercase">
         Your Upcoming Concerts
       </p>
