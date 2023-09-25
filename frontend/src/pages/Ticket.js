@@ -46,8 +46,8 @@ const TicketDetails = ({
     return (
       <div className="ticket-container bg-white shadow-md rounded-2xl flex relative font-inter">
         {/* Image Section */}
-        <div className="ticket-image-container">
-          <img src={imageUrl} alt="Band" className="h-full object-cover" />
+        <div className="ticket-image-container"> 
+            <img src={imageUrl} alt="Band" className="h-full object-cover" />
         </div>
         {/* Details Section */}
         <div className="ticket-details-container-top p-6 flex flex-row">
@@ -102,8 +102,8 @@ export const Ticket = ({ background }) => {
         orderDateTime: "2023-09-17 12:00:00"
       },
       {
-        imageUrl: "https://coconuts.co/wp-content/uploads/2023/05/coldplay-jakarta-concert.jpg",
-        eventName: "Coldplay Music of the Spheres World Tour 2024",
+        imageUrl: "https://fluxmusic.cdn.radiosphere.io/images/4d0cf9f1-28e0-46ae-9360-d4ebcce6b98e?type=large",
+        eventName: "COLDPLAY MUSIC OF THE SPHERES WORLD TOUR 2024",
         location: "National Stadium, Singapore",
         time: "8:00 PM SGT",
         day: "Thursday",
@@ -114,8 +114,8 @@ export const Ticket = ({ background }) => {
         orderDateTime: "2023-09-25 17:11:23"
       },
       {
-        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNQdS0QEfy8MA8kmeK_r2oxKwqbEkvVs54pA&usqp=CAU",
-        eventName: "NBA Finals 2023",
+        imageUrl: "https://i.imgur.com/zoFP66P.png",
+        eventName: "NBA FINALS 2023 - GOLDEN STATE WARRIORS @ BOSTON CELTICS",
         location: "Ball Arena, Denver, Colorado",
         time: "8:30 PM ET",
         day: "Thursday",
