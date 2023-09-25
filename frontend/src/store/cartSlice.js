@@ -5,7 +5,7 @@ export const cartSlice = createSlice({
   initialState: { items: [], totalQuantity: 0 },
   reducers: {
     updateCartQuantity: (state, action) => {
-      const { type, category, section, row, purchaseLimit, price, priceId } = action.payload;
+      const { type, category, section, row, purchaseLimit, price, priceID } = action.payload;
 
       if (type === "ADD") {
         if (state.totalQuantity === purchaseLimit) {
@@ -36,7 +36,7 @@ export const cartSlice = createSlice({
             row: row,
             quantity: 1,
             price: price,
-            priceId: priceId
+            priceID: priceID
           });
         }
         state.totalQuantity += 1;

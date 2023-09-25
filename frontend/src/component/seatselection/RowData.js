@@ -19,7 +19,7 @@ export const RowData = (props) => {
         row: props.row,
         purchaseLimit: props.purchaseLimit,
         price: props.price.price,
-        priceId: props.price.priceId,
+        priceID: props.price.priceID,
       })
     );
   };
@@ -37,7 +37,7 @@ export const RowData = (props) => {
         row: props.row,
         purchaseLimit: props.purchaseLimit,
         price: props.price.price,
-        priceId: props.price.priceId,
+        priceID: props.price.priceID,
       })
     );
   };

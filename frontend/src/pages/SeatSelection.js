@@ -2,20 +2,7 @@ import { Steps, Select } from "antd";
 import { useState, useEffect } from "react";
 import { NationalStadium } from "../component/seatselection/NationalStadium";
 import { RowData } from "../component/seatselection/RowData";
-import { axiosInstance } from "../api/axios";
-
-export const SeatSelection = () => {
-  const startCheckoutHandler = async () => {
-    const redirectURL = await axiosInstance.post("/api/payment/create-checkout-session",JSON.stringify([{
-        quantity: 2,
-        priceID: ""
-    },
-    {
-        quantity: 1,
-        priceID: ""
-    }]))
-    window.location.href = redirectURL.data;
-  }
+import { axiosLocalHostInstance } from "../api/axios";
 import { useParams } from "react-router-dom";
 import { useEventQuery } from "../api/events.query";
 import { useSelector } from "react-redux";
@@ -34,6 +21,12 @@ export const SeatSelection = () => {
   const [availableSections, setAvailableSections] = useState({});
   const [eventDateOptions, setEventDateOptions] = useState([]);
   console.log(items)
+
+  const startCheckoutHandler = async () => {
+    const redirectURL = await axiosLocalHostInstance.post("/api/payment/create-checkout-session",JSON.stringify(items));
+    console.log(redirectURL)
+    window.location.href = redirectURL.data;
+  }
 
   // create options for select dropdown
   useEffect(() => {
