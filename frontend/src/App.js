@@ -11,6 +11,7 @@ import { ConfirmSignUp } from "./pages/ConfirmSignUp";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import { ResetPassword } from "./pages/ResetPassword";
 import { EventDetails } from "./pages/EventDetails";
+import { Queue } from "./pages/Queue"
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
           <Route path="/seatmap/:id" element={<SeatSelection />} />
+          <Route path="/queue/:id" element={<Queue />} />
         </Routes>
       </div>
       <Footer />
