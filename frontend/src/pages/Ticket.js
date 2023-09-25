@@ -95,16 +95,16 @@ export const Ticket = ({ background }) => {
         orderDateTime: "2023-09-17 12:00:00"
       },
       {
-        imageUrl: "https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg",
-        eventName: "ATEEZ WORLD TOUR (THE FELLOWSHIP: BREAK THE WALL) IN SINGAPORE 2023",
-        location: "Singapore Indoor Stadium",
-        time: "19:30 SGT - 23:00 SGT",
-        day: "Friday",
-        date: "15",
-        month: "November",
-        year: "2023",
+        imageUrl: "https://coconuts.co/wp-content/uploads/2023/05/coldplay-jakarta-concert.jpg",
+        eventName: "Coldplay Music of the Spheres World Tour 2024",
+        location: "National Stadium, Singapore",
+        time: "8:00 PM SGT",
+        day: "Thursday",
+        date: "27",
+        month: "January",
+        year: "2024",
         orderId: "1234567890",
-        orderDateTime: "2023-09-17 12:00:00"
+        orderDateTime: "2023-09-25 17:11:23"
       },
       {
         imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNQdS0QEfy8MA8kmeK_r2oxKwqbEkvVs54pA&usqp=CAU",
