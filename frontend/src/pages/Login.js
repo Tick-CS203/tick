@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setTokens, setUsername } from "../store/userSlice";
+import { Recaptcha } from "../component/signup/Recaptcha";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -10,11 +11,16 @@ export const Login = () => {
 
   const [enteredUsername, setEnteredUsername] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
+  const [didRecaptcha, setDidRecaptcha] = useState(null);
+  const [recaptchaErrorMessage, setRecaptchaErrorMessage] = useState("");
 
   async function signIn(event) {
     event.preventDefault();
 
     try {
+      if (!didRecaptcha) {
+        setDidRecaptcha(false);
+      }
       const user = await Auth.signIn(enteredUsername, enteredPassword);
       console.log(user);
       dispatch(
@@ -86,6 +92,21 @@ export const Login = () => {
             }}
           />
         </div>
+
+        <Recaptcha
+          setDidRecaptcha={setDidRecaptcha}
+          setRecaptchaErrorMessage={setRecaptchaErrorMessage}
+        />
+        {recaptchaErrorMessage && (
+          <p className="text-red-500 text-xs font-inter mt-2 flex">
+            {recaptchaErrorMessage}
+          </p>
+        )}
+        {didRecaptcha === false && (
+          <p className="text-red-500 text-xs font-inter mt-2 flex">
+            Please complete the Recaptcha to proceed.
+          </p>
+        )}
 
         <div className="flex items-end justify-between mt-16">
           <button

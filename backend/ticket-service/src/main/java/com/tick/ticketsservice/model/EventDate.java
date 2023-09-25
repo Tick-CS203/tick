@@ -1,14 +1,15 @@
-package com.tick.model;
+package com.tick.ticketsservice.model;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import lombok.Data;
+import lombok.*;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @Data
+@NoArgsConstructor
 public class EventDate {
 
     @Id

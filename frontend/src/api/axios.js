@@ -13,4 +13,3 @@ export const axiosLocalHostInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-
