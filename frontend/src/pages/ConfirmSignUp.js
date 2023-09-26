@@ -53,7 +53,7 @@ export const ConfirmSignUp = () => {
 
         <div className="flex items-end py-2">
           <label className="text-white font-inter text-xs mb-20">
-            We sent a code to number
+            We sent a code to your email
           </label>
           <OtpInput
             value={enteredOTP}
