@@ -2,19 +2,16 @@ package com.tick.bookmarks.service;
 
 import com.tick.bookmarks.exceptions.*;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.io.IOException;
-
 import reactor.core.publisher.Mono;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.reactive.function.client.*;
 
 @Component
 public class EventRequest {
     private String host;
 
+    @Autowired
     public EventRequest(@Value("${EVENT_HOST}") String host) {
         this.host = host;
     }
