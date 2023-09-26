@@ -3,7 +3,6 @@ import { axiosLocalHostInstance } from "../../api/axios";
 
 export const Recaptcha = (props) => {
   
-
   async function onChange(value) {
     try {
       const response = await axiosLocalHostInstance.post("/tickets/recaptcha", {
