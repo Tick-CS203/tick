@@ -26,7 +26,7 @@ export const Navbar = () => {
         </div>
         <input
           placeholder="Search Event"
-          className="bg-black placeholder-main-yellow text-main-yellow rounded p-1 border-solid border-main-yellow text-sm"
+          className="bg-black placeholder-main-yellow text-main-yellow rounded p-1 border-solid border-main-yellow text-sm lg:block hidden"
         />
 
         {accessToken && (
