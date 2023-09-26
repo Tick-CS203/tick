@@ -12,6 +12,7 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 import { ResetPassword } from "./pages/ResetPassword";
 import { EventDetails } from "./pages/EventDetails";
 import { Auth } from "./component/signup/Auth"
+import { Navigate } from "react-router-dom";
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
           <Route path="/seatmap/:id" element={<Auth><SeatSelection /></Auth>} />
+          <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
       </div>
       <Footer />
