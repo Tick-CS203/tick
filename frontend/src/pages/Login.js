@@ -25,7 +25,6 @@ export const Login = (props) => {
         })
       );
       dispatch(setUsername(enteredUsername));
-      props.updateAuthStatus(true);
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -36,14 +35,12 @@ export const Login = (props) => {
     <div className="grid grid-cols-1 h-screen w-full">
       <img
         className="absolute right-[64px] bottom-[128px]"
-        img
         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAADkUlEQVR4nO2cv0uVYRTHn8h+DRE2FBHVUEstQURDQxBRUlC43C0sWlxdCpcgokW3nIIiF9uajIQm2yKXiCKwJIXCKAMRkiTTTzzgEJF15b3nnnPueT5/wfm+3/d+4f3e8zwpOQc4D0zTWCaBM9ra3AFsBr4gw3ttfe4ALiHHpLY+dwBjgobc0tbnCuCIoBkLwC5tja4ABgUNua+tzxVAOzAvaMhhbY2uAK4KmvFEW58rgHXAW0FDOrQ1ugI4J2jG62y4tkZXAI8FDbmirc8VwD7gp5AZn/OXv7ZGVwD9yHFdW58rgE2CvdV3YKe2RlcAl5HjjrY+dyDXWy0DB7X1uQLZ3uqRtj53INtbndTW5wpke6uX5UPQVm91UeY1alGQ7a0+Ahu1NboC2d7qmrY+dyDXW30DtmvrcwWyvdVtbX3uQK63yibv19bnCmR7q4fa+tyBbG91XFufO5Drrca0tbkD2d6qpq3PHcj1VnmBuk1bnyuQ7a16tPW5A7neag7Ypq3PFcK9Vb+2PncI9laLwF5tfe4Q7K0eaGtzh3BvdUxbnzsEe6un2trcIdxbXdDW5w7hc4JVmABOpWgAz7HLRIoEcBTbvEuRyGf5sE13ikITzglWZTTUzpbwvlVV8otyIEWhCecEqxKrGRbet6rKM2B9ioTwOcGqNzgcSpEQ7q2q0puiIXxOsAovgA0pGsAU9vgR9jqNfDEY9riZopKvzlvZALHCq3IsoZqhbQ2s65fKJmP1X1gHjaOv6jzhAe41yIxxYEv4B2okrpaAE8UMO3E1UMywE1dTwNZiiI24Wi43VtuKq7uNmic8VI+rfD98e/gHaSiuOosZduJqqJhhJ65mgB3FEDtxVStm2Imr4WKGnbiaBXYXQ+zEVVcxw05cjRQz7MTVHLCnGGInrrqLGXbiajTUgrTxuJoPtSDtIK56tOduWVh7XMVbkDYcVwvhFqSNx1Wv9swtDWuLq5gL0kbjajHfPqc9b0vD2uLqhva8LQ/1x9WbfCWH9rwtD/XFVVmQNhZXfU0ZKDp1xtV4WZC2E1dLZUHaVlwNNGue8NQRV1NlQdpOXC2XBenmx1VeZluNsiBtKK6my4K0rbjqbPY8oflPXA1pzxeOf8TVTFmQthVXNY15QpP/WAK+/sWMYe3ZQrJKXM2WBWlbcdWlNU94gE9/mDES/qFoAnz4zYyyIK0NcHalNMx3Z53WnicZ4Rfo+Cpo30SEsgAAAABJRU5ErkJggg=="
         alt="lightning"
       />
 
       <img
         className="absolute left-[128px] bottom-[256px]"
-        img
         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEcUlEQVR4nO1aW4hcRRDtYHwQFN+KKFFBEPzQKMYHqETBB+qHKFEQRPTDaNAvH9nMVM+NX0ZU0A9F/fLDD8mHguIbXcUQNVM1O+qKD4TgY5Ps3qq7mxWNhpgrNbOz3Mx2zx1I5j6GOdAsTFfd7XOrurqq+hozwggjjNAnYPvsxZb4C0u8D0i+shhdbYYVY1/vOdkiz1iSODH+DjBaaYYRNeR7u8i2B8pjZhgByE87CZNsMkXG2i3xERZ5syXZaUl2W+Jng/F4eZoekGxxEQbi+02RAcRPORb9TJqeJUG3S4fXmiLDti3btXCeU8v30gNicREOJmbPMUWGXRpp2wtv8AU+nQ0YHe/ev7wv7UXlDov8uXMvYnR37/PXSfgXU3RYkuc9wce7j4H4dreOfGRKe56SfOLT0bPWY+FXTNERUHShO9pyZOJ4mUsHiF9060RjpugIxuPlQLLXRaBK0dkuHUB+z73v5U5TBliUuptAeJtLHkh+cFq4Ea42ZQAQv+oJQk8uEY7jZT6PCHD+FFMGVDF6yG1hfrtbtjLBZ3qC3LwpCyrIV3j25O/dslWMrvIEuaYpCwKcWmGJ97uIbPxy9+lJ2RqF93gs/JYpEwDle2ekRr7hYDkOPO7/nCkTgPh1T+DacLCcvOZJOh42ZQKgPOqx3Bv95N4Wo1t0PpiMj1poDuwElCmttfU3UzRUMbzOE7h+SspZ4t96VVcLzYTugLbZFA3BtrmTLPIBT0BS1/4LiH8F5P/cZ/DUCn1Oy6pLX9rU4v8pkgcA8g4f4bTReUbqfJE8AEjeHDhhR4cFSHblQxjZ9ibG3OplofxxCIR7zmdMOLrVs3+pWg/XJMtFaEQXWeJ3S0244siT9dztBJVgfMcxsD08vxOg9AVY4pdKS1iRCCQHgLi6eGyRrFvsVCL/Y5FrSvgBjI+0yJOlJgwke2skd3UaBBb5Zdcia8T3tXQwWl9awoAybUmuTLRjP/QtEkg+VbkKhZeWlnC1OXuu/tWGOhB/1ytqA/K2BdlVweT0sf0kHmnzucAiX96+Z0o5f5ErnZKxFcU9iYVe5ySe3XM+c9RQ1uo9bxpZte4jP8dHqw4gf9bpjmhEV1JqNVfqmDafKSzJE73y6YRlm2Pfzp3Y0sFofbfFXdD+WKGuUi3JplSi7fFj0Nx1WluH71jaKeF39AZR93QwMXuCrfP1QPxB4qW8r7/pnD4H6nKzlpxZk32wH7JaXATf8FmqUyW5CZD/7fMlpY7MyAYYrexnz2rSH9D0eW2y0TVaLh4uspkStq5yzTECnLmkc+YCyZ7DSTZrws1+FtTqiDTC1QsVU1xewsRzgyBQWMLg+XRhmAlvzZtsti6NvsvtISX8+NbwuL7y5sGO+Tzy5zivoVWZyRrg+bIuE8J53EttbMyfmo9r8/5e34QNFNV6uKbVr8rUneUFkycsyo1AHGZCGOVjbQKavFHBmTOSPedBuLFathBkk6jU+TL9Uk8b8YdaMADKnxqNNUDltmdHGGEEUzT8DyA4/6nO9O/gAAAAAElFTkSuQmCC"
         alt="peace"
       />
