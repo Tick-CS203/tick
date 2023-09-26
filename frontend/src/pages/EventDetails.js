@@ -1,4 +1,3 @@
-import LauvConcertDetailsImage from "../assets/dgszkvmg0llbhkxivzhm.jpg";
 import { useEventQuery } from "../api/events.query.js";
 import { useParams } from "react-router-dom";
 
@@ -21,13 +20,13 @@ export const EventDetails = () => {
 
       {isSuccess && (
         <>
-            <img
-              class="flex justify-center"
-              src={event.banner}
-              alt="event banner"
-              width="1920"
-              height="768"
-            ></img>
+          <img
+            class="flex justify-center"
+            src={event.banner}
+            alt="event banner"
+            width="1920"
+            height="768"
+          ></img>
 
           <p className="font-inter font-black text-main-yellow italic text-2xl pt-5 relative">
             {event.name}
@@ -52,23 +51,43 @@ export const EventDetails = () => {
             <span className="text-white pl-5">{event.venueID}</span>
           </div>
 
-          <div>
-            <svg
-              class="inline-block"
-              fill="white"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-              width="20"
-              height="40"
-            >
-              <path
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
-              ></path>
-            </svg>
-            <span className="text-white pl-5">{/* {event.date} */}</span>
+          <div class="flex">
+            <div class="flex items-center">
+              <svg
+                class="inline-block"
+                fill="white"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                width="20"
+                height="40"
+              >
+                <path
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
+                ></path>
+              </svg>
+              <span class="text-white pl-5">{/* {event.date} */}</span>
+            </div>
+
+            <div class="flex flex-col items-start ml-auto space-y-3">
+              <button class="bg-main-yellow text-black rounded-full py-2 px-4 w-full">
+                Add to Calendar
+              </button>
+
+              <button class="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-4 w-full">
+                View Seatmap
+              </button>
+
+              <button class="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-4 w-full">
+                Open in Maps
+              </button>
+
+              <button class="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-4 w-full">
+                Bookmark Event
+              </button>
+            </div>
           </div>
 
           <p className="font-inter font-black text-main-blue italic text-2xl pt-10 relative">
