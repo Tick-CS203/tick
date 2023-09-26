@@ -7,7 +7,7 @@ export const Recaptcha = () => {
 
   return (
     <ReCAPTCHA
-      sitekey=""
+      sitekey="6Lc-W-4nAAAAAPjaVV4F0FZGH3-R7YlL_Yx_tiOT"
       onChange={onChange}
     />
   );

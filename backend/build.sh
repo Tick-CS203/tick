@@ -2,7 +2,7 @@
 build() {
     cd $1;
     if [ -f mvnw ] ; then
-        if ! ./mvnw -B package -Dmaven.test.skip; then
+        if ! ./mvnw package -Dmaven.test.skip; then
             exit 1;
         fi
         cp target/*.jar app.jar;

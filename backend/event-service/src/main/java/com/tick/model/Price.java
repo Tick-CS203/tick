@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class Price {
     private String category;
-    private String priceId; // id from stripe
+    private String priceID; // id from stripe
     private double price;
 }

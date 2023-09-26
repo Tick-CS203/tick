@@ -43,12 +43,12 @@ public class EventController {
     }
 
     @GetMapping("/event/{id}")
-    public Event getEventByID (@PathVariable Integer id) {
+    public Event getEventByID (@PathVariable String id) {
         return eventService.getEventByID(id);
     }
 
     @DeleteMapping("/event/{id}")
-    public String deleteEvent (@PathVariable Integer id) {
+    public String deleteEvent (@PathVariable String id) {
         return eventService.deleteEvent(id);
     }
 
