@@ -1,5 +1,7 @@
 import { useEventQuery } from "../api/events.query.js";
 import { useParams } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 <script
   src="https://kit.fontawesome.com/12bbdb3ccf.js"
@@ -44,52 +46,24 @@ export const EventDetails = () => {
             {event.name}
           </p>
 
-          <div>
-            <svg
-              className="inline-block"
-              fill="white"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-              width="20"
-              height="40"
-            >
-              <path
-                clipRule="evenodd"
-                fillRule="evenodd"
-                d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
-              ></path>
-            </svg>
-            <span className="text-white pl-5">{event.venueId}</span>
-          </div>
-
-          <p>
-            <img src="https://www.flaticon.com/free-icon/pin_3177361?term=location&page=1&position=9&origin=search&related_id=3177361" className="inline-block h-4 mr-2" />
+          <p className="flex items-center pt-5">
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/3177/3177361.png"
+              className="inline-block h-4 mr-2"
+              style={{ filter: 'invert(1)' }}
+              alt="Icon"
+            />
+            <span className="text-white">{event.venueId}</span>
           </p>
 
-          <div>
-            <span className="text-white pl-5">{event.venueID}</span>
-          </div>
-
-          <div className="flex">
-            <div className="flex items-center">
-              <svg
-                className="inline-block"
-                fill="white"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                width="20"
-                height="40"
-              >
-                <path
-                  clipRule="evenodd"
-                  fillRule="evenodd"
-                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z"
-                ></path>
-              </svg>
-
-              <div className="text-white pl-5">
+          <p className="flex items-center pt-5">
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/3416/3416094.png"
+              className="inline-block h-4 mr-2"
+              style={{ filter: 'invert(1)' }}
+              alt="Icon"
+            />
+            <div className="text-white pl-5">
                 {event.date && event.date.length > 0 ? (
                   event.date.map((eventDate, index) => (
                     <p key={index}>{formatEventDateTime(eventDate.eventDateTime)}</p>
@@ -98,12 +72,13 @@ export const EventDetails = () => {
                   "Date not available"
                 )}
               </div>
-            </div>
+          </p>
 
+          <div className="flex">
             <div className="flex flex-col items-start ml-auto space-y-3">
-              <button className="bg-main-yellow text-black rounded-full py-2 px-4 w-full">
+              <Link to={`/seatmap/${id}`} className="bg-main-yellow text-black rounded-full py-2 px-4 w-full">
                 Purchase Tickets
-              </button>
+              </Link>
 
               <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-4 w-full">
                 View Seatmap
