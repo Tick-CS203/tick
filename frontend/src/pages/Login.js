@@ -20,6 +20,10 @@ export const Login = (props) => {
     try {
       if (!didRecaptcha) {
         setDidRecaptcha(false);
+        return;
+      }
+      if (recaptchaErrorMessage) {
+        return;
       }
       const user = await Auth.signIn(enteredUsername, enteredPassword);
       console.log(user);
