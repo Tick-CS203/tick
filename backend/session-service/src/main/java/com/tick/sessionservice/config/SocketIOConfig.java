@@ -12,6 +12,7 @@ public class SocketIOConfig {
         com.corundumstudio.socketio.Configuration config = new com.corundumstudio.socketio.Configuration();
         config.setPort(8085);
         config.getSocketConfig().setReuseAddress(true);;
+        config.setOrigin("*");
         return new SocketIOServer(config);
     }
 
