@@ -7,6 +7,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @ControllerAdvice
 public class ExceptionCatcher {
@@ -23,6 +24,11 @@ public class ExceptionCatcher {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> wrong_type() {
         return ResponseEntity.status(400).body(new ErrorMessage("Formatting exception", 400));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> not_valid() {
+        return ResponseEntity.status(400).body(new ErrorMessage("Invalid object received", 400));
     }
 
     @ExceptionHandler(WebException.class)

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
 import com.tick.ticketsservice.model.*;
 import com.tick.ticketsservice.model.Ticket.CompositeKey;
 import com.tick.ticketsservice.service.TicketService;
@@ -24,25 +26,26 @@ public class TicketController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Ticket createTicket(@RequestBody Ticket ticket) {
+    public Ticket createTicket(@RequestBody @Valid Ticket ticket) {
         return ticketService.addTicket(ticket);
     }
 
     @PutMapping
-    public Ticket modifyTicket(@RequestBody Ticket ticket) {
+    public Ticket modifyTicket(@RequestBody @Valid Ticket ticket) {
         return ticketService.updateTicket(ticket);
     }
 
     //delete after ticket object belonging to prev user after it has been transferred
     @DeleteMapping
     public String deleteByTicketId(
+            @RequestParam(name="event") String event,
             @RequestParam(name="eventDate") String eventDate,
             @RequestParam(name="section") String section,
             @RequestParam(name="row") String row,
             @RequestParam(name="seatNumber") String seatNumber
             ) {
         try {
-            return ticketService.deleteTicketByTicketId(new CompositeKey(eventDate, section, row, Integer.parseInt(seatNumber)));
+            return ticketService.deleteTicketByTicketId(new CompositeKey(event, eventDate, section, row, Integer.parseInt(seatNumber)));
         } catch (NumberFormatException e) {
             return "seatNumber is invalid";
         }
@@ -67,13 +70,14 @@ public class TicketController {
 
     @GetMapping("/ticket")
     public Ticket tickeyByKey(
+            @RequestParam(name="event") String event,
             @RequestParam(name="eventDate") String eventDate,
             @RequestParam(name="section") String section,
             @RequestParam(name="row") String row,
             @RequestParam(name="seatNumber") String seatNumber
             ) {
         try {
-            return ticketService.getTicketByKey(new CompositeKey(eventDate, section, row, Integer.parseInt(seatNumber)));
+            return ticketService.getTicketByKey(new CompositeKey(event, eventDate, section, row, Integer.parseInt(seatNumber)));
         } catch (NumberFormatException e) {
             return new Ticket();
         }

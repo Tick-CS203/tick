@@ -133,7 +133,7 @@ public class TicketService {
             for (int i = 0; i < quantity; i++) {
                 Integer seatNumber = maxCapacity - currentAvailable + 1;
 
-                Ticket t = new Ticket(new CompositeKey(eventDate.toString(), section, row, seatNumber), user, category);
+                Ticket t = new Ticket(new CompositeKey(event.getEventID(), eventDate.toString(), section, row, seatNumber), user, category);
                 addTicket(t);
                 allocatedTickets.add(t);
                 currentAvailable--;
