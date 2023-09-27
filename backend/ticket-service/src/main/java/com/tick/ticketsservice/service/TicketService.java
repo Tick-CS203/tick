@@ -101,7 +101,7 @@ public class TicketService {
         }
 
         if (totalQuantity > event.getTicketLimit())
-            throw new Error("Selected quantity is above purchase limit");
+            throw new SeatSelectionException("Selected quantity is above purchase limit");
 
         List<Ticket> allocatedTickets = new ArrayList<>();
 
@@ -121,14 +121,14 @@ public class TicketService {
                 currentAvailable = sectionMap.get(row);
                 maxCapacity = seatMap.get(category).get(section).get(row);
             } catch (NullPointerException e) {
-                throw new Error("Invalid seat selection");
+                throw new SeatSelectionException("Invalid seat selection");
             }
 
             if (currentAvailable == 0)
-                throw new Error("No more seats available");
+                throw new SeatSelectionException("No more seats available");
 
             if (currentAvailable - quantity < 0)
-                throw new Error("Invalid quantity");
+                throw new SeatSelectionException("Invalid quantity");
 
             for (int i = 0; i < quantity; i++) {
                 Integer seatNumber = maxCapacity - currentAvailable + 1;
