@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -32,9 +32,15 @@ public class SocketModule {
     @Autowired
     private WebClient webClient;
 
-    public SocketModule(SocketIOServer server, SocketService socketService) {
+    private int session_max;
+
+    @Autowired
+    public SocketModule(SocketIOServer server,
+            SocketService socketService,
+            @Value("${SESSION_MAX}") int session_max) {
         this.server = server;
         this.socketService = socketService;
+        this.session_max = session_max;
         server.addConnectListener(onConnected());
         server.addDisconnectListener(onDisconnected());
         server.addEventListener("enter_session", UserData.class, onClientEnter());
@@ -74,7 +80,7 @@ public class SocketModule {
                 .bodyToMono(TokenResponse.class)
                 .block();
 
-            if (collection.size() < 10) {
+            if (collection.size() < session_max) {
                 collection.add(userId);
                 session.setUserSet(collection);
                 dao.save(session);

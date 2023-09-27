@@ -79,7 +79,9 @@ services:
     ports:
       - "${SESSION_PORT}:8085"
     environment:
+      - SESSION_MAX=10
       - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
       - TOKEN_HOST=${TOKEN_HOST}
       - TOKEN_PORT=${TOKEN_PORT}
       - SERVER_ERROR_INCLUDE-MESSAGE=always
