@@ -48,16 +48,22 @@ public class TicketController {
         }
             }
 
-    @GetMapping("/user/{userId}")
-    public List<Ticket> getTicketByUserId(@PathVariable String userId) {
-        return ticketService.getTicketByUserId(userId);
-    }
+    @GetMapping("/user")
+    public List<Ticket> getTicketByUserId(
+            @RequestHeader Map<String, String> headers) {
+
+            String token = headers.get("authorization");
+            return ticketService.getTicketByUserId(token);
+            }
 
     //if user asks for a refund
-    @DeleteMapping("/user/{userId}")
-    public List<Ticket> ticketsMadeAvailable(@PathVariable String userId) {
-        return ticketService.releaseTicket(userId);
-    }
+    @DeleteMapping("/user")
+    public List<Ticket> ticketsMadeAvailable(
+            @RequestHeader Map<String, String> headers) {
+
+            String token = headers.get("authorization");
+            return ticketService.releaseTicket(token);
+            }
 
     @GetMapping("/ticket")
     public Ticket tickeyByKey(
@@ -89,6 +95,7 @@ public class TicketController {
             @RequestBody List<SelectedRow> selectedRows,
             @RequestHeader Map<String, String> headers) {
             String token = headers.get("authorization");
+
             return ticketService.allocateSeats(id, date, selectedRows, token);
     }
 }

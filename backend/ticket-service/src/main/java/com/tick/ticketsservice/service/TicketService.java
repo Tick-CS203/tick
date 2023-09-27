@@ -4,8 +4,7 @@ import java.util.*;
 import reactor.core.publisher.Mono;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.reactive.function.client.*;
 
 import com.tick.ticketsservice.model.*;
 import com.tick.ticketsservice.model.Ticket.CompositeKey;
@@ -15,8 +14,8 @@ import com.tick.ticketsservice.exception.*;
 @Service
 public class TicketService {
     private TicketRepository ticketRepository;
-    private String event_host;
-    private String token_host;
+    private EventService eventsvc;
+    private TokenService tokensvc;
 
     @Autowired
     public TicketService(TicketRepository repo,
@@ -24,8 +23,8 @@ public class TicketService {
             @Value("${TOKEN_HOST}") String token_host
             ) {
         ticketRepository = repo;
-        this.event_host = event_host;
-        this.token_host = token_host;
+        eventsvc = new EventService(event_host);
+        tokensvc = new TokenService(token_host);
     }
 
 
@@ -39,7 +38,7 @@ public class TicketService {
     }
 
     public List<Ticket> getTicketByUserId(String userId) {
-        return ticketRepository.findByUser(userId);
+        return ticketRepository.findByUser(tokensvc.post(userId, "access"));
     }
 
     public Ticket getTicketByKey(CompositeKey key){
@@ -55,7 +54,7 @@ public class TicketService {
 
     //if user deactivates account
     public List<Ticket> releaseTicket(String userId) {
-         List<Ticket> tickets = ticketRepository.findByUser(userId);
+         List<Ticket> tickets = ticketRepository.findByUser(tokensvc.post(userId, "access"));
          tickets.forEach(ticket -> ticket.setUser(null));
 
          return ticketRepository.saveAll(tickets);
@@ -80,33 +79,12 @@ public class TicketService {
 
     // [{category: "CAT1", section: "PC1", row: "C", quantity: 2}, {category: "CAT2", section: "140", row: "B", quantity: 1}]
     public List<Ticket> allocateSeats(String eventID, String eventDate, List<SelectedRow> selectedRows, String token) {
-        Event event;
-        String user;
-
-        try {
-            event = WebClient.create("http://" + event_host + ":8080/event/" + eventID)
-                .get().exchangeToMono(response -> {
-                    if (response.statusCode().value() == 404)
-                        return response.createError();
-                    return response.bodyToMono(Event.class);
-                }).block();
-            user  = WebClient.create("http://" + token_host + ":8080/token/purchasing")
-                .post().body(Mono.just("{\"token\":\""+token+"\"}"), String.class)
-                .header("Content-Type", "application/json")
-                .exchangeToMono(response -> {
-                    if (response.statusCode().value() == 400)
-                        return response.createError();
-                    return response.bodyToMono(TokenResponse.class);
-                }).block().id();
-        } catch (WebClientResponseException e) {
-            int code = e.getStatusCode().value();
-            if (code == 400) throw new UnauthorisedException();
-            throw new EventNotFoundException();
-        }
+        Event event = eventsvc.get(eventID);
+        String user = tokensvc.post(token, "purchasing");
 
         EventDate date = null;
         for (EventDate d : event.getDate()) {
-            if (d.getEventID().toString().equals(eventDate)) {
+            if (d.getID().toString().equals(eventDate)) {
                 date = d;
                 break;
             }
@@ -115,7 +93,6 @@ public class TicketService {
         if (date == null) throw new RuntimeException();
 
         Map<String, Map<String, Map<String, Integer>>> seatAvailability = date.getSeatAvailability();
-
         Map<String, Map<String, Map<String, Integer>>> seatMap = event.getSeatMap();
 
         Integer totalQuantity = 0;
@@ -134,13 +111,18 @@ public class TicketService {
             String row = rowObj.getRow();
             Integer quantity = rowObj.getQuantity();
 
-            // error prone, to fix in security
-            Integer currentAvailable = seatAvailability.get(category).get(section).get(row);
-            if (currentAvailable == null)
-                throw new Error("Invalid seat selection");
+            Map<String, Integer> sectionMap;
+            int currentAvailable;
+            int maxCapacity;
 
-            // error prone, to fix in security
-            Integer maxCapacity = seatMap.get(category).get(section).get(row);
+            try {
+                sectionMap = seatAvailability.get(category).get(section);
+
+                currentAvailable = sectionMap.get(row);
+                maxCapacity = seatMap.get(category).get(section).get(row);
+            } catch (NullPointerException e) {
+                throw new Error("Invalid seat selection");
+            }
 
             if (currentAvailable == 0)
                 throw new Error("No more seats available");
@@ -157,19 +139,10 @@ public class TicketService {
                 currentAvailable--;
             }
 
-            Map<String, Map<String, Integer>> categoryMap = seatAvailability.get(category);
-            Map<String, Integer> sectionMap = categoryMap.get(section);
             sectionMap.put(row, currentAvailable);
         }
 
-        try {
-            WebClient.create("http://" + event_host + ":8080/event").put()
-                .body(Mono.just(event), Event.class).retrieve()
-                .bodyToMono(String.class)
-                .block();
-        } catch (WebClientResponseException e) {
-            throw new EventUpdateException();
-        }
+        eventsvc.put(event);
 
         return allocatedTickets;
     }
@@ -184,7 +157,6 @@ public class TicketService {
             .flatMap(responseEntity -> {
                 System.out.println("Verified Recaptcha: " + responseEntity.getBody());
                 return Mono.just(responseEntity.getBody());
-            }
-            ); 
+            }); 
     }
 }

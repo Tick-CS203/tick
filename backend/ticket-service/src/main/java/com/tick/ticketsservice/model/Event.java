@@ -25,7 +25,7 @@ class Links {
 public class Event {
 
     @Id
-    private int eventID;
+    private String eventID;
     private String name;
     private String description;
     private String category;
