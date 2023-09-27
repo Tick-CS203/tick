@@ -3,6 +3,7 @@ package com.tick.ticketsservice.service;
 import java.util.*;
 import reactor.core.publisher.Mono;
 import org.springframework.stereotype.Service;
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.reactive.function.client.*;
 
@@ -133,7 +134,9 @@ public class TicketService {
             for (int i = 0; i < quantity; i++) {
                 Integer seatNumber = maxCapacity - currentAvailable + 1;
 
-                Ticket t = new Ticket(new CompositeKey(event.getEventID(), eventDate.toString(), section, row, seatNumber), user, category);
+                Ticket t = new Ticket(
+                        new CompositeKey(event.getEventID(), eventDate.toString(),
+                            section, row, seatNumber), user, category);
                 addTicket(t);
                 allocatedTickets.add(t);
                 currentAvailable--;
@@ -147,16 +150,16 @@ public class TicketService {
         return allocatedTickets;
     }
 
-    public Mono<Object> verifyRecaptcha(RecaptchaRequest recaptchaRequest) {
-        return WebClient.create().post()
+    public ResponseEntity<?> verifyRecaptcha(RecaptchaRequest recaptchaRequest) {
+        RecaptchaResponse recap = WebClient.create().post()
             .uri("https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}",
                     RecaptchaObject.getSecret(), recaptchaRequest.getRecaptchaToken()
                 )
-            .retrieve()
-            .toEntity(Object.class)
-            .flatMap(responseEntity -> {
-                System.out.println("Verified Recaptcha: " + responseEntity.getBody());
-                return Mono.just(responseEntity.getBody());
-            }); 
+            .exchangeToMono(response ->
+                response.bodyToMono(RecaptchaResponse.class)
+            ).block();
+
+        if (recap.getSuccess() == "true") return ResponseEntity.noContent().build();
+        return ResponseEntity.badRequest().body(recap.getError());
     }
 }
