@@ -30,33 +30,17 @@ public class EventService {
         List<Event> intermediaryEvents = eventRepository.findAll();
 
         Iterator<Event> iter = intermediaryEvents.iterator();
-        if (category != null && !category.isEmpty()) {
-            while (iter.hasNext()) {
-                Event currEvent = iter.next();
-                if (!currEvent.getCategory().equals(category)) {
-                    iter.remove();
-                }
-            }
-        }
+        boolean categoryFilter = category != null && !category.isEmpty();
+        boolean priceFilter = maxPrice != null && maxPrice != 0;
 
-        iter = intermediaryEvents.iterator();
-        if (maxPrice != null && maxPrice != 0) {
-            while (iter.hasNext()) {
-                Event currEvent = iter.next();
-                if (!eventHasAPriceLessThanOrEqualToMaxPrice(currEvent, maxPrice)) {
-                    iter.remove();
-                }
-            }
-        }
-
-        iter = intermediaryEvents.iterator();
-        if (eventDateTime != null){
-            while (iter.hasNext()) {
-                Event currEvent = iter.next();
-                if (!eventHasFilteredDate(currEvent, eventDateTime)){
-                    iter.remove();
-                }
-            }
+        while (iter.hasNext()) {
+            Event currEvent = iter.next();
+            if ((categoryFilter && !currEvent.getCategory().equals(category))
+                    || (priceFilter && !eventHasAPriceLessThanOrEqualToMaxPrice(currEvent, maxPrice))
+                    || (eventDateTime != null
+                        && !eventHasFilteredDate(currEvent, eventDateTime))) {
+                iter.remove();
+                        }
         }
 
         return intermediaryEvents;
@@ -64,8 +48,8 @@ public class EventService {
 
     public Event getEventByID(String eventID) {
         return eventRepository.findById(eventID).orElseThrow(
-            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found")
-        );
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found")
+                );
     }
 
     public Event updateEvent(Event eventRequest) {
