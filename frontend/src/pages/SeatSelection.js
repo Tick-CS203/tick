@@ -11,7 +11,7 @@ export const SeatSelection = () => {
   const { id } = useParams();
   const { data: eventData, isLoading, isSuccess, isError } = useEventQuery(id);
   console.log(eventData);
-  const { items } = useSelector((state) => state.cart);
+  const { items, purchasingToken } = useSelector((state) => state.cart);
 
   const [currEventDateTime, setCurrEventDateTime] = useState("");
   const [currSeatAvailability, setCurrSeatAvailability] = useState({});
@@ -21,6 +21,7 @@ export const SeatSelection = () => {
   const [availableSections, setAvailableSections] = useState({});
   const [eventDateOptions, setEventDateOptions] = useState([]);
   console.log(items);
+  console.log(purchasingToken);
 
   const startCheckoutHandler = async () => {
     const redirectURL = await axiosLocalHostInstance.post(
@@ -162,7 +163,7 @@ export const SeatSelection = () => {
                           available={row.availability}
                           price={
                             eventData.prices[
-                              currCategory.charAt(currCategory.length - 1) - 1
+                            currCategory.charAt(currCategory.length - 1) - 1
                             ]
                           }
                           purchaseLimit={eventData.ticketLimit}

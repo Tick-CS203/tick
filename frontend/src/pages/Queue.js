@@ -1,20 +1,28 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { socket } from "../api/socket.js";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setPurchasing } from "../store/userSlice.js";
+import { axiosInstance } from "../api/axios.js";
 
 export const Queue = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { accessToken } = useSelector((state) => state.user);
   const [queueNumber, setQueueNumber] = useState(null);
+  const [userID, setUserID] = useState("");
 
   const enterSession = () => {
-    socket.emit("enter_session", {
-      type: "CLIENT",
-      room: id,
-      token: accessToken,
-    });
+    try {
+      socket.emit("enter_session", {
+        type: "CLIENT",
+        room: id,
+        token: accessToken,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const exitSession = () => {
@@ -26,27 +34,49 @@ export const Queue = () => {
   };
 
   useEffect(() => {
-    function moveInQueue(value) {
-      if (value.QueueNo) {
-        setQueueNumber(value.Queue)
-      }
-
-      if (value.Token) {
-        navigate(`/seatmap/${id}`)
+    function moveInQueue(res) {
+      if (res.queueNo) {
+        setQueueNumber(res.queueNo);
+        console.log(res.queueNo);
+      } else if (res.token) {
+        console.log(res.token);
+        console.log("seatmap nav");
+        dispatch(
+          setPurchasing({
+            purchasingToken: res.token,
+          })
+        );
+        navigate(`/seatmap/${id}`);
       }
     }
-
-    socket.on("foo", moveInQueue);
+    console.log(userID);
+    socket.on(userID, moveInQueue);
+    enterSession();
 
     return () => {
-      socket.off("foo", moveInQueue);
+      socket.off(userID);
     };
-  }, []);
+  }, [userID]);
 
   useEffect(() => {
     socket.connect();
 
+    //fetching will be refactored to higher level in next iter
+    async function fetchUserId(accessToken) {
+      try {
+        const response = await axiosInstance.post(
+          "/token/access",
+          JSON.stringify({ token: accessToken })
+        );
+        setUserID(response.data.id);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchUserId(accessToken);
+
     return () => {
+      exitSession();
       socket.disconnect();
     };
   }, []);
@@ -56,9 +86,11 @@ export const Queue = () => {
       <p className="font-inter font-black text-white italic text-xl py-5 relative uppercase">
         Queue for Event {id}
       </p>
-      {queueNumber && <p className="font-inter font-black text-white italic text-xl py-5 relative uppercase">
-        Your Queue Number is {queueNumber}
-      </p>}
+      {queueNumber && (
+        <p className="font-inter font-black text-white italic text-xl py-5 relative uppercase">
+          Your Queue Number is {queueNumber}
+        </p>
+      )}
     </>
   );
 };
