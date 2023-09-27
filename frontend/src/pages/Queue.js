@@ -35,12 +35,12 @@ export const Queue = () => {
 
   useEffect(() => {
     function moveInQueue(res) {
-      if (res.queueNo) {
-        setQueueNumber(res.queueNo);
-        console.log(res.queueNo);
+      console.log(res);
+      if ("queue_no" in res) {
+        setQueueNumber(res.queue_no);
+        console.log(res.queue_no);
       } else if (res.token) {
         console.log(res.token);
-        console.log("seatmap nav");
         dispatch(
           setPurchasing({
             purchasingToken: res.token,
@@ -51,7 +51,7 @@ export const Queue = () => {
     }
     console.log(userID);
     socket.on(userID, moveInQueue);
-    enterSession();
+    if (userID) enterSession();
 
     return () => {
       socket.off(userID);
