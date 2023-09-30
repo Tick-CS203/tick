@@ -2,7 +2,7 @@ import { Steps, Select } from "antd";
 import { useState, useEffect } from "react";
 import { NationalStadium } from "../component/seatselection/NationalStadium";
 import { RowData } from "../component/seatselection/RowData";
-import { axiosLocalHostInstance } from "../api/axios";
+import { axiosLocalHostInstance2 } from "../api/axios";
 import { useParams } from "react-router-dom";
 import { useEventQuery } from "../api/events.query";
 import { useSelector } from "react-redux";
@@ -11,7 +11,7 @@ export const SeatSelection = () => {
   const { id } = useParams();
   const { data: eventData, isLoading, isSuccess, isError } = useEventQuery(id);
   console.log(eventData);
-  const { items } = useSelector((state) => state.cart);
+  const { items, purchasingToken } = useSelector((state) => state.cart);
 
   const [currEventDateTime, setCurrEventDateTime] = useState("");
   const [currSeatAvailability, setCurrSeatAvailability] = useState({});
@@ -21,9 +21,10 @@ export const SeatSelection = () => {
   const [availableSections, setAvailableSections] = useState({});
   const [eventDateOptions, setEventDateOptions] = useState([]);
   console.log(items);
+  console.log(purchasingToken);
 
   const startCheckoutHandler = async () => {
-    const redirectURL = await axiosLocalHostInstance.post(
+    const redirectURL = await axiosLocalHostInstance2.post(
       "/api/payment/create-checkout-session",
       JSON.stringify(items)
     );
@@ -162,7 +163,7 @@ export const SeatSelection = () => {
                           available={row.availability}
                           price={
                             eventData.prices[
-                              currCategory.charAt(currCategory.length - 1) - 1
+                            currCategory.charAt(currCategory.length - 1) - 1
                             ]
                           }
                           purchaseLimit={eventData.ticketLimit}
