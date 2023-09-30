@@ -37,8 +37,8 @@ export const Queue = () => {
     function moveInQueue(res) {
       console.log(res);
       if ("queue_no" in res) {
-        setQueueNumber(res.queue_no);
-        console.log(res.queue_no);
+        setQueueNumber(res.queue_no + 1);
+        console.log(res.queue_no + 1);
       } else if (res.token) {
         console.log(res.token);
         dispatch(
@@ -46,7 +46,7 @@ export const Queue = () => {
             purchasingToken: res.token,
           })
         );
-        navigate(`/seatmap/${id}`);
+        navigate(`/seatmap/${id}`); // comment to stop auto redirect
       }
     }
     console.log(userID);

@@ -66,10 +66,10 @@ export const EventDetails = () => {
                   <span className="text-white pl-5 font-semibold">
                     {event.date && event.date.length > 0
                       ? event.date.map((eventDate, index) => (
-                          <span key={index}>
-                            {formatEventDateTime(eventDate.eventDateTime)}
-                          </span>
-                        ))
+                        <span key={index}>
+                          {formatEventDateTime(eventDate.eventDateTime)}
+                        </span>
+                      ))
                       : "Date not available"}
                   </span>
                 </div>
@@ -158,7 +158,7 @@ export const EventDetails = () => {
 
             <div className="pt-5 lg:w-2/12 w-full min-w-fit flex flex-col items-start space-y-3">
               <Link
-                to={`/seatmap/${id}`}
+                to={`/queue/${id}`}
                 className="bg-main-yellow text-black rounded-full py-2 px-4 w-full flex items-center justify-center"
               >
                 Purchase Tickets

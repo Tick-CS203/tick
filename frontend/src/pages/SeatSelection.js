@@ -2,7 +2,7 @@ import { Steps, Select } from "antd";
 import { useState, useEffect } from "react";
 import { NationalStadium } from "../component/seatselection/NationalStadium";
 import { RowData } from "../component/seatselection/RowData";
-import { axiosLocalHostInstance } from "../api/axios";
+import { axiosLocalHostInstance2 } from "../api/axios";
 import { useParams } from "react-router-dom";
 import { useEventQuery } from "../api/events.query";
 import { useSelector } from "react-redux";
@@ -24,7 +24,7 @@ export const SeatSelection = () => {
   console.log(purchasingToken);
 
   const startCheckoutHandler = async () => {
-    const redirectURL = await axiosLocalHostInstance.post(
+    const redirectURL = await axiosLocalHostInstance2.post(
       "/api/payment/create-checkout-session",
       JSON.stringify(items)
     );
