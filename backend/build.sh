@@ -1,4 +1,5 @@
 #!/bin/bash
+exittext="Ctrl + C to exit auto-build"
 build() {
     cd $1;
     if [ -f mvnw ] ; then
@@ -7,7 +8,7 @@ build() {
         fi
         cp target/*.jar app.jar;
     elif [ -f gradlew ] ; then
-        if ! ./gradlew bootJar; then
+        if ! ./gradlew bootJar < /dev/null; then
             exit 1;
         fi
         cp build/libs/*.jar app.jar;
@@ -18,6 +19,29 @@ build() {
 }
 
 if [ $# -ne 0 ]; then
+    if [ $1 = auto ]; then
+        if [ $# -ne 2 ]; then
+            echo Missing argument
+            echo usage: $0 $1 service-folder
+            exit
+        fi
+        arg=${2%%/}
+        docker compose up $arg -d
+        echo $exittext
+        while true; do
+            for file in $(ls -d */); do
+                file=${file%%/}
+                if [ -n "$(find ${file}/src/main/java -newer ${file}/app.jar -print -quit 2> /dev/null)" ]; then
+                    docker compose down
+                    build $file
+                    docker compose build $file
+                    docker compose up $arg -d
+                    echo $exittext;
+                fi
+            done;
+            sleep 1;
+        done;
+    fi
     for file in $@; do
         build $file;
     done
