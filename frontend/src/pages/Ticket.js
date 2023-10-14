@@ -169,6 +169,7 @@ export const Ticket = ({ background }) => {
           </div>
           <div className="flex items-stretch">
             <TicketFlip ticket={ticket} /> {}
+            <TicketMenu />
           </div>
         </div>
       ))}
@@ -178,3 +179,4 @@ export const Ticket = ({ background }) => {
 };
 
 export default Ticket;
+export {TicketDetails};

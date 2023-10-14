@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSpring, a } from 'react-spring';
-import TicketDetails from '../../pages/Ticket';
+import { TicketDetails } from '../../pages/Ticket';
 import './TicketFlip.css';
 
 const TicketFlip = ({ ticket }) => {
