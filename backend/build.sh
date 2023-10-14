@@ -3,14 +3,10 @@ exittext="Ctrl + C to exit auto-build"
 build() {
     cd $1;
     if [ -f mvnw ] ; then
-        if ! ./mvnw package -Dmaven.test.skip; then
-            exit 1;
-        fi
+        ./mvnw package || exit 1;
         cp target/*.jar app.jar;
     elif [ -f gradlew ] ; then
-        if ! ./gradlew bootJar < /dev/null; then
-            exit 1;
-        fi
+        ./gradlew build || exit 1;
         cp build/libs/*.jar app.jar;
     else
         echo "No executable found";
