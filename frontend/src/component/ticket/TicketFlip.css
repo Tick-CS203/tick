@@ -1,0 +1,18 @@
+.ticket-flip-container {
+    width: 100%;
+    height: 100%;
+    perspective: 600px;
+    cursor: pointer;
+  }
+  
+  .ticket-c {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    will-change: transform, opacity;
+  }
+  
+  .front {
+    backface-visibility: hidden;
+  }
+  

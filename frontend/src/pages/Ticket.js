@@ -1,6 +1,7 @@
 import React from "react";
 import "../component/ticket/TicketDetails.css";
 import { useTicketsQuery } from "../api/tickets.query";
+import TicketFlip from "../component/ticket/TicketFlip";
 
 // Header Component
 const TicketHeader = ({ title }) => (
@@ -160,20 +161,20 @@ export const Ticket = ({ background }) => {
       <TicketHeader title="My Tickets" />
       {tickets.map((ticket, index) => (
         <div className="ticket-block mb-12" key={index}>
-          <div style={{ marginBottom: "20px" }}>
+          <div style={{ marginBottom: '20px' }}>
             <OrderDetails
               orderId={ticket.orderId}
               orderDateTime={ticket.orderDateTime}
             />
           </div>
           <div className="flex items-stretch">
-            <TicketDetails {...ticket} />
-            <TicketMenu />
+            <TicketFlip ticket={ticket} /> {}
           </div>
         </div>
       ))}
     </div>
   );
+
 };
 
 export default Ticket;
