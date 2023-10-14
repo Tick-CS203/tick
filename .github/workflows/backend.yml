@@ -32,35 +32,44 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build jar
+      - name: Build jar and image
         run: |
+          cd backend
           echo Building jar
-          backend/build.sh
+          ./build.sh
+          docker compose build
 
-      - name: Build image
-        run: |
-          echo Building images
-          cd backend && docker compose build
-
-      - name: Export image to Amazon
-        id: build-image
+      - name: Check image
+        id: check-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
-          echo Exporting to Amazon
           cd backend
-          folders=$(ls -d */)
-          echo "All images to push: ${folders}"
-          images=`docker images --format "{{.Repository}}@@{{.Tag}}"`
-          for image in ${folders}; do
-            image=${image%/}
+          export ECR_REGISTRY
+          for file in $(ls -d */); do
+            file=${file%%/}
+            echo Comparing $file
+            if ! ./hashcheck.sh $file; then
+              EXPORT_IMAGES="$EXPORT_IMAGES $file"
+            fi
+          done
+          echo "EXPORT_IMAGES=$EXPORT_IMAGES" >> "$GITHUB_OUTPUT"
+
+      - name: Export images to Amazon
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          EXPORT_IMAGES: ${{ steps.check-image.outputs.EXPORT_IMAGES }}
+        run: |
+          cd backend
+          echo "All images to push: ${EXPORT_IMAGES}"
+          for image in ${EXPORT_IMAGES}; do
             echo "Uploading ${image}"
-            line=`echo $images | grep -o "$image@@[^ ]* "`
-            tag=${line##*@@};
+            tag=$(docker images $image --format "{{.Tag}}")
             repourl=$ECR_REGISTRY/$image
             echo "repourl=${repourl}"
             docker tag $image:$tag $repourl
-            docker push $repourl
+            echo "docker push $repourl"
+            #docker push $repourl
             docker rmi $image:$tag $repourl
             echo "Removed images ${image}:${tag} and ${repourl}"
           done

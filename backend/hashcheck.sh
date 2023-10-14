@@ -1,29 +1,25 @@
 #!/bin/bash
 check() {
-    { docker run --name container -d --env-file hashcheck.env $1 && docker cp container:/app.jar app.jar && docker container kill container && docker container rm container; } 2>&1 > /dev/null
-    if ! [ -e $1/app.jar ]; then
-        echo "Please run build.sh before checking"
-        exit 1
-    elif ! [ -e app.jar ]; then
-        echo "Something went wrong extracting the jar from image"
-        exit 1
-    fi
-    localhash=$(sha1sum $1/app.jar)
-    remotehash=$(sha1sum app.jar)
-    localhost=${localhash%% **}
-    remotehost=${remotehash%% **}
-    if [ $localhost = $remotehost ] ; then
+    #{ aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin $ECR_REGISTRY; }
+    docker pull $ECR_REGISTRY/$1
+    repo=$(docker images $ECR_REGISTRY/$1 --no-trunc --format "{{.ID}}")
+    repo=${repo##sha256:}
+    image=$(docker images $1 --no-trunc --format "{{.ID}}")
+    image=${image##sha256:}
+    docker rmi $ECR_REGISTRY/$1 2>&1 > /dev/null
+
+    status=0
+    if [ $repo = $image ] ; then
         echo Hashes are identical
-        return 0;
     else
         echo Hashes are different
-        return 1;
+        status=1;
     fi
-    rm app.jar
+    return $status
 }
 
 if [ $# = 0 ]; then
-    echo "Usage: $0 [folders]"
+    echo "Usage: $0 image"
     exit;
 fi
 check ${1%%/}
