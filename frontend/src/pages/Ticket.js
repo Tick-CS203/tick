@@ -107,10 +107,10 @@ const TicketDetails = ({
 
 // Main Ticket Component
 export const Ticket = ({ background }) => {
-  const { data: ticketData } = useTicketsQuery(
-    "e96a053c-e0f1-70b9-a432-97fde72597e4"
-  );
-  console.log(ticketData);
+  // const { data: ticketData } = useTicketsQuery(
+  //   "e96a053c-e0f1-70b9-a432-97fde72597e4"
+  // );
+  // console.log(ticketData);
   const tickets = [
     {
       imageUrl:
