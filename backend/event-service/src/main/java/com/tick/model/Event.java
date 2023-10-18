@@ -39,7 +39,8 @@ public class Event {
     private Links links;
 
     public Event(String name, String description, String category, String banner, LocalDateTime lastUpdated, List<Price> prices,
-            int ticketLimit, String venueID, Map<String, Map<String, Map<String, Integer>>> seatMap, List<EventDate> date, Links links) {
+            int ticketLimit, String venueID, Map<String, Map<String, Map<String, Integer>>> seatMap,
+            List<EventDate> date, Links links) {
         this.name = name;
         this.description = description;
         this.category = category;
@@ -51,5 +52,9 @@ public class Event {
         this.seatMap = seatMap;
         this.date = date;
         this.links = links;
+    }
+    
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
     }
 }

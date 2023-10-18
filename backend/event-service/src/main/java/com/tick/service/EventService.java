@@ -80,6 +80,10 @@ public class EventService {
     }
 
     public String deleteEvent(String eventID) {
+        if (!eventRepository.findById(eventID).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not");
+        }
+
         eventRepository.deleteById(eventID);
         return eventID + " event deleted successfully";
     }
