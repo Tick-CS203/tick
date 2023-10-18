@@ -1,7 +1,7 @@
 #!/bin/bash
 check() {
     #{ aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin $ECR_REGISTRY; }
-    docker pull ${ECR_REGISTRY:?Run \"export ECR_REGISTRY variable\"}/$1 2>&1 > /dev/null\
+    docker pull ${ECR_REGISTRY:?Run \"export ECR_REGISTRY variable\"}/$1 > /dev/null 2>&1 \
         || { echo Error pulling image $ECR_REGISTRY/$1; exit 0; }
 
     image=$(docker images $1 --no-trunc --format "{{.ID}}")
@@ -11,7 +11,7 @@ check() {
     repo=$(docker images $ECR_REGISTRY/$1 --no-trunc --format "{{.ID}}")
     : ${repo:?Error using image $ECR_REGISTRY/$1}
     repo=${repo##sha256:}
-    docker rmi $ECR_REGISTRY/$1 2>&1 > /dev/null
+    docker rmi $ECR_REGISTRY/$1 > /dev/null 2>&1
     echo "Repo:$repo Image:$image"
 
     if [ $repo = $image ] ; then
