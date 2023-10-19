@@ -137,3 +137,66 @@
     color: #F6E902; /* Text color becomes yellow on hover */
     background-color: transparent; /* Background becomes transparent on hover */
 }
+
+/* Responsive for mobile */
+/* Media query for iPhone screens */
+/* For screens with a maximum width of 768px (typical for iPhones) */
+@media (max-width: 768px) {
+    .ticket-container {
+      flex-direction: column;
+      /* Change the flex direction to stack elements vertically */
+      width: 100%; /* Use the full width of the screen */
+      margin: 0; /* Remove margin */
+    }
+  
+    .ticket-image-container {
+      width: 100%; /* Use the full width of the screen */
+      flex: 0 0 auto; /* Reset flex properties */
+      height: auto; /* Auto height to maintain aspect ratio */
+    }
+  
+    .ticket-details-container-top {
+      width: 100%; /* Use the full width of the screen */
+      padding: 20px; /* Add padding for spacing */
+      margin: 0; /* Remove margin */
+    }
+  
+    .ticket-name {
+      margin-bottom: 5px; /* Reduce margin for spacing */
+      font-size: 20px; /* Adjust font size for readability */
+    }
+  
+    .text-left,
+    .text-right {
+      flex-direction: row; /* Arrange text horizontally */
+    }
+  
+    .text-sm {
+      font-size: 12px; /* Adjust font size for readability */
+    }
+  
+    .details-section-right {
+      flex-direction: column; /* Stack elements vertically */
+      align-items: center; /* Center align elements */
+      padding: 10px; /* Add padding for spacing */
+    }
+  
+    .semi-circle-container {
+      display: none; /* Hide semi-circle for smaller screens */
+    }
+  
+    .menu-button {
+      font-size: 14px; /* Adjust font size for readability */
+      padding: 8px 12px; /* Increase button padding for touch targets */
+    }
+  
+    .inverted-button {
+      font-size: 14px; /* Adjust font size for readability */
+      padding: 8px 12px; /* Increase button padding for touch targets */
+    }
+  
+    .test-text {
+      font-size: 12px; /* Adjust font size for readability */
+    }
+  }
+  
