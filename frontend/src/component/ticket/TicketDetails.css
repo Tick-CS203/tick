@@ -207,3 +207,51 @@
         display: none;
     }
 }
+
+/* Media query for iPad-sized screens (768px to 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .ticket-container {
+        width: 100%; /* Full width for mobile devices */
+        flex-direction: column; /* Stack elements vertically */
+        height: auto; /* Remove fixed height */
+    }
+
+    .ticket-image-container {
+        width: 100%; /* Full width for mobile devices */
+        height: auto; /* Auto height */
+    }
+
+    .ticket-details-container-top {
+        padding: 10px; /* Reduce padding for mobile devices */
+        margin: 10px; /* Reduce margin for mobile devices */
+    }
+
+    .ticket-name {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .text-container {
+        flex-direction: column; /* Stack text containers vertically */
+        align-items: flex-start; /* Align text to the left for mobile devices */
+    }
+
+    .text-left {
+        margin-bottom: 10px; /* Add some spacing between text elements */
+    }
+
+    .text-right {
+        align-items: flex-start; /* Align text to the left for mobile devices */
+    }
+
+    /* Adjust styles for the ticket menu to make it appear below details */
+    .ticket-menu {
+        display: none;
+    }
+
+    /* Hide "ADMIT ONE" section on mobile devices */
+    .details-section-right {
+        display: none;
+    }
+}
