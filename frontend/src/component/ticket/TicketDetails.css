@@ -1,9 +1,18 @@
-.ticket-container {
+/* .ticket-container {
     position: relative;
     width: 1200px;
     height: 200px;
     display: flex;
     justify-content: space-between;
+} */
+
+.ticket-container {
+    position: relative;
+    width: 1200px;
+    height: 200px;
+    display: flex;          /* Use Flexbox */
+    justify-content: space-between;
+    align-items: stretch;   /* Ensure children stretch to full height */
 }
 
 .ticket-image-container {
@@ -92,17 +101,21 @@
 
 
 /* Ticket menu */
-.ticket-container,
-.ticket-menu {
+  /* .ticket-menu {
     height: 200px;
-  }
-  
-  .ticket-menu {
     margin-left: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-  }
+  } */
+
+  .ticket-menu {
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 20px;      /* Some margin to separate from the ticket details */
+}
   
   .menu-button {
     flex-grow: 1;
@@ -138,65 +151,59 @@
     background-color: transparent; /* Background becomes transparent on hover */
 }
 
-/* Responsive for mobile */
-/* Media query for iPhone screens */
-/* For screens with a maximum width of 768px (typical for iPhones) */
+/* Add media query for screens below 768px (typical mobile devices) */
 @media (max-width: 768px) {
     .ticket-container {
-      flex-direction: column;
-      /* Change the flex direction to stack elements vertically */
-      width: 100%; /* Use the full width of the screen */
-      margin: 0; /* Remove margin */
+        width: 100%; /* Full width for mobile devices */
+        flex-direction: column; /* Stack elements vertically */
+        height: auto; /* Remove fixed height */
     }
-  
+
     .ticket-image-container {
-      width: 100%; /* Use the full width of the screen */
-      flex: 0 0 auto; /* Reset flex properties */
-      height: auto; /* Auto height to maintain aspect ratio */
+        width: 100%; /* Full width for mobile devices */
+        height: auto; /* Auto height */
     }
-  
+
     .ticket-details-container-top {
-      width: 100%; /* Use the full width of the screen */
-      padding: 20px; /* Add padding for spacing */
-      margin: 0; /* Remove margin */
+        padding: 10px; /* Reduce padding for mobile devices */
+        margin: 10px; /* Reduce margin for mobile devices */
     }
-  
+
     .ticket-name {
-      margin-bottom: 5px; /* Reduce margin for spacing */
-      font-size: 20px; /* Adjust font size for readability */
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
     }
-  
-    .text-left,
+
+    .text-container {
+        flex-direction: column; /* Stack text containers vertically */
+        align-items: flex-start; /* Align text to the left for mobile devices */
+    }
+
+    .text-left {
+        margin-bottom: 10px; /* Add some spacing between text elements */
+    }
+
     .text-right {
-      flex-direction: row; /* Arrange text horizontally */
+        align-items: flex-start; /* Align text to the left for mobile devices */
     }
-  
-    .text-sm {
-      font-size: 12px; /* Adjust font size for readability */
+
+    /* .ticket-container {
+        flex-direction: column;   
     }
-  
+
+    .ticket-menu {
+        margin-left: 0;          
+        margin-top: 20px;        
+    } */
+
+    /* Adjust styles for the ticket menu to make it appear below details */
+    .ticket-menu {
+        display: none;
+    }
+
+    /* Hide "ADMIT ONE" section on mobile devices */
     .details-section-right {
-      flex-direction: column; /* Stack elements vertically */
-      align-items: center; /* Center align elements */
-      padding: 10px; /* Add padding for spacing */
+        display: none;
     }
-  
-    .semi-circle-container {
-      display: none; /* Hide semi-circle for smaller screens */
-    }
-  
-    .menu-button {
-      font-size: 14px; /* Adjust font size for readability */
-      padding: 8px 12px; /* Increase button padding for touch targets */
-    }
-  
-    .inverted-button {
-      font-size: 14px; /* Adjust font size for readability */
-      padding: 8px 12px; /* Increase button padding for touch targets */
-    }
-  
-    .test-text {
-      font-size: 12px; /* Adjust font size for readability */
-    }
-  }
-  
+}

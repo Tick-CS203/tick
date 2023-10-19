@@ -144,6 +144,17 @@ export const Ticket = ({ background }) => {
                     <TicketMenu />
                 </div>
             </div>
+// {tickets.map((ticket, index) => (
+//     <div className="ticket-block mb-12" key={index}>
+//         <div style={{ marginBottom: '20px' }}>
+//             <OrderDetails orderId={ticket.orderId} orderDateTime={ticket.orderDateTime} />
+//         </div>
+//         <div className="ticket-container">
+//             <TicketDetails {...ticket} />
+//             <TicketMenu />
+//         </div>
+//     </div>
+// ))}
           ))}
         </div>
       );
