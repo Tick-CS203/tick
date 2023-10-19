@@ -16,3 +16,6 @@
     backface-visibility: hidden;
   }
   
+  .back {
+    backface-visibility: hidden;
+  }

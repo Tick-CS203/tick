@@ -18,13 +18,13 @@ export const Login = (props) => {
     event.preventDefault();
 
     try {
-      if (!didRecaptcha) {
-        setDidRecaptcha(false);
-        return;
-      }
-      if (recaptchaErrorMessage) {
-        return;
-      }
+      // if (!didRecaptcha) {
+      //   setDidRecaptcha(false);
+      //   return;
+      // }
+      // if (recaptchaErrorMessage) {
+      //   return;
+      // }
       const user = await Auth.signIn(enteredUsername, enteredPassword);
       console.log(user);
       dispatch(

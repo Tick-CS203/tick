@@ -11,15 +11,43 @@ const TicketFlip = ({ ticket }) => {
     config: { mass: 5, tension: 500, friction: 80 },
   });
 
+  const handleFlip = () => {
+    set(!flipped);
+  };
+
+  // return (
+  //   <div className="ticket-flip-container" onClick={() => set(state => !state)}>
+  //     <a.div
+  //       className="ticket-c front"
+  //       style={{ opacity, transform, rotateX: '180deg' }}
+  //     >
+  //       <TicketDetails {...ticket} />
+  //     </a.div>
+  //   </div>
+  // );
+
   return (
-    <div className="ticket-flip-container" onClick={() => set(state => !state)}>
+    <a.div className="ticket-flip-container" onClick={handleFlip}>
       <a.div
-        className="ticket-c front"
-        style={{ opacity, transform, rotateX: '180deg' }}
+        className={`ticket-c ${flipped ? 'front' : 'back'}`}
+        style={{
+          opacity: opacity.to((o) => 1 - o),
+          transform,
+        }}
       >
         <TicketDetails {...ticket} />
       </a.div>
-    </div>
+
+      <a.div
+        className={`ticket-c ${flipped ? 'back' : 'front'}`}
+        style={{
+          opacity,
+          transform: transform.to(t => `${t} rotateX(180deg)`),
+        }}
+      >
+        <TicketDetails {...ticket} />
+      </a.div>
+    </a.div>
   );
 };
 
