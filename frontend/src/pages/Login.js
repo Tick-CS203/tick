@@ -29,24 +29,26 @@ export const Login = (props) => {
         const user = await Auth.signIn(enteredUsername, enteredPassword);
         
         if (user.challengeName === 'SMS_MFA') {
-            // The user needs to enter the code they received via SMS
-            const code = prompt("Enter the code you received:");
-            
-            const loggedInUser = await Auth.confirmSignIn(
-                user,   // the current user
-                code,   // the MFA code entered
-                'SMS_MFA' // MFA type
-            );
-            
-            dispatch(
-                setTokens({
-                    accessToken: loggedInUser.signInUserSession.accessToken.jwtToken,
-                    refreshToken: loggedInUser.signInUserSession.refreshToken.token,
-                    idToken: loggedInUser.signInUserSession.idToken.jwtToken,
-                })
-            );
             dispatch(setUsername(enteredUsername));
-            navigate("/");
+            navigate("/confirmsignin");
+            // // The user needs to enter the code they received via SMS
+            // const code = prompt("Enter the code you received:");
+            
+            // const loggedInUser = await Auth.confirmSignIn(
+            //     user,   // the current user
+            //     code,   // the MFA code entered
+            //     'SMS_MFA' // MFA type
+            // );
+            
+            // dispatch(
+            //     setTokens({
+            //         accessToken: loggedInUser.signInUserSession.accessToken.jwtToken,
+            //         refreshToken: loggedInUser.signInUserSession.refreshToken.token,
+            //         idToken: loggedInUser.signInUserSession.idToken.jwtToken,
+            //     })
+            // );
+            // dispatch(setUsername(enteredUsername));
+            // navigate("/");
         } else {
             // MFA is not enabled for this user, continue with the sign-in process.
             dispatch(
