@@ -1,0 +1,184 @@
+services:
+  token-service:
+    build:
+      context: token-service
+      dockerfile: ../Dockerfile
+    image: token-service
+    container_name: token_container
+    hostname: ${TOKEN_HOST}
+    environment:
+      - jwt.keyURL=
+      - jwt.key=purchasing
+      - jwt.expiry.map={access:'120',purchasing:'5'}
+    ports:
+      - '${TOKEN_PORT}:8080'
+  bookmarks-service:
+    build:
+      context: bookmarks-service
+      dockerfile: ../Dockerfile
+    image: bookmarks-service
+    container_name: ${BOOKMARK_HOST}
+    depends_on:
+      - bookmark-db
+      - token-service
+      - event-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${BOOKMARK_DB}:5432/bookmarks
+      - SPRING_DATASOURCE_USERNAME=${MONGO_USER}
+      - SPRING_DATASOURCE_PASSWORD=${MONGO_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - TOKEN_HOST=${TOKEN_HOST}
+      - EVENT_HOST=${EVENT_HOST}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${BOOKMARK_PORT}:8080'
+  event-service:
+    build:
+      context: event-service
+      dockerfile: ../Dockerfile
+    image: event-service
+    container_name: ${EVENT_HOST}
+    depends_on:
+      - ${EVENT_DB}
+    environment:
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=event
+      - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${EVENT_DB}:27017/?retryWrites=true&w=majority
+      - SPRING_DATA_MONGODB_DATABASE=event
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${EVENT_PORT}:8080'
+  ticket-service:
+    build:
+      context: ticket-service
+      dockerfile: ../Dockerfile
+    image: ticket-service
+    container_name: ${TICKET_HOST}
+    depends_on:
+      - event-service
+      - token-service
+      - ${TICKET_DB}
+    environment:
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=ticket
+      - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${TICKET_DB}:27017/?retryWrites=true&w=majority
+      - SPRING_DATA_MONGODB_DATABASE=ticket
+      - EVENT_HOST=${EVENT_HOST}
+      - TOKEN_HOST=${TOKEN_HOST}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${TICKET_PORT}:8080'
+  session-service:
+    build:
+      context: session-service
+      dockerfile: ../Dockerfile
+    image: session-service
+    container_name: ${SESSION_HOST}
+    depends_on:
+      token-service:
+        condition: service_started
+      redis-cluster:
+        condition: service_completed_successfully
+    ports:
+      - "${SESSION_PORT}:8085"
+    environment:
+      - SESSION_MAX=10
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - TOKEN_HOST=${TOKEN_HOST}
+      - TOKEN_PORT=${TOKEN_PORT}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+  redis-node-1:
+    image: redis
+    container_name: node-1
+    command: bash -c "${redis_command}"
+    ports:
+      - '7001:6379'
+  redis-node-2:
+    image: redis
+    container_name: node-2
+    command: bash -c "${redis_command}"
+    ports:
+      - '7002:6379'
+  redis-node-3:
+    image: redis
+    container_name: node-3
+    command: bash -c "${redis_command}"
+    ports:
+      - '7003:6379'
+  redis-node-4:
+    image: redis
+    container_name: node-4
+    command: bash -c "${redis_command}"
+    ports:
+      - '7004:6379'
+  redis-node-5:
+    image: redis
+    container_name: node-5
+    command: bash -c "${redis_command}"
+    ports:
+      - '7005:6379'
+  redis-node-6:
+    image: redis
+    container_name: node-6
+    command: bash -c "${redis_command}"
+    ports:
+      - '7006:6379'
+  redis-cluster:
+    container_name: redis
+    image: "redis"
+    ports:
+      - "6379:6379"
+    command: bash -c "echo yes | redis-cli --cluster create node-1:6379 node-2:6379 node-3:6379 node-4:6379 node-5:6379 node-6:6379 --cluster-replicas 1; sleep 5"
+    depends_on:
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+      - redis-node-4
+      - redis-node-5
+      - redis-node-6
+    volumes:
+      - redis_db:/data
+  event-db:
+    image: mongo
+    container_name: ${EVENT_DB}
+    environment:
+      - MONGO_INITDB_ROOT_DB=event
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${EVENT_DB_PORT}:27017'
+    volumes:
+      - event_db:/data/db
+  ticket-db:
+    image: mongo
+    container_name: ${TICKET_DB}
+    environment:
+      - MONGO_INITDB_ROOT_DB=ticket
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${TICKET_DB_PORT}:27017'
+    volumes:
+      - ticket_db:/data/db
+  bookmark-db:
+    image: 'postgres:15-alpine'
+    container_name: ${BOOKMARK_DB}
+    environment:
+      - POSTGRES_DB=bookmarks
+      - POSTGRES_USER=${MONGO_USER}
+      - POSTGRES_PASSWORD=${MONGO_PASSWORD}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${BOOKMARK_DB_PORT}:5432'
+    volumes:
+      - bookmark_db:/var/lib/postgresql/data
+volumes:
+  bookmark_db:
+    name: "bookmark-db"
+  redis_db:
+    name: "redis-db"
+  event_db:
+    name: "event-db"
+  ticket_db:
+    name: "ticket-db"

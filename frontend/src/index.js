@@ -1,30 +1,49 @@
-import * as React from "react"
-import * as ReactDOM from "react-dom"
-import Amplify from "aws-amplify"
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import { ConfigProvider, theme } from "antd";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Provider } from "react-redux";
+import { persistor, store } from "./store/store";
+import { PersistGate } from 'redux-persist/integration/react';
 
-/** Presentational */
-import App from "./Components/App"
-import { GlobalStyles } from "./global"
+import { Amplify } from "aws-amplify";
+import awsconfig from "./aws-exports";
+Amplify.configure(awsconfig);
 
-/** Amplify config */
-import awsconfig from "./aws-exports"
+const queryClient = new QueryClient();
 
-/** Service worker */
-import * as serviceWorker from "./serviceWorker"
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <ConfigProvider
+          theme={{
+            token: {
+              // Seed Token
+              colorPrimary: "#F6E902",
+            },
+            algorithm: theme.darkAlgorithm,
+          }}
+        >
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <App />
+            </PersistGate>
+          </Provider>
+          <ReactQueryDevtools />
+        </ConfigProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
+  </React.StrictMode>
+);
 
-/** Configure amplify */
-Amplify.configure(awsconfig)
-
-ReactDOM.render(
-  <>
-    <GlobalStyles />
-    <App />
-  </>,
-  document.getElementById("root")
-)
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister()
-
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
