@@ -2,7 +2,7 @@ import { Steps, Select } from "antd";
 import { useState, useEffect } from "react";
 import { NationalStadium } from "../component/seatselection/NationalStadium";
 import { RowData } from "../component/seatselection/RowData";
-import { axiosLocalHostInstance } from "../api/axios";
+import { axiosLocalHostInstance2 } from "../api/axios";
 import { useParams } from "react-router-dom";
 import { useEventQuery } from "../api/events.query";
 import { useSelector } from "react-redux";
@@ -10,8 +10,8 @@ import { useSelector } from "react-redux";
 export const SeatSelection = () => {
   const { id } = useParams();
   const { data: eventData, isLoading, isSuccess, isError } = useEventQuery(id);
-  console.log(eventData)
-  const { items } = useSelector((state) => state.cart);
+  console.log(eventData);
+  const { items, purchasingToken } = useSelector((state) => state.cart);
 
   const [currEventDateTime, setCurrEventDateTime] = useState("");
   const [currSeatAvailability, setCurrSeatAvailability] = useState({});
@@ -20,13 +20,17 @@ export const SeatSelection = () => {
   const [filteredRows, setFilteredRows] = useState([]);
   const [availableSections, setAvailableSections] = useState({});
   const [eventDateOptions, setEventDateOptions] = useState([]);
-  console.log(items)
+  console.log(items);
+  console.log(purchasingToken);
 
   const startCheckoutHandler = async () => {
-    const redirectURL = await axiosLocalHostInstance.post("/api/payment/create-checkout-session",JSON.stringify(items));
-    console.log(redirectURL)
+    const redirectURL = await axiosLocalHostInstance2.post(
+      "/api/payment/create-checkout-session",
+      JSON.stringify(items)
+    );
+    console.log(redirectURL);
     window.location.href = redirectURL.data;
-  }
+  };
 
   // create options for select dropdown
   useEffect(() => {
@@ -157,7 +161,11 @@ export const SeatSelection = () => {
                           section={currSection}
                           row={row.row}
                           available={row.availability}
-                          price={eventData.prices[currCategory.charAt(currCategory.length - 1)-1]}
+                          price={
+                            eventData.prices[
+                            currCategory.charAt(currCategory.length - 1) - 1
+                            ]
+                          }
                           purchaseLimit={eventData.ticketLimit}
                         />
                       );
@@ -186,12 +194,17 @@ export const SeatSelection = () => {
                   <tbody>
                     {items.map((item) => {
                       return (
-                        <tr className="text-main-yellow border-b border-main-yellow py-5">
+                        <tr
+                          className="text-main-yellow border-b border-main-yellow py-5"
+                          key={`${item.category}:${item.section}:${item.row}`}
+                        >
                           <td className="py-1">{item.category}</td>
                           <td className="py-1">{item.section}</td>
                           <td className="py-1">{item.row}</td>
                           <td className="py-1">{item.quantity}</td>
-                          <td className="py-1">${item.price*item.quantity}</td>
+                          <td className="py-1">
+                            ${item.price * item.quantity}
+                          </td>
                         </tr>
                       );
                     })}

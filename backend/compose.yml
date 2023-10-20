@@ -1,26 +1,27 @@
 services:
-  token:
+  token-service:
     build:
       context: token-service
       dockerfile: ../Dockerfile
     image: token-service
-    container_name: ${TOKEN_HOST}
+    container_name: token_container
+    hostname: ${TOKEN_HOST}
     environment:
       - jwt.keyURL=https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_E2biAnMuS/.well-known/jwks.json
       - jwt.key=purchasing
       - jwt.expiry.map={access:'120',purchasing:'5'}
     ports:
       - '${TOKEN_PORT}:8080'
-  bookmark:
+  bookmarks-service:
     build:
       context: bookmarks-service
       dockerfile: ../Dockerfile
-    image: bookmark
+    image: bookmarks-service
     container_name: ${BOOKMARK_HOST}
     depends_on:
       - bookmark-db
-      - token
-      - event
+      - token-service
+      - event-service
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://${BOOKMARK_DB}:5432/bookmarks
       - SPRING_DATASOURCE_USERNAME=${MONGO_USER}
@@ -31,7 +32,7 @@ services:
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${BOOKMARK_PORT}:8080'
-  event:
+  event-service:
     build:
       context: event-service
       dockerfile: ../Dockerfile
@@ -46,15 +47,15 @@ services:
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${EVENT_PORT}:8080'
-  ticket:
+  ticket-service:
     build:
       context: ticket-service
       dockerfile: ../Dockerfile
     image: ticket-service
     container_name: ${TICKET_HOST}
     depends_on:
-      - event
-      - token
+      - event-service
+      - token-service
       - ${TICKET_DB}
     environment:
       - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=ticket
@@ -65,21 +66,23 @@ services:
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${TICKET_PORT}:8080'
-  session:
+  session-service:
     build:
       context: session-service
       dockerfile: ../Dockerfile
     image: session-service
     container_name: ${SESSION_HOST}
     depends_on:
-      token:
+      token-service:
         condition: service_started
       redis-cluster:
         condition: service_completed_successfully
     ports:
       - "${SESSION_PORT}:8085"
     environment:
+      - SESSION_MAX=10
       - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
       - TOKEN_HOST=${TOKEN_HOST}
       - TOKEN_PORT=${TOKEN_PORT}
       - SERVER_ERROR_INCLUDE-MESSAGE=always

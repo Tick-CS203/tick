@@ -43,6 +43,7 @@ export const Home = () => {
         events.map((event) => {
           return (
             <Event
+              key={event.eventID}
               eventId={event.eventID}
               imageURL={event.banner}
               eventName={event.name}

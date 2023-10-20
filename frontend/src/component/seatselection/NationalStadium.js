@@ -27,8 +27,8 @@ export const NationalStadium = (props) => {
           "CAT2" in props.availableSections &&
           "PH5" in props.availableSections["CAT2"] &&
           props.availableSections["CAT2"]["PH5"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
@@ -43,8 +43,8 @@ export const NationalStadium = (props) => {
           "CAT6" in props.availableSections &&
           "606" in props.availableSections["CAT6"] &&
           props.availableSections["CAT6"]["606"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT6");
@@ -59,8 +59,8 @@ export const NationalStadium = (props) => {
           "CAT6" in props.availableSections &&
           "607" in props.availableSections["CAT6"] &&
           props.availableSections["CAT6"]["607"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT6");
@@ -74,8 +74,8 @@ export const NationalStadium = (props) => {
           "CAT6" in props.availableSections &&
           "608" in props.availableSections["CAT6"] &&
           props.availableSections["CAT6"]["608"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT6");
@@ -89,8 +89,8 @@ export const NationalStadium = (props) => {
           "CAT6" in props.availableSections &&
           "609" in props.availableSections["CAT6"] &&
           props.availableSections["CAT6"]["609"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT6");
@@ -105,8 +105,8 @@ export const NationalStadium = (props) => {
           "CAT6" in props.availableSections &&
           "610" in props.availableSections["CAT6"] &&
           props.availableSections["CAT6"]["610"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT6");
@@ -121,8 +121,8 @@ export const NationalStadium = (props) => {
           "CAT5" in props.availableSections &&
           "611" in props.availableSections["CAT5"] &&
           props.availableSections["CAT5"]["611"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
@@ -136,8 +136,8 @@ export const NationalStadium = (props) => {
           "CAT5" in props.availableSections &&
           "612" in props.availableSections["CAT5"] &&
           props.availableSections["CAT5"]["612"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
@@ -151,8 +151,8 @@ export const NationalStadium = (props) => {
           "CAT5" in props.availableSections &&
           "613" in props.availableSections["CAT5"] &&
           props.availableSections["CAT5"]["613"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
@@ -166,8 +166,8 @@ export const NationalStadium = (props) => {
           "CAT5" in props.availableSections &&
           "614" in props.availableSections["CAT5"] &&
           props.availableSections["CAT5"]["614"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
@@ -181,8 +181,8 @@ export const NationalStadium = (props) => {
           "CAT5" in props.availableSections &&
           "615" in props.availableSections["CAT5"] &&
           props.availableSections["CAT5"]["615"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
@@ -197,8 +197,8 @@ export const NationalStadium = (props) => {
           "CAT5" in props.availableSections &&
           "616" in props.availableSections["CAT5"] &&
           props.availableSections["CAT5"]["616"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
@@ -213,8 +213,8 @@ export const NationalStadium = (props) => {
           "CAT5" in props.availableSections &&
           "617" in props.availableSections["CAT5"] &&
           props.availableSections["CAT5"]["617"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
@@ -229,8 +229,8 @@ export const NationalStadium = (props) => {
           "CAT4" in props.availableSections &&
           "405" in props.availableSections["CAT4"] &&
           props.availableSections["CAT4"]["405"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
@@ -245,8 +245,8 @@ export const NationalStadium = (props) => {
           "CAT4" in props.availableSections &&
           "406" in props.availableSections["CAT4"] &&
           props.availableSections["CAT4"]["406"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
@@ -260,8 +260,8 @@ export const NationalStadium = (props) => {
           "CAT4" in props.availableSections &&
           "407" in props.availableSections["CAT4"] &&
           props.availableSections["CAT4"]["407"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
@@ -276,8 +276,8 @@ export const NationalStadium = (props) => {
           "CAT4" in props.availableSections &&
           "408" in props.availableSections["CAT4"] &&
           props.availableSections["CAT4"]["408"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
@@ -292,8 +292,8 @@ export const NationalStadium = (props) => {
           "CAT4" in props.availableSections &&
           "409" in props.availableSections["CAT4"] &&
           props.availableSections["CAT4"]["409"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
@@ -308,8 +308,8 @@ export const NationalStadium = (props) => {
           "CAT4" in props.availableSections &&
           "410" in props.availableSections["CAT4"] &&
           props.availableSections["CAT4"]["410"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
@@ -323,8 +323,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "411" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["411"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -338,8 +338,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "412" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["412"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -353,8 +353,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "413" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["413"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -369,8 +369,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "414" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["414"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -384,8 +384,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "415" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["415"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -399,8 +399,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "416" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["416"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -415,8 +415,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "417" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["417"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -431,8 +431,8 @@ export const NationalStadium = (props) => {
           "CAT2" in props.availableSections &&
           "107B" in props.availableSections["CAT2"] &&
           props.availableSections["CAT2"]["107B"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
@@ -446,8 +446,8 @@ export const NationalStadium = (props) => {
           "CAT2" in props.availableSections &&
           "107A" in props.availableSections["CAT2"] &&
           props.availableSections["CAT2"]["107A"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
@@ -461,8 +461,8 @@ export const NationalStadium = (props) => {
           "CAT2" in props.availableSections &&
           "109" in props.availableSections["CAT2"] &&
           props.availableSections["CAT2"]["109"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
@@ -476,8 +476,8 @@ export const NationalStadium = (props) => {
           "CAT2" in props.availableSections &&
           "110" in props.availableSections["CAT2"] &&
           props.availableSections["CAT2"]["110"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
@@ -492,8 +492,8 @@ export const NationalStadium = (props) => {
           "CAT2" in props.availableSections &&
           "111" in props.availableSections["CAT2"] &&
           props.availableSections["CAT2"]["111"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
@@ -507,8 +507,8 @@ export const NationalStadium = (props) => {
           "CAT1" in props.availableSections &&
           "112" in props.availableSections["CAT1"] &&
           props.availableSections["CAT1"]["112"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
@@ -523,8 +523,8 @@ export const NationalStadium = (props) => {
           "CAT1" in props.availableSections &&
           "113" in props.availableSections["CAT1"] &&
           props.availableSections["CAT1"]["113"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
@@ -538,8 +538,8 @@ export const NationalStadium = (props) => {
           "CAT1" in props.availableSections &&
           "114" in props.availableSections["CAT1"] &&
           props.availableSections["CAT1"]["114"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
@@ -554,8 +554,8 @@ export const NationalStadium = (props) => {
           "CAT1" in props.availableSections &&
           "115" in props.availableSections["CAT1"] &&
           props.availableSections["CAT1"]["115"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
@@ -570,8 +570,8 @@ export const NationalStadium = (props) => {
           "CAT1" in props.availableSections &&
           "116" in props.availableSections["CAT1"] &&
           props.availableSections["CAT1"]["116"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
@@ -585,8 +585,8 @@ export const NationalStadium = (props) => {
           "CAT1" in props.availableSections &&
           "117" in props.availableSections["CAT1"] &&
           props.availableSections["CAT1"]["117"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
@@ -600,8 +600,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "106" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["106"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -615,8 +615,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "105" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["105"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -630,8 +630,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "104" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["104"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -646,8 +646,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "103" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["103"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -662,8 +662,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "102" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["102"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
@@ -678,8 +678,8 @@ export const NationalStadium = (props) => {
           "CAT3" in props.availableSections &&
           "101" in props.availableSections["CAT3"] &&
           props.availableSections["CAT3"]["101"] === 1
-            ? ""
-            : "opacity-40"
+            ? "opacity-10"
+            : "opacity-40 pointer-events-none"
         }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
