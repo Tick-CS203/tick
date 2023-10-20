@@ -17,29 +17,80 @@ export const Login = (props) => {
   async function signIn(event) {
     event.preventDefault();
 
-    try {
-      if (!didRecaptcha) {
+    if (!didRecaptcha) {
         setDidRecaptcha(false);
         return;
-      }
-      if (recaptchaErrorMessage) {
-        return;
-      }
-      const user = await Auth.signIn(enteredUsername, enteredPassword);
-      console.log(user);
-      dispatch(
-        setTokens({
-          accessToken: user.signInUserSession.accessToken.jwtToken,
-          refreshToken: user.signInUserSession.refreshToken.token,
-          idToken: user.signInUserSession.idToken.jwtToken,
-        })
-      );
-      dispatch(setUsername(enteredUsername));
-      navigate("/");
-    } catch (error) {
-      console.log(error);
     }
-  }
+    if (recaptchaErrorMessage) {
+        return;
+    }
+
+    try {
+        const user = await Auth.signIn(enteredUsername, enteredPassword);
+        
+        if (user.challengeName === 'SMS_MFA') {
+            // The user needs to enter the code they received via SMS
+            const code = prompt("Enter the code you received:");
+            
+            const loggedInUser = await Auth.confirmSignIn(
+                user,   // the current user
+                code,   // the MFA code entered
+                'SMS_MFA' // MFA type
+            );
+            
+            dispatch(
+                setTokens({
+                    accessToken: loggedInUser.signInUserSession.accessToken.jwtToken,
+                    refreshToken: loggedInUser.signInUserSession.refreshToken.token,
+                    idToken: loggedInUser.signInUserSession.idToken.jwtToken,
+                })
+            );
+            dispatch(setUsername(enteredUsername));
+            navigate("/");
+        } else {
+            // MFA is not enabled for this user, continue with the sign-in process.
+            dispatch(
+                setTokens({
+                    accessToken: user.signInUserSession.accessToken.jwtToken,
+                    refreshToken: user.signInUserSession.refreshToken.token,
+                    idToken: user.signInUserSession.idToken.jwtToken,
+                })
+            );
+            dispatch(setUsername(enteredUsername));
+            navigate("/");
+        }
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+//   async function signIn(event) {
+//     event.preventDefault();
+
+//     try {
+//       if (!didRecaptcha) {
+//         setDidRecaptcha(false);
+//         return;
+//       }
+//       if (recaptchaErrorMessage) {
+//         return;
+//       }
+//       const user = await Auth.signIn(enteredUsername, enteredPassword);
+//       console.log(user);
+//       dispatch(
+//         setTokens({
+//           accessToken: user.signInUserSession.accessToken.jwtToken,
+//           refreshToken: user.signInUserSession.refreshToken.token,
+//           idToken: user.signInUserSession.idToken.jwtToken,
+//         })
+//       );
+//       dispatch(setUsername(enteredUsername));
+//       navigate("/");
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
 
   return (
     <div className="relative grid grid-cols-1 h-screen w-full">

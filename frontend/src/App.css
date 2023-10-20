@@ -1,0 +1,7 @@
+path, polygon {
+  pointer-events: all;
+}
+
+path:hover, polygon:hover {
+  fill: #F6E902;
+}
