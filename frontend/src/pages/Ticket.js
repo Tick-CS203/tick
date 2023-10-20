@@ -68,6 +68,15 @@ const TicketDetails = ({
                 <p className="text-4xl font-bold">{date}</p>
                 <p>{`${month} ${year}`}</p>
             </div>
+            {/* TicketMenu Mobile Section */}
+            <div className="ticket-menu-mobile">
+                <img src="https://cdn.britannica.com/17/155017-050-9AC96FC8/Example-QR-code.jpg" alt="QR Code" className="qr-code"/>
+                <div className="menu-links">
+                    <a href="#download-link" className="menu-link">Download</a>
+                    <a href="#event-details-link" className="menu-link">Event Details</a>
+                    <a href="#transfer-ticket-link" className="menu-link">Transfer Ticket</a>
+                </div>
+            </div>
           </div>
         </div>
         {/* Admit One Section */}
