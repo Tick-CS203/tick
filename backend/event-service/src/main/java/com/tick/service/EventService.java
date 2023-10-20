@@ -21,8 +21,11 @@ import lombok.AllArgsConstructor;
 public class EventService {
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private VenueRequest venue;
 
     public Event addEvent(Event event) {
+        event.setSeatMap(venue.getSeatMap(event.getVenueID()));
         return eventRepository.save(event);
     }
 
