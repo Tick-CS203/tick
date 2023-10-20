@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useSpring, a } from 'react-spring';
-import { TicketDetails } from '../../pages/Ticket';
+import { TicketDetails, TicketDetailsBack } from '../../pages/Ticket';
 import './TicketFlip.css';
 
-const TicketFlip = ({ ticket }) => {
+const TicketFlip = ({ ticket, backOfTicket }) => {
   const [flipped, set] = useState(false);
   const { transform, opacity } = useSpring({
     opacity: flipped ? 1 : 0,
@@ -14,17 +14,6 @@ const TicketFlip = ({ ticket }) => {
   const handleFlip = () => {
     set(!flipped);
   };
-
-  // return (
-  //   <div className="ticket-flip-container" onClick={() => set(state => !state)}>
-  //     <a.div
-  //       className="ticket-c front"
-  //       style={{ opacity, transform, rotateX: '180deg' }}
-  //     >
-  //       <TicketDetails {...ticket} />
-  //     </a.div>
-  //   </div>
-  // );
 
   return (
     <a.div className="ticket-flip-container" onClick={handleFlip}>
@@ -45,7 +34,7 @@ const TicketFlip = ({ ticket }) => {
           transform: transform.to(t => `${t} rotateX(180deg)`),
         }}
       >
-        <TicketDetails {...ticket} />
+        <TicketDetailsBack {...backOfTicket} />
       </a.div>
     </a.div>
   );

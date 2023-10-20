@@ -105,6 +105,107 @@ const TicketDetails = ({
   );
 };
 
+function calculateStandingTime(time) {
+  // Clean the time string by removing "SGT"
+  const cleanedTime = time.replace("SGT", "").trim();
+
+  // Split the cleaned time string into start and end times
+  const [startTime] = cleanedTime.split(" - ");
+  const [startHour, startMinute] = startTime.split(":").map(Number);
+
+  // Calculate standing time
+  let standingHour = startHour - 3;
+  let standingMinute = startMinute;
+
+  if (standingMinute < 0) {
+    standingHour -= 1;
+    standingMinute += 60;
+  }
+
+  if (standingHour < 0) {
+    standingHour += 24;
+  }
+
+  // Convert to 12-hour clock representation
+  const standingTime = convertTo12HourClock(standingHour, standingMinute);
+  return standingTime;
+}
+
+function calculateSeatingTime(time) {
+  const cleanedTime = time.replace("SGT", "").trim();
+
+  const [startTime] = cleanedTime.split(" - ");
+  const [startHour, startMinute] = startTime.split(":").map(Number);
+
+  let seatingHour = startHour - 2;
+  let seatingMinute = startMinute;
+
+  if (seatingMinute < 0) {
+    seatingHour -= 1;
+    seatingMinute += 60;
+  }
+
+  if (seatingHour < 0) {
+    seatingHour += 24;
+  }
+
+  const seatingTime = convertTo12HourClock(seatingHour, seatingMinute);
+  return seatingTime;
+}
+
+function convertTo12HourClock(hour, minute) {
+  // Determine AM or PM based on the hour
+  const period = hour < 12 ? "AM" : "PM";
+
+  // Convert hour to 12-hour format
+  const formattedHour = (hour % 12) || 12; // Ensure 12:00 remains as 12:00
+
+  // Format the time as 'hh:mm AM/PM'
+  return `${formattedHour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} ${period}`;
+}
+
+const TicketDetailsBack = ({
+  imageUrl,
+  eventName,
+  location,
+  time,
+  day,
+  date,
+  month,
+  year,
+}) => {
+  const seatingTime = calculateSeatingTime(time);
+  const standingTime = calculateStandingTime(time);
+  return (
+    <div className="ticket-container bg-white shadow-md rounded-2xl flex relative font-inter">
+      <div className="ticket-details-container-top p-10 flex flex-row">
+        <div className="text-container d-flex justify-content-center">
+          <div className="text-center">
+            <p>
+              Standing: Gates open at {standingTime}
+              <br />
+              Seated: Gates open at {seatingTime}
+            </p>
+          </div>
+          <div className="text-right text-center">
+            <p>
+              Do arrive early for security checks
+              <br />
+              No re-entry
+              <br />
+              No photography & videography allowed
+              <br />
+              No admission for children aged below 12 for Standing
+              <br />
+              No admission for children aged below 3 for Seated
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );  
+};
+
 // Main Ticket Component
 export const Ticket = ({ background }) => {
   // const { data: ticketData } = useTicketsQuery(
@@ -156,6 +257,52 @@ export const Ticket = ({ background }) => {
     },
   ];
 
+  const backOfTickets = [
+    {
+      imageUrl:
+        "https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg",
+      eventName:
+        "THIS IS THE BACK OF THE TICKET",
+      location: "Singapore Indoor Stadium",
+      time: "19:30 SGT - 23:00 SGT",
+      day: "Friday",
+      date: "20",
+      month: "November",
+      year: "2023",
+      orderId: "1234567890",
+      orderDateTime: "2023-09-17 12:00:00",
+    },
+    {
+      imageUrl:
+        "https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg",
+      eventName:
+        "THIS IS THE BACK OF THE TICKET",
+      location: "Singapore Indoor Stadium",
+      time: "19:30 SGT - 23:00 SGT",
+      day: "Friday",
+      date: "20",
+      month: "November",
+      year: "2023",
+      orderId: "1234567890",
+      orderDateTime: "2023-09-17 12:00:00",
+    },
+    {
+      imageUrl:
+        "https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg",
+      eventName:
+        "THIS IS THE BACK OF THE TICKET",
+      location: "Singapore Indoor Stadium",
+      time: "19:30 SGT - 23:00 SGT",
+      day: "Friday",
+      date: "20",
+      month: "November",
+      year: "2023",
+      orderId: "1234567890",
+      orderDateTime: "2023-09-17 12:00:00",
+    },
+  ];
+
+
   return (
     <div className={`bg-${background} p-4`}>
       <TicketHeader title="My Tickets" />
@@ -168,7 +315,7 @@ export const Ticket = ({ background }) => {
             />
           </div>
           <div className="flex items-stretch">
-            <TicketFlip ticket={ticket} /> {}
+            <TicketFlip ticket={ticket} backOfTicket={backOfTickets[index]} /> { }
             <TicketMenu />
           </div>
         </div>
@@ -179,4 +326,4 @@ export const Ticket = ({ background }) => {
 };
 
 export default Ticket;
-export {TicketDetails};
+export { TicketDetails, TicketDetailsBack };
