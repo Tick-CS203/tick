@@ -6,7 +6,7 @@ services:
     image: token-service
     container_name: ${TOKEN_HOST}
     environment:
-      - jwt.keyURL=
+      - jwt.keyURL=https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_E2biAnMuS/.well-known/jwks.json
       - jwt.key=purchasing
       - jwt.expiry.map={access:'120',purchasing:'5'}
     ports:

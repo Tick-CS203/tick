@@ -12,23 +12,19 @@ import com.tick.service.*;
 import com.tick.model.*;
 
 @RestController
+@RequestMapping("/event")
 @AllArgsConstructor
 public class EventController {
     @Autowired
     private final EventService eventService;
 
-    @GetMapping
-    public String health_check() {
-        return "Service is running";
-    }
-
-    @PostMapping("/event")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED) 
     public Event createEvent (@RequestBody Event event) {
         return eventService.addEvent(event);
     }
 
-    @GetMapping("/event")
+    @GetMapping
     public List<Event> getEvents (
         @RequestParam(name = "category", required = false) String category,
         @RequestParam(name = "maxPrice", required = false) Double maxPrice,
@@ -37,17 +33,17 @@ public class EventController {
         return eventService.filterEvents(category, maxPrice, eventDateTime);
     }
 
-    @PutMapping("/event")
+    @PutMapping
     public Event modifyEvent (@RequestBody Event e) {
         return eventService.updateEvent(e);
     }
 
-    @GetMapping("/event/{id}")
+    @GetMapping("/{id}")
     public Event getEventByID (@PathVariable String id) {
         return eventService.getEventByID(id);
     }
 
-    @DeleteMapping("/event/{id}")
+    @DeleteMapping("/{id}")
     public String deleteEvent (@PathVariable String id) {
         return eventService.deleteEvent(id);
     }

@@ -21,8 +21,11 @@ import lombok.AllArgsConstructor;
 public class EventService {
     @Autowired
     private EventRepository eventRepository;
+    @Autowired
+    private VenueRequest venue;
 
     public Event addEvent(Event event) {
+        event.setSeatMap(venue.getSeatMap(event.getVenueID()));
         return eventRepository.save(event);
     }
 
@@ -56,11 +59,11 @@ public class EventService {
         if (eventRequest.getEventID() == null) 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "eventID field must be provided");
         return eventRepository.findById(eventRequest.getEventID()).map(
-            event -> {
-                event.setDate(eventRequest.getDate());
-                return eventRepository.save(event);
-            }
-        ).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+                event -> {
+                    event.setDate(eventRequest.getDate());
+                    return eventRepository.save(event);
+                }).orElseThrow(() ->
+                    new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
     }
 
     public String deleteEvent(String eventID) {
