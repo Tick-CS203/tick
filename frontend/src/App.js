@@ -14,6 +14,7 @@ import { EventDetails } from "./pages/EventDetails";
 import { Auth } from "./component/signup/Auth"
 import { Navigate } from "react-router-dom";
 import { Queue } from "./pages/Queue"
+import { Events } from "./pages/Events";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/event/:id" element={<EventDetails />} />
+          <Route path="/event" element={<Events />}/>
           <Route path="/ticket" element={<Auth><Ticket /></Auth>} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
