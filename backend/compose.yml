@@ -32,6 +32,22 @@ services:
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${BOOKMARK_PORT}:8080'
+  venue-service:
+    build:
+      context: venue-service
+      dockerfile: ../Dockerfile
+    image: venue-service
+    container_name: ${VENUE_HOST}
+    depends_on:
+      - venue-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${VENUE_DB}:5432/venue
+      - SPRING_DATASOURCE_USERNAME=${MONGO_USER}
+      - SPRING_DATASOURCE_PASSWORD=${MONGO_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${VENUE_PORT}:8080'
   event-service:
     build:
       context: event-service
@@ -173,6 +189,18 @@ services:
       - '${BOOKMARK_DB_PORT}:5432'
     volumes:
       - bookmark_db:/var/lib/postgresql/data
+  venue-db:
+    image: 'postgres:15-alpine'
+    container_name: ${VENUE_DB}
+    environment:
+      - POSTGRES_DB=venue
+      - POSTGRES_USER=${MONGO_USER}
+      - POSTGRES_PASSWORD=${MONGO_PASSWORD}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${VENUE_DB_PORT}:5432'
+    volumes:
+      - venue_db:/var/lib/postgresql/data
 volumes:
   bookmark_db:
     name: "bookmark-db"
@@ -182,3 +210,5 @@ volumes:
     name: "event-db"
   ticket_db:
     name: "ticket-db"
+  venue_db:
+    name: "venue-db"

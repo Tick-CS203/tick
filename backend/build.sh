@@ -59,6 +59,7 @@ else
     for file in $@; do
         build $file;
     done
+    exit
     fi
 fi
 echo "usage: $0 [auto|all|test] service-folder"

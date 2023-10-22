@@ -134,9 +134,12 @@ public class TicketService {
             for (int i = 0; i < quantity; i++) {
                 Integer seatNumber = maxCapacity - currentAvailable + 1;
 
+                String orderID = createOrderId();
+                String orderDateTime = createOrderDate();
+
                 Ticket t = new Ticket(
                         new CompositeKey(event.getEventID(), eventDate.toString(),
-                            section, row, seatNumber), user, category);
+                            section, row, seatNumber), user, category, orderID, orderDateTime);
                 addTicket(t);
                 allocatedTickets.add(t);
                 currentAvailable--;
@@ -161,5 +164,13 @@ public class TicketService {
 
         if (recap.getSuccess() == "true") return ResponseEntity.noContent().build();
         return ResponseEntity.badRequest().body(recap.getError());
+    }
+
+    private String createOrderId() {
+        return "";
+    }
+
+    private String createOrderDate() {
+        return "";
     }
 }
