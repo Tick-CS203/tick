@@ -25,6 +25,7 @@ public class VenueRequest {
                 }
                 return response.bodyToMono(Map.class);
             }).block();
+            return (Map<String, Map<String, Map<String, Integer>>>) map;
         } catch (WebClientResponseException e) {
             throw new VenueNotFoundException();
         }

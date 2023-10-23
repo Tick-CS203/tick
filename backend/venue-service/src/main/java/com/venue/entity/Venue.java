@@ -3,13 +3,13 @@ package com.venue.entity;
 import java.util.*;
 import lombok.*;
 
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
 import jakarta.validation.constraints.*;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Document
 public class Venue {
     @Id
     @NotNull

@@ -1,26 +1,27 @@
 services:
-  token:
+  token-service:
     build:
       context: token-service
       dockerfile: ../Dockerfile
     image: token-service
-    container_name: ${TOKEN_HOST}
+    container_name: token_container
+    hostname: ${TOKEN_HOST}
     environment:
       - jwt.keyURL=https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_E2biAnMuS/.well-known/jwks.json
       - jwt.key=purchasing
       - jwt.expiry.map={access:'120',purchasing:'5'}
     ports:
       - '${TOKEN_PORT}:8080'
-  bookmark:
+  bookmarks-service:
     build:
       context: bookmarks-service
       dockerfile: ../Dockerfile
-    image: bookmark
+    image: bookmarks-service
     container_name: ${BOOKMARK_HOST}
     depends_on:
       - bookmark-db
-      - token
-      - event
+      - token-service
+      - event-service
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://${BOOKMARK_DB}:5432/bookmarks
       - SPRING_DATASOURCE_USERNAME=${MONGO_USER}
@@ -31,7 +32,23 @@ services:
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${BOOKMARK_PORT}:8080'
-  event:
+  venue-service:
+    build:
+      context: venue-service
+      dockerfile: ../Dockerfile
+    image: venue-service
+    container_name: ${VENUE_HOST}
+    depends_on:
+      - ${VENUE_DB}
+    environment:
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=venue
+      - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${VENUE_DB}:27017/?retryWrites=true&w=majority
+      - SPRING_DATA_MONGODB_DATABASE=venue
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${VENUE_PORT}:8080'
+  event-service:
     build:
       context: event-service
       dockerfile: ../Dockerfile
@@ -46,15 +63,15 @@ services:
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${EVENT_PORT}:8080'
-  ticket:
+  ticket-service:
     build:
       context: ticket-service
       dockerfile: ../Dockerfile
     image: ticket-service
     container_name: ${TICKET_HOST}
     depends_on:
-      - event
-      - token
+      - event-service
+      - token-service
       - ${TICKET_DB}
     environment:
       - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=ticket
@@ -65,14 +82,14 @@ services:
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${TICKET_PORT}:8080'
-  session:
+  session-service:
     build:
       context: session-service
       dockerfile: ../Dockerfile
     image: session-service
     container_name: ${SESSION_HOST}
     depends_on:
-      token:
+      token-service:
         condition: service_started
       redis-cluster:
         condition: service_completed_successfully
@@ -172,6 +189,18 @@ services:
       - '${BOOKMARK_DB_PORT}:5432'
     volumes:
       - bookmark_db:/var/lib/postgresql/data
+  venue-db:
+    image: mongo
+    container_name: ${VENUE_DB}
+    environment:
+      - MONGO_INITDB_ROOT_DB=venue
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${VENUE_DB_PORT}:27017'
+    volumes:
+      - venue_db:/data/db
 volumes:
   bookmark_db:
     name: "bookmark-db"
@@ -181,3 +210,5 @@ volumes:
     name: "event-db"
   ticket_db:
     name: "ticket-db"
+  venue_db:
+    name: "venue-db"

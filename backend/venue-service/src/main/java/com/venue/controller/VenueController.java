@@ -1,5 +1,7 @@
 package com.venue.controller;
 
+import java.util.*;
+
 import com.venue.service.VenueService;
 import com.venue.entity.Venue;
 
@@ -16,6 +18,11 @@ public class VenueController {
     @Autowired
     public VenueController(VenueService service) {
         this.service = service;
+    }
+
+    @GetMapping
+    public List<Venue> getAllVenue() {
+        return service.getAllVenue();
     }
 
     @GetMapping("/{id}")
