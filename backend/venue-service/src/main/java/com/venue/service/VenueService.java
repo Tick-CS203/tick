@@ -1,9 +1,10 @@
 package com.venue.service;
 
-import com.venue.repository.VenueRepository;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.venue.repository.VenueRepository;
 import com.venue.entity.Venue;
 import com.venue.exception.VenueNotFoundException;
 
@@ -13,6 +14,10 @@ public class VenueService {
 
     public VenueService(VenueRepository repo) {
         this.repo = repo;
+    }
+
+    public List<Venue> getAllVenue() {
+        return repo.findAll();
     }
 
     public Venue getVenue(String id) {
