@@ -29,7 +29,6 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 0px;
 }
 
 .text-left, .text-right {
@@ -50,7 +49,6 @@
 
 .grey-dotted-line {
     height: 100%;
-    background-color: transparent;
     border-left: 1px dashed grey;
 }
 
@@ -96,15 +94,14 @@
 .menu-button, .inverted-button {
     flex-grow: 1;
     text-align: center;
-    gap: 5px;
     border-radius: 12.5px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
+    border: 2px solid #F6E902;
 }
 
 .menu-button {
     color: #F6E902;
-    border: 2px solid #F6E902;
     background-color: transparent;
 }
 
@@ -116,7 +113,6 @@
 .inverted-button {
     color: black;
     background-color: #F6E902;
-    border: 2px solid #F6E902;
 }
 
 .inverted-button:hover {
@@ -129,26 +125,23 @@
 }
 
 /* Media Queries */
-@media (max-width: 768px), (min-width: 768px) and (max-width: 1024px) {
-    .ticket-container, .ticket-image-container, .ticket-details-container-top, .ticket-name {
+@media (max-width: 1024px) {
+    .ticket-container,
+    .ticket-image-container,
+    .ticket-details-container-top,
+    .ticket-name {
         width: 100%;
         height: auto;
         flex-direction: column;
     }
 
     .ticket-image-container {
-        border-top-left-radius: 15px;  /* Adjust these values as needed */
-        border-top-right-radius: 15px;
+        border-radius: 15px 15px 0 0;
     }
 
     .ticket-details-container-top {
         padding: 10px;
         margin: 10px;
-    }
-
-    .text-container, .text-left, .text-right {
-        flex-direction: column;
-        align-items: flex-start;
     }
 
     .text-left {
@@ -159,9 +152,14 @@
         margin-bottom: 15px;
     }
 
+    .text-container, .text-left, .text-right {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     .ticket-menu-mobile {
         display: flex;
-        align-items: flex-start; /* Centers children horizontally */
+        align-items: flex-start;
     }
     
     .menu-links {
@@ -170,8 +168,8 @@
         cursor: pointer;
         margin-left: 15px;
         display: flex;
-        flex-direction: column; /* Stacks the links vertically */
-        gap: 5px; /* Adds spacing between links */
+        flex-direction: column;
+        gap: 5px;
     }
 
     .qr-code {
@@ -180,7 +178,8 @@
         margin-bottom: 5px;
     }
 
-    .ticket-menu, .details-section-right {
+    .ticket-menu,
+    .details-section-right {
         display: none;
     }
 }
