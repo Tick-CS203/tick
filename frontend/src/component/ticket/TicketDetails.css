@@ -135,6 +135,10 @@
         flex-direction: column;
     }
 
+    .ticket-name {
+        padding-right: 10px;
+    }
+
     .ticket-image-container {
         border-radius: 15px 15px 0 0;
     }

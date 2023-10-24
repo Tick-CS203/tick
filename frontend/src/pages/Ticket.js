@@ -100,7 +100,7 @@ export const Ticket = ({ background }) => {
     const tickets = [
       {
         imageUrl: "https://visitglendale.com/wp-content/uploads/2022/09/ateez.jpg",
-        eventName: "ATEEZ WORLD TOUR (THE FELLOWSHIP: BREAK THE WALL) IN SINGAPORE 2023",
+        eventName: "ATEEZ WORLD TOUR (THE FELLOWSHIP: BREAK THE WALL)",
         location: "Singapore Indoor Stadium",
         time: "19:30 SGT - 23:00 SGT",
         day: "Friday",
