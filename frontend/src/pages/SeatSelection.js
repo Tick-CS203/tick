@@ -126,8 +126,21 @@ export const SeatSelection = () => {
 
   return (
     <>
-      <div style={{ position: "absolute", top: 10, left: 10, color: "red" }}>
-        Time Left: {Math.floor(countdown / 60)}:{countdown % 60}
+      <div style={{
+        position: "fixed",
+        top: 15,
+        left: 280,
+        zIndex: 9999,
+      }}>
+        <div style={{
+          background: "red",
+          color: "white",
+          padding: "6px 12px",
+          borderRadius: "10px",
+          display: "inline-block",
+        }}>
+          <b>Time Left: {Math.floor(countdown / 60)}:{String(countdown % 60).padStart(2, '0')}</b>
+        </div>
       </div>
 
       {isLoading && <p className="text-white"> Loading... </p>}
