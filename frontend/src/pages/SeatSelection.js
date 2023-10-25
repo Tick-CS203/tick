@@ -23,6 +23,26 @@ export const SeatSelection = () => {
   console.log(items);
   console.log(purchasingToken);
 
+  // Countdown timer state
+  const [countdown, setCountdown] = useState(600); // 600 seconds = 10 mins
+
+  // Countdown timer function
+  const startCountdown = () => {
+    if (countdown > 0) {
+      setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000); // Update countdown every 1 second
+    } else {
+      window.location.href = "/"; // Redirect to homepage
+      alert("Error: Time limit exceeded. Please try again.");
+    }
+  };
+
+  // Start the countdown when the component mounts
+  useEffect(() => {
+    startCountdown();
+  }, [countdown]);
+
   const startCheckoutHandler = async () => {
     const redirectURL = await axiosLocalHostInstance2.post(
       "/api/payment/create-checkout-session",
@@ -106,6 +126,10 @@ export const SeatSelection = () => {
 
   return (
     <>
+      <div style={{ position: "absolute", top: 10, left: 10, color: "red" }}>
+        Time Left: {Math.floor(countdown / 60)}:{countdown % 60}
+      </div>
+
       {isLoading && <p className="text-white"> Loading... </p>}
 
       {isError && <p className="text-white"> Error 404 : Event not found </p>}
