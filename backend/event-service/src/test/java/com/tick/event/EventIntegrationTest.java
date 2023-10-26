@@ -19,7 +19,10 @@ import com.tick.event.container.MongoDBContainer;
 import com.tick.model.Event;
 import com.tick.repository.EventRepository;
 
-/** Run disposable database in Docker container */
+/**
+ * Run disposable database in Docker container
+ * Ensure that Docker Desktop is running
+ */
 @Testcontainers
 /** Start an actual HTTP server listening at a random port*/
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -49,9 +52,9 @@ public class EventIntegrationTest extends MongoDBContainer {
     }
 
     @Test
-    public void addEvent_Success() throws Exception {
+    public void addEvent_ValidVenueID_Success() throws Exception {
         Event event = new Event("test event", null, null, null, null, null,
-                5, null, null, null, null);
+                5, "64ecb4ad17d89d593f3c5f2f", null, null, null);
 
         URI uri = new URI(baseUrl + port + "/event");
         ResponseEntity<Event> result = restTemplate.postForEntity(uri, event, Event.class);
@@ -134,7 +137,7 @@ public class EventIntegrationTest extends MongoDBContainer {
         Event newEvent = new Event("new test event", null, null, null, null, null,
                 5, null, null, null, null);
         
-        URI uri = new URI(baseUrl + port + "/books/100");
+        URI uri = new URI(baseUrl + port + "/event/100");
 
         ResponseEntity<Event> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(newEvent), Event.class);
         assertEquals(404, result.getStatusCode().value());

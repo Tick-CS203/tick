@@ -162,7 +162,7 @@ public class TicketService {
                 response.bodyToMono(RecaptchaResponse.class)
             ).block();
 
-        if (recap.getSuccess() == "true") return ResponseEntity.noContent().build();
+        if (recap.getSuccess().equals("true")) return ResponseEntity.noContent().build();
         return ResponseEntity.badRequest().body(recap.getError());
     }
 

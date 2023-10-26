@@ -49,7 +49,7 @@ public class TicketController {
         } catch (NumberFormatException e) {
             return "seatNumber is invalid";
         }
-            }
+    }
 
     @GetMapping("/user")
     public List<Ticket> getTicketByUserId(
@@ -69,19 +69,21 @@ public class TicketController {
             }
 
     @GetMapping("/ticket")
-    public Ticket tickeyByKey(
+    public Ticket ticketByKey(
             @RequestParam(name="event") String event,
             @RequestParam(name="eventDate") String eventDate,
             @RequestParam(name="section") String section,
             @RequestParam(name="row") String row,
             @RequestParam(name="seatNumber") String seatNumber
-            ) {
+    ) {
         try {
-            return ticketService.getTicketByKey(new CompositeKey(event, eventDate, section, row, Integer.parseInt(seatNumber)));
+            return ticketService
+                    .getTicketByKey(new CompositeKey(event, eventDate, section, row, Integer.parseInt(seatNumber)));
         } catch (NumberFormatException e) {
             return new Ticket();
         }
-            }
+    }
+    
     //if event is cancelled
     @DeleteMapping("/event/{eventId}")
     public String deleteByEventId(@PathVariable String eventId) {
@@ -94,7 +96,8 @@ public class TicketController {
     }
 
     @PostMapping("/allocate/{id}/{date}")
-    public List<Ticket> allocateSeats(@PathVariable String id,
+    public List<Ticket> allocateSeats(
+            @PathVariable String id,
             @PathVariable String date,
             @RequestBody List<SelectedRow> selectedRows,
             @RequestHeader Map<String, String> headers) {
