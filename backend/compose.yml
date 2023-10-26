@@ -82,6 +82,18 @@ services:
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${TICKET_PORT}:8080'
+  payment-service:
+    build:
+      context: payment-service
+      dockerfile: ../Dockerfile
+    image: payment-service
+    container_name: ${PAYMENT_HOST}
+    secrets:
+      - STRIPE_APIKEY
+    environment:
+      - stripe.apikey=${STRIPE_APIKEY}
+      - frontend.successURL=${FRONTEND_SUCCESSURL}
+      - frontend.canceledURL=${FRONTEND_CANCELLEDURL}
   session-service:
     build:
       context: session-service
@@ -212,3 +224,6 @@ volumes:
     name: "ticket-db"
   venue_db:
     name: "venue-db"
+secrets:
+  STRIPE_APIKEY:
+    file: ./secret.txt
