@@ -2,46 +2,39 @@ import { useEventsQuery, useFilteredEventsQuery } from "../api/events.query.js";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Event } from "../component/homepage/Event";
+import { format } from 'date-fns';
 
 export const Events = () => {
 
-    const [ enteredCategory, setEnteredCategory ] = useState("");  
-    const [ enteredMaxPrice, setEnteredMaxPrice ] = useState("");     
-    const [ enteredEventDateTime, setEnteredEventDateTime ] = useState("");      
+  const [enteredCategory, setEnteredCategory] = useState("");
+  const [enteredMaxPrice, setEnteredMaxPrice] = useState("");
+  const [enteredEventDateTime, setEnteredEventDateTime] = useState("");
 
-    const { data: events, isLoading, isSuccess, isError } = useEventsQuery();
-    console.log(events);
+  const { data: events } = useEventsQuery();
 
-    async function FilterEvents(event) {
-        event.preventDefault();
+  const { data: filteredEvents, isLoading, isSuccess, isError, error } = useFilteredEventsQuery(
+      enteredCategory,
+      enteredMaxPrice,
+      enteredEventDateTime
+  );
 
-        const category = enteredCategory;
-        const maxPrice = enteredMaxPrice;
-        const eventDateTime = enteredEventDateTime;
+  const filterEvents = (event) => {
+      event.preventDefault();
+      
+  };
 
-        const { data: filteredEvents, isLoading, isSuccess, isError, error } = useFilteredEventsQuery(category, maxPrice, eventDateTime);
-        console.log(filteredEvents);
-
-        if (isLoading) {
-            return <div>Loading...</div>;
-          }
-        
-          if (isError) {
-            console.error('Error:', error); 
-            return <p className="text-white"> There aren't any events which fit your criteria </p>;
-          }
-        
-    }
+  function convertToLocalDateTime(date) {
+    return new Date(date).toISOString().split('Z')[0]
+  }
 
     return (
         <>
           {isLoading && <p className="text-white"> Loading... </p>}
     
-          {isError && <p className="text-white"> Error 404: Events not found </p>}
-    
+          {isError && <p className="text-main-red"> Error 404: Events not found </p>}
+          <div className="flex-wrap justify-around gap-4">
           {isSuccess && (
-            //filter & results
-            <form className="flex flex-wrap justify-around gap-4" onSubmit={FilterEvents}>
+            <form className="flex flex-wrap justify-around gap-4" onSubmit={filterEvents}>
               <div className="flex flex-col gap-y-10 justify-left">
                 <div className="flex flex-col">
                     <label className="text-main-yellow font-inter italic font-extrabold text-l ">
@@ -51,7 +44,7 @@ export const Events = () => {
                     className="bg-black border-b-[1px] border-main-yellow w-4/5 text-main-yellow"
                     type="date"
                     onChange={(event) => {
-                        setEnteredEventDateTime(event.target.value);
+                        setEnteredEventDateTime(convertToLocalDateTime(event.target.value));
                         }}/>
                 </div>
 
@@ -78,24 +71,25 @@ export const Events = () => {
                         setEnteredMaxPrice(event.target.value);
                         }}/>
                 </div>
-                    
-                <button type="submit" className="bg-main-yellow text-black font-inter font-semibold rounded-lg w-52 h-9">Filter</button>
-              </div>
-
-              <div className="flex flex-wrap justify-around gap-y-4">
-                {events && events.map((event) => (
-                    <Link to={`/event/${event.eventID}`} key={event.eventID}>
-                    <Event
-                    eventId={event.eventID}
-                    imageURL={event.banner}
-                    eventName={event.name}
-                    eventDates={event.date}
-                    />
-                    </Link>
-                ))}
               </div>
             </form>
           )}
+
+          {isSuccess && filteredEvents && (
+                <div className="flex flex-wrap justify-around gap-y-4">
+                    {filteredEvents.map((event) => (
+                        <Link to={`/event/${event.eventID}`} key={event.eventID}>
+                            <Event
+                                eventId={event.eventID}
+                                imageURL={event.banner}
+                                eventName={event.name}
+                                eventDates={event.date}
+                            />
+                        </Link>
+                    ))}
+                </div>
+            )}
+          </div>
         </>
       );
 }
