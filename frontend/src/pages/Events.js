@@ -10,9 +10,9 @@ export const Events = () => {
   const [enteredMaxPrice, setEnteredMaxPrice] = useState("");
   const [enteredEventDateTime, setEnteredEventDateTime] = useState("");
 
-  const { data: events } = useEventsQuery();
+  const { data: events, isLoading, isSuccess, isError, error } = useEventsQuery();
 
-  const { data: filteredEvents, isLoading, isSuccess, isError, error } = useFilteredEventsQuery(
+  const { data: filteredEvents } = useFilteredEventsQuery(
       enteredCategory,
       enteredMaxPrice,
       enteredEventDateTime
@@ -24,7 +24,15 @@ export const Events = () => {
   };
 
   function convertToLocalDateTime(date) {
-    return new Date(date).toISOString().split('Z')[0]
+
+    const parts = date.split("-");
+        if (parts.length === 3) {
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10) + 1;
+        const jsDate = new Date(year, month, day);
+        return jsDate.toISOString().split('Z')[0];
+    }
   }
 
     return (
@@ -32,8 +40,10 @@ export const Events = () => {
           {isLoading && <p className="text-white"> Loading... </p>}
     
           {isError && <p className="text-main-red"> Error 404: Events not found </p>}
-          <div className="flex-wrap justify-around gap-4">
+          
+          <div className="flex flex-row justify-around gap-4">
           {isSuccess && (
+            
             <form className="flex flex-wrap justify-around gap-4" onSubmit={filterEvents}>
               <div className="flex flex-col gap-y-10 justify-left">
                 <div className="flex flex-col">

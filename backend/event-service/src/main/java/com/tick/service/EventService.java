@@ -97,7 +97,7 @@ public class EventService {
     public Boolean eventHasFilteredDate(Event event, LocalDateTime eventDate) {
         List<EventDate> eventDates = event.getDate();
         for (EventDate currEventDate : eventDates) {
-            if (currEventDate.getEventDateTime().equals(eventDate)){
+            if (currEventDate.getEventDateTime().toLocalDate().equals(eventDate.toLocalDate())){
                 return true;
             }
         }
