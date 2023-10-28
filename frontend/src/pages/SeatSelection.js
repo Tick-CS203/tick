@@ -211,7 +211,8 @@ export const SeatSelection = () => {
                   </tbody>
                 </table>
                 <button
-                  className="bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto"
+                  className={`bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto ${
+                    items.length === 0 ? "opacity-30" : ""}`}
                   disabled={items.length === 0}
                   onClick={startCheckoutHandler}
                 >
