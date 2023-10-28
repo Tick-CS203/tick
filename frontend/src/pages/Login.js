@@ -2,7 +2,7 @@ import { Auth } from "aws-amplify";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { setTokens, setUsername } from "../store/userSlice";
+import { setTokens, setUsername, setUser } from "../store/userSlice";
 import { Recaptcha } from "../component/signup/Recaptcha";
 
 export const Login = (props) => {
@@ -29,26 +29,8 @@ export const Login = (props) => {
         const user = await Auth.signIn(enteredUsername, enteredPassword);
         
         if (user.challengeName === 'SMS_MFA') {
-            dispatch(setUsername(enteredUsername));
+            dispatch(setUser(user)); // <-- Dispatch user object here
             navigate("/confirmsignin");
-            // // The user needs to enter the code they received via SMS
-            // const code = prompt("Enter the code you received:");
-            
-            // const loggedInUser = await Auth.confirmSignIn(
-            //     user,   // the current user
-            //     code,   // the MFA code entered
-            //     'SMS_MFA' // MFA type
-            // );
-            
-            // dispatch(
-            //     setTokens({
-            //         accessToken: loggedInUser.signInUserSession.accessToken.jwtToken,
-            //         refreshToken: loggedInUser.signInUserSession.refreshToken.token,
-            //         idToken: loggedInUser.signInUserSession.idToken.jwtToken,
-            //     })
-            // );
-            // dispatch(setUsername(enteredUsername));
-            // navigate("/");
         } else {
             // MFA is not enabled for this user, continue with the sign-in process.
             dispatch(
