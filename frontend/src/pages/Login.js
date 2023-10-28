@@ -35,7 +35,7 @@ export const Login = (props) => {
         })
       );
       dispatch(setUsername(enteredUsername));
-      navigate("/");
+      navigate(-1);
     } catch (error) {
       console.log(error);
     }
