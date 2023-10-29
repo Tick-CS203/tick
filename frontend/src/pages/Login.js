@@ -29,10 +29,10 @@ export const Login = (props) => {
         const user = await Auth.signIn(enteredUsername, enteredPassword);
         
         if (user.challengeName === 'SMS_MFA') {
-            dispatch(setUser(user)); // <-- Dispatch user object here
+            dispatch(setUser(user));
             navigate("/confirmsignin");
         } else {
-            // MFA is not enabled for this user, continue with the sign-in process.
+            // If MFA is not enabled, continue with the sign-in process without directing to ConfirmSignIn
             dispatch(
                 setTokens({
                     accessToken: user.signInUserSession.accessToken.jwtToken,
@@ -48,33 +48,6 @@ export const Login = (props) => {
         console.log(error);
     }
 }
-
-//   async function signIn(event) {
-//     event.preventDefault();
-
-//     try {
-//       if (!didRecaptcha) {
-//         setDidRecaptcha(false);
-//         return;
-//       }
-//       if (recaptchaErrorMessage) {
-//         return;
-//       }
-//       const user = await Auth.signIn(enteredUsername, enteredPassword);
-//       console.log(user);
-//       dispatch(
-//         setTokens({
-//           accessToken: user.signInUserSession.accessToken.jwtToken,
-//           refreshToken: user.signInUserSession.refreshToken.token,
-//           idToken: user.signInUserSession.idToken.jwtToken,
-//         })
-//       );
-//       dispatch(setUsername(enteredUsername));
-//       navigate("/");
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
 
   return (
     <div className="relative grid grid-cols-1 h-screen w-full">

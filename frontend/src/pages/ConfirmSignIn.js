@@ -10,7 +10,7 @@ export const ConfirmSignIn = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const cognitoUser = useSelector(state => state.user.user); // <-- Retrieve the user from Redux store
+    const cognitoUser = useSelector(state => state.user.user);
   
     const [enteredOTP, setEnteredOTP] = useState("");
 
@@ -19,16 +19,11 @@ export const ConfirmSignIn = () => {
   
         try {
             const loggedInUser = await Auth.confirmSignIn(
-                cognitoUser,    // Use cognitoUser here
-                enteredOTP,     // the MFA code entered
-                'SMS_MFA'       // MFA type
+                cognitoUser,   
+                enteredOTP,     
+                'SMS_MFA'       
             );
-    
-            // After user is logged in, fetch their information
-            // const userInfo = await Auth.currentAuthenticatedUser();
-            // console.log(userInfo.attributes); // This will give you user attributes
 
-            // Save tokens to redux
             dispatch(
                 setTokens({
                     accessToken: loggedInUser.signInUserSession.accessToken.jwtToken,
