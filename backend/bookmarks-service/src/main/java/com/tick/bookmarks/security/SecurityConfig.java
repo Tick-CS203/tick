@@ -6,12 +6,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.*;
 import org.springframework.security.config.annotation.web.configuration.*;
-import org.springframework.security.config.annotation.web.configurers.*;
-import org.springframework.security.config.Customizer;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.stereotype.*;
-
-import java.util.Collection;
 
 @Configuration
 @EnableWebSecurity

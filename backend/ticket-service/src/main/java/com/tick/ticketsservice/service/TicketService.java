@@ -16,7 +16,6 @@ import com.tick.ticketsservice.exception.*;
 public class TicketService {
     private TicketRepository ticketRepository;
     private EventService eventsvc;
-    private TokenService tokensvc;
 
     @Autowired
     public TicketService(TicketRepository repo,
@@ -25,7 +24,6 @@ public class TicketService {
             ) {
         ticketRepository = repo;
         eventsvc = new EventService(event_host);
-        tokensvc = new TokenService(token_host);
     }
 
 
@@ -39,7 +37,7 @@ public class TicketService {
     }
 
     public List<Ticket> getTicketByUserId(String userId) {
-        return ticketRepository.findByUser(tokensvc.post(userId, "access"));
+        return ticketRepository.findByUser(userId);
     }
 
     public Ticket getTicketByKey(CompositeKey key){
@@ -55,7 +53,7 @@ public class TicketService {
 
     //if user deactivates account
     public List<Ticket> releaseTicket(String userId) {
-         List<Ticket> tickets = ticketRepository.findByUser(tokensvc.post(userId, "access"));
+         List<Ticket> tickets = ticketRepository.findByUser(userId);
          tickets.forEach(ticket -> ticket.setUser(null));
 
          return ticketRepository.saveAll(tickets);

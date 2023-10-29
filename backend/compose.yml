@@ -44,7 +44,6 @@ services:
       - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=venue
       - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${VENUE_DB}:27017/?retryWrites=true&w=majority
       - SPRING_DATA_MONGODB_DATABASE=venue
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${VENUE_PORT}:8080'

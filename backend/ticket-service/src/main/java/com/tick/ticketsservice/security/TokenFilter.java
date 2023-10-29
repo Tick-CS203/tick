@@ -1,4 +1,4 @@
-package com.tick.bookmarks.security;
+package com.tick.ticketsservice.security;
 
 import org.springframework.stereotype.*;
 import org.springframework.beans.factory.annotation.*;
