@@ -48,8 +48,13 @@ public class EventController {
     }
 
     @DeleteMapping("/event/{id}")
-    public String deleteEvent (@PathVariable String id) {
+    public String deleteEvent(@PathVariable String id) {
         return eventService.deleteEvent(id);
     }
-
+    
+    @PostMapping("/event/recommend")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<Event> getRecommendedEvents(@RequestBody Artist artist) {
+        return eventService.getRecommendedEvents(artist.getName());
+    }
 }
