@@ -2,7 +2,7 @@ import { Auth } from "aws-amplify";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { setTokens, setUsername } from "../store/userSlice";
+import { setTokens, setUsername, setUserID } from "../store/userSlice";
 import { Recaptcha } from "../component/signup/Recaptcha";
 
 export const Login = (props) => {
@@ -27,6 +27,7 @@ export const Login = (props) => {
       }
       const user = await Auth.signIn(enteredUsername, enteredPassword);
       console.log(user);
+
       dispatch(
         setTokens({
           accessToken: user.signInUserSession.accessToken.jwtToken,
@@ -34,6 +35,9 @@ export const Login = (props) => {
           idToken: user.signInUserSession.idToken.jwtToken,
         })
       );
+
+      dispatch(setUserID(user.attributes.sub));
+
       dispatch(setUsername(enteredUsername));
       navigate(-1);
     } catch (error) {

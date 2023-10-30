@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { socket } from "../api/socket.js";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setPurchasing, setTokens } from "../store/userSlice.js";
+import { setPurchasing, setUserID } from "../store/userSlice.js";
 import { axiosInstance } from "../api/axios.js";
 
 export const Queue = () => {
@@ -11,7 +11,7 @@ export const Queue = () => {
   const dispatch = useDispatch();
   const { accessToken } = useSelector((state) => state.user);
   const [queueNumber, setQueueNumber] = useState(null);
-  //const [userID, setUserID] = useState("");
+  const { userID } = useSelector((state) => state.user);
 
   const enterSession = () => {
     try {
@@ -49,14 +49,14 @@ export const Queue = () => {
         navigate(`/seatmap/${id}`); // comment to stop auto redirect
       }
     }
-    console.log(accessToken);
-    socket.on(accessToken, moveInQueue);
-    enterSession();
+    console.log(userID);
+    socket.on(userID, moveInQueue);
+    if (userID) enterSession();
 
     return () => {
-      socket.off(accessToken);
+      socket.off(userID);
     };
-  }, [accessToken]);
+  }, [userID]);
 
   useEffect(() => {
     socket.connect();
@@ -68,7 +68,7 @@ export const Queue = () => {
           "/token/access",
           JSON.stringify({ token: accessToken })
         );
-        dispatch(setTokens(response.data));
+        setUserID(response.data.id);
       } catch (e) {
         console.log(e);
       }
@@ -79,7 +79,7 @@ export const Queue = () => {
       exitSession();
       socket.disconnect();
     };
-  }, [dispatch, accessToken]);
+  }, []);
 
   return (
     <>
