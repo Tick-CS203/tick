@@ -16,7 +16,7 @@ public class EventRequest {
         this.host = host;
     }
 
-    public void post(long event) {
+    public void post(String event) {
         String url = "http://" + host + ":8080/event/" + event;
         try {
             Object something = WebClient.create(url).get()

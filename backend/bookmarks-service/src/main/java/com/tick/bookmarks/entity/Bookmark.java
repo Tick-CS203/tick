@@ -11,7 +11,7 @@ public class Bookmark {
     private String userID;
     @ElementCollection
     @CollectionTable(name = "users_event_list")
-    private Set<Long> eventList = new HashSet<>();
+    private Set<String> eventList = new HashSet<>();
 
     public Bookmark(String userID) {
         this.userID = userID;
@@ -23,16 +23,16 @@ public class Bookmark {
         return userID;
     }
 
-    public Set<Long> getEventList() {
+    public Set<String> getEventList() {
         return eventList;
     }
 
-    public Bookmark addEvent(long event) {
+    public Bookmark addEvent(String event) {
         eventList.add(event);
         return this;
     }
 
-    public Bookmark removeEvent(long event) {
+    public Bookmark removeEvent(String event) {
         eventList.remove(event);
         return this;
     }

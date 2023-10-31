@@ -36,7 +36,7 @@ public class BookmarkController {
     }
 
     @DeleteMapping("/{event}")
-    public Bookmark delete_bookmark(@PathVariable long event,
+    public Bookmark delete_bookmark(@PathVariable String event,
             TokenAuthentication auth
             ) throws IOException
     {
@@ -47,7 +47,7 @@ public class BookmarkController {
     }
 
     @PostMapping("/{event}")
-    public Bookmark add_bookmark(@PathVariable long event,
+    public Bookmark add_bookmark(@PathVariable String event,
             TokenAuthentication auth
             ) throws IOException
     {
@@ -57,7 +57,7 @@ public class BookmarkController {
         return svc.add_bookmark(id, event);
     }
 
-    private void verify_event(long event) {
+    private void verify_event(String event) {
         req.post(event);
     }
 }

@@ -20,13 +20,13 @@ public class BookmarkService {
         return repo.findAll();
     }
 
-    public Bookmark add_bookmark(String id, long event) {
+    public Bookmark add_bookmark(String id, String event) {
         return repo.save(getBookmark(id).map(
                 user -> user.addEvent(event)
                 ).orElse(new Bookmark(id).addEvent(event)));
     }
 
-    public Bookmark delete_bookmark(String id, long event) {
+    public Bookmark delete_bookmark(String id, String event) {
         return getBookmark(id).map(
                 user -> {
                     user.removeEvent(event);

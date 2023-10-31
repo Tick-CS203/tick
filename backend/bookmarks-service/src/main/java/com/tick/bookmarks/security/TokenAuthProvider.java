@@ -22,12 +22,7 @@ class TokenAuthProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication auth) {
         TokenAuthentication tokenAuth = (TokenAuthentication) auth;
         try {
-            TokenResponse user = WebClient.create("http://" + host + ":8080/token/access").post()
-                .body(Mono.just(new Token(tokenAuth.getName())), Token.class)
-                .exchangeToMono(response -> {
-                    if (response.statusCode().value() == 400) return response.createError();
-                    return response.bodyToMono(TokenResponse.class);
-                }).block();
+            TokenResponse user = webRequest(tokenAuth);
             tokenAuth.setAuthenticated(true);
             tokenAuth.setPrincipal(user.id());
         } catch (Exception e) {
@@ -37,7 +32,16 @@ class TokenAuthProvider implements AuthenticationProvider {
     }
 
     public boolean supports(Class<?> authtype) {
-        if (authtype.equals(TokenAuthentication.class)) return true;
-        return false;
+        return authtype.equals(TokenAuthentication.class);
+    }
+
+    private TokenResponse webRequest(TokenAuthentication tokenAuth) {
+        return WebClient.create("http://" + host + ":8080/token/access").post()
+                .body(Mono.just(new Token(tokenAuth.getName())), Token.class)
+                .exchangeToMono(response -> {
+                    if (response.statusCode().value() == 400)
+                        return response.createError();
+                    return response.bodyToMono(TokenResponse.class);
+                }).block();
     }
 }
