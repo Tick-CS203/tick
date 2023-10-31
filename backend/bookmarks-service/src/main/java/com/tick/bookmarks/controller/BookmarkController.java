@@ -4,14 +4,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.function.BiFunction;
 
 import com.tick.bookmarks.service.*;
 import com.tick.bookmarks.entity.*;
-import com.tick.bookmarks.exceptions.*;
 import com.tick.bookmarks.security.*;
-import com.tick.bookmarks.repository.*;
 
 @RestController
 @RequestMapping("/bookmarks")
