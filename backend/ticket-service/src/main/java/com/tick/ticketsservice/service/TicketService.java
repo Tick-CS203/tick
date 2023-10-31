@@ -1,7 +1,6 @@
 package com.tick.ticketsservice.service;
 
 import java.util.*;
-import reactor.core.publisher.Mono;
 import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.*;
@@ -77,9 +76,8 @@ public class TicketService {
     }
 
     // [{category: "CAT1", section: "PC1", row: "C", quantity: 2}, {category: "CAT2", section: "140", row: "B", quantity: 1}]
-    public List<Ticket> allocateSeats(String eventID, String eventDate, List<SelectedRow> selectedRows, String token) {
+    public List<Ticket> allocateSeats(String eventID, String eventDate, List<SelectedRow> selectedRows, String user) {
         Event event = eventsvc.get(eventID);
-        String user = tokensvc.post(token, "purchasing");
 
         EventDate date = null;
         for (EventDate d : event.getDate()) {

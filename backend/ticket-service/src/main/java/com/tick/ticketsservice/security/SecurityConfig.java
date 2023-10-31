@@ -21,14 +21,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.addFilterBefore(filter, BasicAuthenticationFilter.class).authorizeHttpRequests(
-                registry -> {
-                    registry.requestMatchers((HttpMethod) null, "/tickets/user").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/tickets").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/tickets/recaptcha").permitAll()
-                        .requestMatchers(HttpMethod.GET).permitAll();
-                })
-        .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(CorsFilter.config()));
+                        registry -> {
+                            registry.requestMatchers((HttpMethod) null, "/tickets/user").hasAuthority("access")
+                                    .requestMatchers(HttpMethod.POST, "/tickets/allocate/**").hasAuthority("purchasing")
+                                    .requestMatchers(HttpMethod.GET, "/tickets").permitAll()
+                                    .requestMatchers(HttpMethod.POST, "/tickets/recaptcha").permitAll()
+                                    .requestMatchers(HttpMethod.GET).permitAll();
+                        })
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(CorsFilter.config()));
         return http.build();
     }
 }

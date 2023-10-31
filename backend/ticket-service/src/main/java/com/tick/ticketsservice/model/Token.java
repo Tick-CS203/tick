@@ -1,3 +1,3 @@
-package com.tick.bookmarks.entity;
+package com.tick.ticketsservice.model;
 
 public record Token(String token) {}

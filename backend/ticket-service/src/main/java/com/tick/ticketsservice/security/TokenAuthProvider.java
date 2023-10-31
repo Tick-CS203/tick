@@ -21,23 +21,33 @@ class TokenAuthProvider implements AuthenticationProvider {
 
     public Authentication authenticate(Authentication auth) {
         TokenAuthentication tokenAuth = (TokenAuthentication) auth;
-        try {
-            TokenResponse user = WebClient.create("http://" + host + ":8080/token/access").post()
-                .body(Mono.just(new Token(tokenAuth.getName())), Token.class)
-                .exchangeToMono(response -> {
-                    if (response.statusCode().value() == 400) return response.createError();
-                    return response.bodyToMono(TokenResponse.class);
-                }).block();
-            tokenAuth.setAuthenticated(true);
-            tokenAuth.setPrincipal(user.id());
-        } catch (Exception e) {
-            tokenAuth.setAuthenticated(false);
+        tokenAuth.setAuthenticated(false);
+
+        String[] arr = new String[] { "access", "purchasing" };
+        for (String url : arr) {
+            try {
+                TokenResponse user = webRequest(tokenAuth, url);
+                tokenAuth.setAuthenticated(true);
+                tokenAuth.setPrincipal(user.id());
+                tokenAuth.addAuthorities(url);
+            } catch (Exception e) {
+                System.out.println("Token authentication failed: " + url);
+            }
         }
         return tokenAuth;
     }
 
     public boolean supports(Class<?> authtype) {
-        if (authtype.equals(TokenAuthentication.class)) return true;
-        return false;
+        return authtype.equals(TokenAuthentication.class);
+    }
+
+    public TokenResponse webRequest(TokenAuthentication tokenAuth, String url) {
+        return WebClient.create("http://" + host + ":8080/token/" + url).post()
+                .body(Mono.just(new Token(tokenAuth.getName())), Token.class)
+                .exchangeToMono(response -> {
+                    if (response.statusCode().value() == 400)
+                        return response.createError();
+                    return response.bodyToMono(TokenResponse.class);
+                }).block();
     }
 }
