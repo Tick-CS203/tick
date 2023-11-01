@@ -60,21 +60,6 @@ export const Queue = () => {
 
   useEffect(() => {
     socket.connect();
-
-    //fetching will be refactored to higher level in next iter
-    async function fetchUserId(accessToken) {
-      try {
-        const response = await axiosInstance.post(
-          "/token/access",
-          JSON.stringify({ token: accessToken })
-        );
-        setUserID(response.data.id);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    fetchUserId(accessToken);
-
     return () => {
       exitSession();
       socket.disconnect();
