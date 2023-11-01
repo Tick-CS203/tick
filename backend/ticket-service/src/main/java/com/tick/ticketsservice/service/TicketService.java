@@ -1,6 +1,7 @@
 package com.tick.ticketsservice.service;
 
 import java.util.*;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.*;
@@ -18,15 +19,12 @@ public class TicketService {
 
     @Autowired
     public TicketService(TicketRepository repo,
-            @Value("${EVENT_HOST}") String event_host,
-            @Value("${TOKEN_HOST}") String token_host
-            ) {
+            @Value("${EVENT_HOST}") String event_host) {
         ticketRepository = repo;
         eventsvc = new EventService(event_host);
     }
 
-
-    public List<Ticket> getAllTickets(){
+    public List<Ticket> getAllTickets() {
         return ticketRepository.findAll();
     }
 
@@ -39,55 +37,49 @@ public class TicketService {
         return ticketRepository.findByUser(userId);
     }
 
-    public Ticket getTicketByKey(CompositeKey key){
-        return ticketRepository.findByKey(key).orElse(null);
+    public Ticket getTicketByKey(CompositeKey key) {
+        return ticketRepository.findById(key).orElse(null);
     }
 
-    //if user transfers ticket
+    // if user transfers ticket
     public Ticket updateTicket(Ticket updatedTicket) {
         return ticketRepository.save(
-                ticketRepository.findByKey(updatedTicket.getKey()).map(
-                    ticket -> updatedTicket).orElse(null));
+                ticketRepository.findById(updatedTicket.getKey()).map(
+                        ticket -> updatedTicket).orElse(null));
     }
 
-    //if user deactivates account
+    // if user deactivates account
     public List<Ticket> releaseTicket(String userId) {
-         List<Ticket> tickets = ticketRepository.findByUser(userId);
-         tickets.forEach(ticket -> ticket.setUser(null));
+        List<Ticket> tickets = ticketRepository.findByUser(userId);
+        tickets.forEach(ticket -> ticket.setUser(null));
 
-         return ticketRepository.saveAll(tickets);
+        return ticketRepository.saveAll(tickets);
     }
 
-    //if event is cancelled
-    public String deleteTicketByEvent(String eventId){
+    // if event is cancelled
+    public String deleteTicketByEvent(String eventId) {
         List<Ticket> tickets = ticketRepository.findAll();
         tickets.forEach(ticket -> {
             CompositeKey key = ticket.getKey();
-            if (eventId.equals(key.getEventDate())) ticketRepository.deleteByKey(key);
+            if (eventId.equals(key.getEventDate()))
+                ticketRepository.deleteByKey(key);
         });
         return "event " + eventId + "'s tickets have been deleted";
     }
 
-    //if user transfers ticket
-    //is it possible for user to get a refund?
+    // if user transfers ticket
+    // is it possible for user to get a refund?
     public String deleteTicketByTicketId(CompositeKey key) {
         ticketRepository.deleteByKey(key);
         return key + "ticket has been deleted";
     }
 
-    // [{category: "CAT1", section: "PC1", row: "C", quantity: 2}, {category: "CAT2", section: "140", row: "B", quantity: 1}]
-    public List<Ticket> allocateSeats(String eventID, String eventDate, List<SelectedRow> selectedRows, String user) {
+    // [{category: "CAT1", section: "PC1", row: "C", quantity: 2}, {category:
+    // "CAT2", section: "140", row: "B", quantity: 1}]
+    public List<Ticket> allocateSeats(String eventID, String eventDateID, List<SelectedRow> selectedRows, String user) {
         Event event = eventsvc.get(eventID);
 
-        EventDate date = null;
-        for (EventDate d : event.getDate()) {
-            if (d.getID().toString().equals(eventDate)) {
-                date = d;
-                break;
-            }
-        }
-
-        if (date == null) throw new RuntimeException();
+        EventDate date = findEventDate(event, eventDateID);
 
         Map<String, Map<String, Map<String, Integer>>> seatAvailability = date.getSeatAvailability();
         Map<String, Map<String, Map<String, Integer>>> seatMap = event.getSeatMap();
@@ -101,6 +93,9 @@ public class TicketService {
             throw new SeatSelectionException("Selected quantity is above purchase limit");
 
         List<Ticket> allocatedTickets = new ArrayList<>();
+
+        String orderID = createOrderId();
+        LocalDateTime orderDateTime = createOrderDate();
 
         for (SelectedRow rowObj : selectedRows) {
             String category = rowObj.getCategory();
@@ -130,12 +125,10 @@ public class TicketService {
             for (int i = 0; i < quantity; i++) {
                 Integer seatNumber = maxCapacity - currentAvailable + 1;
 
-                String orderID = createOrderId();
-                String orderDateTime = createOrderDate();
-
                 Ticket t = new Ticket(
-                        new CompositeKey(event.getEventID(), eventDate.toString(),
-                            section, row, seatNumber), user, category, orderID, orderDateTime);
+                        new CompositeKey(event.getEventID(), eventDateID.toString(),
+                                section, row, seatNumber),
+                        user, category, orderID, orderDateTime);
                 addTicket(t);
                 allocatedTickets.add(t);
                 currentAvailable--;
@@ -151,22 +144,29 @@ public class TicketService {
 
     public ResponseEntity<?> verifyRecaptcha(RecaptchaRequest recaptchaRequest) {
         RecaptchaResponse recap = WebClient.create().post()
-            .uri("https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}",
-                    RecaptchaObject.getSecret(), recaptchaRequest.getRecaptchaToken()
-                )
-            .exchangeToMono(response ->
-                response.bodyToMono(RecaptchaResponse.class)
-            ).block();
+                .uri("https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}",
+                        RecaptchaObject.getSecret(), recaptchaRequest.getRecaptchaToken())
+                .exchangeToMono(response -> response.bodyToMono(RecaptchaResponse.class)).block();
 
-        if (recap.getSuccess() == "true") return ResponseEntity.noContent().build();
+        if (recap.getSuccess().equals("true"))
+            return ResponseEntity.noContent().build();
         return ResponseEntity.badRequest().body(recap.getError());
     }
 
     private String createOrderId() {
-        return "";
+        return UUID.randomUUID().toString();
     }
 
-    private String createOrderDate() {
-        return "";
+    private LocalDateTime createOrderDate() {
+        return LocalDateTime.now();
+    }
+
+    private EventDate findEventDate(Event event, String eventDateID) {
+        for (EventDate d : event.getDate()) {
+            if (d.getID().toString().equals(eventDateID))
+                return d;
+        }
+
+        throw new EventDateNotFoundException();
     }
 }

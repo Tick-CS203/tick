@@ -1,6 +1,7 @@
 package com.tick.ticketsservice.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,23 +24,23 @@ public class Ticket {
     private CompositeKey key;
     @NotBlank
     private String user;
-    @NotNull
+    @NotBlank
     private String category;
-    @NotNull
+    @Null
     private String orderId;
-    @NotNull
-    private String orderDateTime;
+    @Null
+    private LocalDateTime orderDateTime;
 
     @Data
     @AllArgsConstructor
     public static class CompositeKey implements Serializable {
-        @NotNull
+        @NotBlank
         private String eventID;
-        @NotNull
+        @NotBlank
         private String eventDate;
-        @NotNull
+        @NotBlank
         private String section;
-        @NotNull
+        @NotBlank
         private String row;
         @Positive
         private int seatNumber;

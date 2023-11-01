@@ -1,6 +1,8 @@
-package com.tick.ticketsservice.exception;
+package com.tick.ticketsservice.controller;
 
 import java.time.LocalDateTime;
+
+import com.tick.ticketsservice.exception.WebException;
 
 public class ErrorMessage {
     private String timestamp;
@@ -11,6 +13,10 @@ public class ErrorMessage {
         this.error = error;
         timestamp = LocalDateTime.now().toString();
         this.status = status;
+    }
+
+    public ErrorMessage(WebException e) {
+        this(e.getMessage(), e.getStatus());
     }
 
     public String getError() {

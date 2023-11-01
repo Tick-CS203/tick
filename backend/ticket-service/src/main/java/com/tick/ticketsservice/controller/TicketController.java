@@ -5,6 +5,7 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.validation.Valid;
 
@@ -49,7 +50,7 @@ public class TicketController {
             return ticketService.deleteTicketByTicketId(
                     new CompositeKey(event, eventDate, section, row, Integer.parseInt(seatNumber)));
         } catch (NumberFormatException e) {
-            return "seatNumber is invalid";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "seatNumber must be a number");
         }
     }
 
@@ -86,7 +87,7 @@ public class TicketController {
     }
 
     @PostMapping("/recaptcha")
-    public Object verifyRecaptcha(@RequestBody RecaptchaRequest recaptchaRequest) {
+    public Object verifyRecaptcha(@Valid @RequestBody RecaptchaRequest recaptchaRequest) {
         return ticketService.verifyRecaptcha(recaptchaRequest);
     }
 
