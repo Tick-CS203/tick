@@ -36,7 +36,7 @@ export const Login = (props) => {
         })
       );
 
-      dispatch(setUserID(user.attributes.sub));
+      dispatch(setUserID(response.data.id));
 
       dispatch(setUsername(enteredUsername));
       navigate(-1);
