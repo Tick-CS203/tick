@@ -2,12 +2,10 @@ package com.tick.model;
 
 import com.tick.exception.*;
 import java.time.*;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 import java.lang.reflect.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

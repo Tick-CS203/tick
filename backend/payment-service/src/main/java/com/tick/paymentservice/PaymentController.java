@@ -2,11 +2,7 @@ package com.tick.paymentservice;
 
 import java.util.*;
 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.stripe.Stripe;
@@ -14,7 +10,7 @@ import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 
 @RestController
-@RequestMapping("api/payment")
+@RequestMapping("/payment")
 public class PaymentController {
 
     private String apiKey;
@@ -29,8 +25,8 @@ public class PaymentController {
     }
 
     // { quantity: 2, priceID: XXXX }
-    @CrossOrigin(origins = "http://localhost:3000")
-    @PostMapping("/create-checkout-session")
+    @CrossOrigin(origins = "")
+    @PostMapping
     public String createSession(@RequestBody List<LineItemRequest> cartItems) {
         Stripe.apiKey = this.apiKey;
 

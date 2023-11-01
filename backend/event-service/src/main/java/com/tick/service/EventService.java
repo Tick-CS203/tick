@@ -1,20 +1,15 @@
 package com.tick.service;
 
 import java.time.LocalDateTime;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.tick.exception.EventDateNotFoundException;
-import com.tick.exception.EventNotFoundException;
-import com.tick.model.Event;
-import com.tick.model.EventDate;
-import com.tick.model.Price;
+import com.tick.exception.*;
+import com.tick.model.*;
 import com.tick.repository.EventRepository;
 
 import lombok.AllArgsConstructor;
