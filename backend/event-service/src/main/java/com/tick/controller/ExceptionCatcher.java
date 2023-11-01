@@ -31,9 +31,8 @@ public class ExceptionCatcher {
         return ResponseEntity.status(400).body(new ErrorMessage("Invalid object received", 400));
     }
 
-    @ExceptionHandler(VenueNotFoundException.class)
+    @ExceptionHandler(WebException.class)
     public ResponseEntity<?> generic_exception(VenueNotFoundException e) {
-        return ResponseEntity.status(404)
-            .body(new ErrorMessage(e.getMessage(), 404));
+        return ResponseEntity.status(e.getStatus()).body(new ErrorMessage(e));
     }
 }

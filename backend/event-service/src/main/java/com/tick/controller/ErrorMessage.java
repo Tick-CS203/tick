@@ -2,10 +2,16 @@ package com.tick.controller;
 
 import java.time.LocalDateTime;
 
+import com.tick.exception.WebException;
+
 public class ErrorMessage {
     private String timestamp;
     private String error;
     private int status;
+
+    public ErrorMessage(WebException e) {
+        this(e.getMessage(), e.getStatus());
+    }
 
     public ErrorMessage(String error, int status) {
         this.error = error;

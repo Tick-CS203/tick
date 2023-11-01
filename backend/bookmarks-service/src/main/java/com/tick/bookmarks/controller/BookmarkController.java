@@ -2,6 +2,7 @@ package com.tick.bookmarks.controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 
@@ -47,6 +48,7 @@ public class BookmarkController {
     }
 
     @PostMapping("/{event}")
+    @ResponseStatus(HttpStatus.CREATED)
     public Bookmark add_bookmark(@PathVariable String event,
             TokenAuthentication auth
             ) throws IOException

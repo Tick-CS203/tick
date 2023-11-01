@@ -4,7 +4,6 @@ import com.tick.exception.VenueNotFoundException;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 import org.springframework.web.reactive.function.client.*;
 
 @Component
@@ -27,7 +26,7 @@ public class VenueRequest {
             }).block();
             return (Map<String, Map<String, Map<String, Integer>>>) map;
         } catch (WebClientResponseException e) {
-            throw new VenueNotFoundException();
+            throw new VenueNotFoundException(venueID);
         }
     }
 }
