@@ -33,7 +33,6 @@ public class ExceptionCatcher {
 
     @ExceptionHandler(WebException.class)
     public ResponseEntity<?> generic_exception(WebException e) {
-        return ResponseEntity.status(404)
-            .body(new ErrorMessage(e.getMessage(), e.getStatus()));
+        return ResponseEntity.status(e.getStatus()).body(new ErrorMessage(e));
     }
 }

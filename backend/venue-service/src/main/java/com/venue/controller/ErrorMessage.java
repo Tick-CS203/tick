@@ -2,6 +2,8 @@ package com.venue.controller;
 
 import java.time.LocalDateTime;
 
+import com.venue.exception.WebException;
+
 public class ErrorMessage {
     private String timestamp;
     private String error;
@@ -11,6 +13,10 @@ public class ErrorMessage {
         this.error = error;
         timestamp = LocalDateTime.now().toString();
         this.status = status;
+    }
+
+    public ErrorMessage(WebException e) {
+        this(e.getMessage(), e.getStatus());
     }
 
     public String getError() {

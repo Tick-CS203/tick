@@ -62,7 +62,7 @@ public class TicketService {
         tickets.forEach(ticket -> {
             CompositeKey key = ticket.getKey();
             if (eventId.equals(key.getEventDate()))
-                ticketRepository.deleteByKey(key);
+                ticketRepository.deleteById(key);
         });
         return "event " + eventId + "'s tickets have been deleted";
     }
@@ -70,7 +70,7 @@ public class TicketService {
     // if user transfers ticket
     // is it possible for user to get a refund?
     public String deleteTicketByTicketId(CompositeKey key) {
-        ticketRepository.deleteByKey(key);
+        ticketRepository.deleteById(key);
         return key + "ticket has been deleted";
     }
 
