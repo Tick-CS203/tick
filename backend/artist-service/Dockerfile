@@ -8,4 +8,5 @@ COPY /templates .
 COPY app.py .
 COPY /pickle .
 
+ENV FLASK_APP=app.py
 CMD ["flask", "run"]
