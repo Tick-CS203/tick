@@ -2,7 +2,7 @@ import { Steps, Select } from "antd";
 import { useState, useEffect } from "react";
 import { NationalStadium } from "../component/seatselection/NationalStadium";
 import { RowData } from "../component/seatselection/RowData";
-import { axiosInstance, axiosLocalHostInstance2 } from "../api/axios";
+import { axiosInstance } from "../api/axios";
 import { useParams } from "react-router-dom";
 import { useEventQuery } from "../api/events.query";
 import { useSelector } from "react-redux";
