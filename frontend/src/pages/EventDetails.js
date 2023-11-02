@@ -6,6 +6,8 @@ import './countdown.css';
 import { Modal } from 'antd';
 import SeatMapImage from '../assets/taylor-seating-map.jpeg'
 
+const venueName = "Singapore Indoor Stadium";
+
 export const EventDetails = () => {
   const { id } = useParams();
   const [showSeatMap, setShowSeatMap] = useState(false);
@@ -92,7 +94,7 @@ export const EventDetails = () => {
                     alt="Icon"
                   />
                   <span className="text-white pl-5 font-semibold">
-                    Singapore Indoor Stadium
+                    {venueName}
                   </span>
                 </p>
 
@@ -237,9 +239,14 @@ export const EventDetails = () => {
                 View Seatmap
               </button>
 
-              <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full">
+              <a 
+                className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full text-center"
+                href={"http://maps.google.com/?q=" + venueName}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Open in Maps
-              </button>
+              </a>
 
               <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full">
                 Bookmark Event
