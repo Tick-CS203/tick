@@ -2,8 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { socket } from "../api/socket.js";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setPurchasing, setUserID } from "../store/userSlice.js";
-import { axiosInstance } from "../api/axios.js";
+import { setPurchasing } from "../store/userSlice.js";
 
 export const Queue = () => {
   const { id } = useParams();
