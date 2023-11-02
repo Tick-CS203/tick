@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OtpInput from "otp-input-react";
 import { useSelector, useDispatch } from "react-redux";
-import { setTokens } from "../store/userSlice";
+import { setTokens, setUserID } from "../store/userSlice";
+import { axiosInstance } from "../api/axios.js";
 import "./OTP.css";
 
 export const ConfirmSignIn = () => {
@@ -13,6 +14,18 @@ export const ConfirmSignIn = () => {
     const cognitoUser = useSelector(state => state.user.user);
   
     const [enteredOTP, setEnteredOTP] = useState("");
+
+    async function fetchUserId(accessToken) {
+      try {
+        const response = await axiosInstance.post(
+          "/token/access",
+          JSON.stringify({ token: accessToken })
+        );
+        return response.data.id;
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
     async function confirmSignIn(event) {
         event.preventDefault();
@@ -31,6 +44,9 @@ export const ConfirmSignIn = () => {
                     idToken: loggedInUser.signInUserSession.idToken.jwtToken,
                 })
             );
+
+            let userId = await fetchUserId(loggedInUser.signInUserSession.accessToken.jwtToken);
+            dispatch(setUserID(userId));
 
             navigate("/");
         } catch (error) {

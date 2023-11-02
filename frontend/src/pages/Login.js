@@ -18,19 +18,18 @@ export const Login = (props) => {
   async function signIn(event) {
     event.preventDefault();
 
-      //fetching will be refactored to higher level in next iter
-      async function fetchUserId(accessToken) {
-        try {
-          const response = await axiosInstance.post(
-            "/token/access",
-            JSON.stringify({ token: accessToken })
-          );
-          return response.data.id;
-        } catch (e) {
-          console.log(e);
-        }
+    async function fetchUserId(accessToken) {
+      try {
+        const response = await axiosInstance.post(
+          "/token/access",
+          JSON.stringify({ token: accessToken })
+        );
+        return response.data.id;
+      } catch (e) {
+        console.log(e);
       }
-    
+    }
+  
     try {
         if (!didRecaptcha) {
           setDidRecaptcha(false);
