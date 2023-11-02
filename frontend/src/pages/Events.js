@@ -2,7 +2,6 @@ import { useEventsQuery, useFilteredEventsQuery } from "../api/events.query.js";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Event } from "../component/homepage/Event";
-import { format } from 'date-fns';
 
 export const Events = () => {
 
@@ -19,23 +18,12 @@ export const Events = () => {
       enteredEventDateTime
   );
   console.log(filteredEvents);
+  const numEvents = filteredEvents?.length;
 
   const filterEvents = (event) => {
       event.preventDefault();
       
   };
-
-  function convertToLocalDateTime(date) {
-
-    const parts = date.split("-");
-        if (parts.length === 3) {
-        const year = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10) - 1;
-        const day = parseInt(parts[2], 10) + 1;
-        const jsDate = new Date(year, month, day);
-        return jsDate.toISOString().split('Z')[0];
-    }
-  }
 
     return (
         <>
@@ -78,7 +66,7 @@ export const Events = () => {
                     </label>
                     <input 
                     className="bg-black border-b-[1px] border-main-blue w-4/5 text-main-blue"
-                    type="text"
+                    type="number"
                     onChange={(event) => {
                         setEnteredMaxPrice(event.target.value);
                         }}/>
@@ -88,7 +76,9 @@ export const Events = () => {
           )}
 
           {isSuccess && filteredEvents && (
-                <div className="flex flex-wrap justify-around gap-y-4">
+              <div>
+                <h2 className="text-white font-inter italic font-extrabold">WE FOUND {numEvents} RELATED EVENT(S) FOR YOU</h2>
+                <div className="flex flex-wrap justify-around gap-y-4"> 
                     {filteredEvents.map((event) => (
                         <Link to={`/event/${event.eventID}`} key={event.eventID}>
                             <Event
@@ -100,6 +90,8 @@ export const Events = () => {
                         </Link>
                     ))}
                 </div>
+              </div>
+                
             )}
           </div>
         </>
