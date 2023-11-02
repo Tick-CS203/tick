@@ -22,14 +22,14 @@ export const Ticket = ({ ticketData }) => {
 
   return (
     <a.div
-      className="flex flex-row w-full gap-x-5 perspective-600 cursor-pointer"
+      className="flex lg:flex-row flex-col w-full lg:gap-x-5 gap-y-5 perspective-600 cursor-pointer"
       onClick={handleFlip}
     >
       {!isFlipped && (
         <a.div
           className="w-full will-change-transform will-change-opacity"
           style={{
-            /* opacity: opacity.to((o) => 1 - o), */
+            opacity: opacity.to((o) => 1 - o), 
             transform,
           }}
         >
