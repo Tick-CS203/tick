@@ -2,8 +2,9 @@ import { Auth } from "aws-amplify";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { setTokens, setUsername, setUser } from "../store/userSlice";
+import { setTokens, setUsername, setUser, setUserID } from "../store/userSlice";
 import { Recaptcha } from "../component/signup/Recaptcha";
+import { axiosInstance } from "../api/axios.js";
 
 export const Login = (props) => {
   const navigate = useNavigate();
@@ -17,14 +18,28 @@ export const Login = (props) => {
   async function signIn(event) {
     event.preventDefault();
 
-    if (!didRecaptcha) {
-        setDidRecaptcha(false);
-        return;
-    }
-    if (recaptchaErrorMessage) {
-        return;
-    }
+      //fetching will be refactored to higher level in next iter
+      async function fetchUserId(accessToken) {
+        try {
+          const response = await axiosInstance.post(
+            "/token/access",
+            JSON.stringify({ token: accessToken })
+          );
+          return response.data.id;
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    
     try {
+        if (!didRecaptcha) {
+          setDidRecaptcha(false);
+          return;
+        }
+        if (recaptchaErrorMessage) {
+          return;
+        }
+      
         const user = await Auth.signIn(enteredUsername, enteredPassword);
         
         if (user.challengeName === 'SMS_MFA') {
@@ -39,10 +54,12 @@ export const Login = (props) => {
                     idToken: user.signInUserSession.idToken.jwtToken,
                 })
             );
-            dispatch(setUsername(enteredUsername));
-            navigate("/");
-        }
-        
+          
+          let userId = fetchUserId(user.signInUserSession.accessToken.jwtToken);
+          dispatch(setUserID(userId));
+          dispatch(setUsername(enteredUsername));
+          navigate(-1);
+       }
     } catch (error) {
         console.log(error);
     }

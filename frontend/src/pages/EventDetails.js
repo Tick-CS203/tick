@@ -1,7 +1,8 @@
 import { useEventQuery } from "../api/events.query.js";
 import { useParams } from "react-router-dom";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
+import './countdown.css';
 
 export const EventDetails = () => {
   const { id } = useParams();
@@ -20,6 +21,33 @@ export const EventDetails = () => {
     };
     return new Date(dateTimeString).toLocaleString(undefined, options);
   };
+
+  const calculateTimeRemaining = () => {
+    const eventStartTime = new Date(event.date[0].eventDateTime).getTime();
+    const currentTime = new Date().getTime();
+    const timeRemaining = eventStartTime - currentTime;
+
+    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+    return { days, hours, minutes, seconds };
+  };
+
+  const [timeRemaining, setTimeRemaining] = useState(null);
+
+  useEffect(() => {
+    if (event) {
+      const interval = setInterval(() => {
+        setTimeRemaining(calculateTimeRemaining());
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, []); 
 
   return (
     <>
@@ -74,6 +102,33 @@ export const EventDetails = () => {
                   </span>
                 </div>
               </div>
+              
+              {timeRemaining && timeRemaining > 0 && 
+                <div className="py-5">
+                <p className="font-inter font-black text-white text-s py-5">
+                  Event starts in:
+                </p>
+
+                <div class="countdowntimer">
+                  <div class="box">
+                    <span class="num" id="day-box">{timeRemaining.days.toString().padStart(2, '0')}</span>
+                    <span class="text">DAYS</span>
+                  </div>
+                  <div class="box">
+                    <span class="num" id="hr-box">{timeRemaining.hours.toString().padStart(2, '0')}</span>
+                    <span class="text">HOURS</span>
+                  </div>
+                  <div class="box">
+                    <span class="num" id="min-box">{timeRemaining.minutes.toString().padStart(2, '0')}</span>
+                    <span class="text">MINUTES</span>
+                  </div>
+                  <div class="box">
+                    <span class="num" id="sec-box">{timeRemaining.seconds.toString().padStart(2, '0')}</span>
+                    <span class="text">SECONDS</span>
+                  </div>
+                </div> 
+                
+              </div>}
 
               <div className="py-5">
                 <p className="font-inter font-black text-main-blue italic text-2xl">

@@ -1,5 +1,6 @@
 path, polygon {
   pointer-events: all;
+  cursor: pointer;
 }
 
 path:hover, polygon:hover {
