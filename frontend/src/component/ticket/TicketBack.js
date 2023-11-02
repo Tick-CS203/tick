@@ -1,6 +1,6 @@
 export const TicketBack = ({ ticketData, eventData }) => {
   return (
-    <div className="relative w-full lg:max-h-[200px] bg-white shadow-md flex lg:flex-row flex-col font-inter">
+    <div className="relative w-full lg:h-[200px] bg-white shadow-md flex lg:flex-row flex-col font-inter">
       
       {/* Admit One Section for LARGE screens */}
       <div className="hidden lg:flex justify-center items-center relative">
