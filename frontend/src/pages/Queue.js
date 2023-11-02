@@ -3,7 +3,6 @@ import { socket } from "../api/socket.js";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setPurchasing } from "../store/userSlice.js";
-import { axiosInstance } from "../api/axios.js";
 
 export const Queue = () => {
   const { id } = useParams();
@@ -11,7 +10,7 @@ export const Queue = () => {
   const dispatch = useDispatch();
   const { accessToken } = useSelector((state) => state.user);
   const [queueNumber, setQueueNumber] = useState(null);
-  const [userID, setUserID] = useState("");
+  const { userID } = useSelector((state) => state.user);
 
   const enterSession = () => {
     try {
@@ -60,21 +59,6 @@ export const Queue = () => {
 
   useEffect(() => {
     socket.connect();
-
-    //fetching will be refactored to higher level in next iter
-    async function fetchUserId(accessToken) {
-      try {
-        const response = await axiosInstance.post(
-          "/token/access",
-          JSON.stringify({ token: accessToken })
-        );
-        setUserID(response.data.id);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    fetchUserId(accessToken);
-
     return () => {
       exitSession();
       socket.disconnect();

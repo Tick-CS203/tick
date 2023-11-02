@@ -8,6 +8,7 @@ import { SeatSelection } from "./pages/SeatSelection";
 import { SignUp } from "./pages/SignUp";
 import { Login } from "./pages/Login";
 import { ConfirmSignUp } from "./pages/ConfirmSignUp";
+import { ConfirmSignIn } from "./pages/ConfirmSignIn";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import { ResetPassword } from "./pages/ResetPassword";
 import { EventDetails } from "./pages/EventDetails";
@@ -28,6 +29,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/confirmsignup" element={<ConfirmSignUp />} />
+          <Route path="/confirmsignin" element={<ConfirmSignIn />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
           <Route path="/seatmap/:id" element={<Auth><SeatSelection /></Auth>} />
