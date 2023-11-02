@@ -15,8 +15,7 @@ export const ConfirmSignUp = () => {
     event.preventDefault();
 
     try {
-      const response = await Auth.confirmSignUp(username, enteredOTP);
-      console.log(response);
+      await Auth.confirmSignUp(username, enteredOTP);
       navigate("/");
     } catch (error) {
       console.log("error confirming sign up", error);
