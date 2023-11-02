@@ -45,7 +45,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT6"]["606"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT6");
           props.setCurrSection("606");
@@ -61,7 +61,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT6"]["607"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT6");
           props.setCurrSection("607");
@@ -76,7 +76,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT6"]["608"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT6");
           props.setCurrSection("608");
@@ -91,7 +91,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT6"]["609"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT6");
           props.setCurrSection("609");
@@ -107,7 +107,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT6"]["610"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT6");
           props.setCurrSection("610");
@@ -123,7 +123,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT5"]["611"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
           props.setCurrSection("611");
@@ -138,7 +138,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT5"]["612"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
           props.setCurrSection("612");
@@ -153,7 +153,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT5"]["613"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
           props.setCurrSection("613");
@@ -168,7 +168,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT5"]["614"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
           props.setCurrSection("614");
@@ -183,7 +183,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT5"]["615"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
           props.setCurrSection("615");
@@ -199,7 +199,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT5"]["616"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
           props.setCurrSection("616");
@@ -215,7 +215,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT5"]["617"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT5");
           props.setCurrSection("617");
@@ -231,7 +231,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT4"]["405"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
           props.setCurrSection("405");
@@ -247,7 +247,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT4"]["406"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
           props.setCurrSection("406");
@@ -262,7 +262,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT4"]["407"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
           props.setCurrSection("407");
@@ -278,7 +278,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT4"]["408"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
           props.setCurrSection("408");
@@ -294,7 +294,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT4"]["409"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
           props.setCurrSection("409");
@@ -310,7 +310,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT4"]["410"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT4");
           props.setCurrSection("410");
@@ -325,7 +325,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["411"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("411");
@@ -340,7 +340,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["412"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("412");
@@ -355,7 +355,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["413"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("413");
@@ -371,7 +371,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["414"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("414");
@@ -386,7 +386,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["415"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("415");
@@ -401,7 +401,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["416"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("416");
@@ -417,7 +417,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["417"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("417");
@@ -433,7 +433,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT2"]["107B"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
           props.setCurrSection("107B");
@@ -448,7 +448,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT2"]["107A"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
           props.setCurrSection("107a");
@@ -463,7 +463,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT2"]["109"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
           props.setCurrSection("109");
@@ -478,7 +478,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT2"]["110"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
           props.setCurrSection("110");
@@ -494,7 +494,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT2"]["111"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT2");
           props.setCurrSection("111");
@@ -509,7 +509,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT1"]["112"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
           props.setCurrSection("112");
@@ -525,7 +525,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT1"]["113"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
           props.setCurrSection("113");
@@ -540,7 +540,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT1"]["114"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
           props.setCurrSection("114");
@@ -556,7 +556,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT1"]["115"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
           props.setCurrSection("115");
@@ -572,7 +572,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT1"]["116"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
           props.setCurrSection("116");
@@ -587,7 +587,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT1"]["117"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT1");
           props.setCurrSection("117");
@@ -602,7 +602,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["106"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("106");
@@ -617,7 +617,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["105"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("105");
@@ -632,7 +632,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["104"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("104");
@@ -648,7 +648,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["103"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("103");
@@ -664,7 +664,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["102"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("102");
@@ -680,7 +680,7 @@ export const NationalStadium = (props) => {
           props.availableSections["CAT3"]["101"] === 1
             ? "opacity-10"
             : "opacity-40 pointer-events-none"
-        } `}
+        }`}
         onClick={() => {
           props.setCurrCategory("CAT3");
           props.setCurrSection("101");
