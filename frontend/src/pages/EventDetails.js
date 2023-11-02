@@ -3,9 +3,12 @@ import { useParams } from "react-router-dom";
 import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import './countdown.css';
+import { Modal } from 'antd';
+import SeatMapImage from '../assets/taylor-seating-map.jpeg'
 
 export const EventDetails = () => {
   const { id } = useParams();
+  const [showSeatMap, setShowSeatMap] = useState(false);
 
   const { data: event, isLoading, isSuccess, isError } = useEventQuery(id);
   console.log(event);
@@ -51,6 +54,15 @@ export const EventDetails = () => {
 
   return (
     <>
+      <Modal
+        footer={null}
+        title="Venue Seatmap"
+        open={showSeatMap}
+        onOk={()=> setShowSeatMap(false)}
+        onCancel={()=> setShowSeatMap(false)}
+      >
+        <img src={SeatMapImage} alt="seatMap"/>
+      </Modal>
       {isLoading && <p className="text-white"> Loading... </p>}
 
       {isError && <p className="text-white"> Error 404: Event not found </p>}
@@ -219,7 +231,9 @@ export const EventDetails = () => {
                 Purchase Tickets
               </Link>
 
-              <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full">
+              <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full" 
+                onClick={() => setShowSeatMap(true)}
+              >
                 View Seatmap
               </button>
 
