@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-tickamplify-dev-101208-authRole",
+      "UnauthRoleArn": "arn:aws:iam::116178103162:role/amplify-tickamplify-dev-101208-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::116178103162:role/amplify-tickamplify-dev-101208-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-tickamplify-dev-101208-deployment",
+      "UnauthRoleName": "amplify-tickamplify-dev-101208-unauthRole",
+      "StackName": "amplify-tickamplify-dev-101208",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:116178103162:stack/amplify-tickamplify-dev-101208/1c211b70-52a4-11ee-81f4-0a66fd261458",
+      "AmplifyAppId": "d1fj609szjsiqg"
+    },
+    "categories": {
+      "function": {
+        "tickUsers": {}
+      },
+      "auth": {
+        "tickamplifyf683b715f683b715": {}
+      }
+    }
+  }
+}
