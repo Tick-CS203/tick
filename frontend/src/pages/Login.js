@@ -1,8 +1,8 @@
 import { Auth } from "aws-amplify";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { setTokens, setUsername, setUser} from "../store/userSlice";
+import { setTokens, setUsername } from "../store/userSlice";
 import { Recaptcha } from "../component/signup/Recaptcha";
 import OtpInput from "otp-input-react";
 import "./OTP.css";
@@ -17,7 +17,7 @@ export const Login = (props) => {
     const [recaptchaErrorMessage, setRecaptchaErrorMessage] = useState("");
     const [isConfirmSignIn, setIsConfirmSignIn] = useState(false);
     const [enteredOTP, setEnteredOTP] = useState("");
-    const [user, setUser] = useState(null);  // Added local user state
+    const [user, setUser] = useState(null);
 
   async function signIn(event) {
     event.preventDefault();
@@ -76,6 +76,17 @@ export const Login = (props) => {
       }
   }
 
+  const handleResend = async () => {
+    if (user && user.challengeName === 'SMS_MFA') {
+      try {
+        const userRes = await Auth.signIn(enteredUsername, enteredPassword);
+        setUser(userRes);
+      } catch (error) {
+        console.log("Error resending MFA code:", error);
+      }
+    }
+  }
+
   if (isConfirmSignIn) {
     return (
         <div className="relative grid grid-cols-1 h-screen w-full">
@@ -131,7 +142,7 @@ export const Login = (props) => {
                 <p className="text-white font-inter mr-1">
                   Didn't receive the code?
                 </p>
-                <button type="button" className="text-main-yellow font-inter">
+                <button type="button" className="text-main-yellow font-inter" onClick={handleResend}>
                   {" "}
                   Click to resend{" "}
                 </button>
