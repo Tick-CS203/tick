@@ -10,7 +10,7 @@ export const TicketFront = ({ ticketData, eventData }) => {
 
   // need to match eventDateID with ticket eventDateID
   useEffect(() => {
-    if (eventData.dates) {
+    if (eventData && eventData.dates) {
       for (let i = 0; i < eventData.dates.length; i++) {
         if (eventData.dates[i].eventDateID === ticketData.key.eventDateID) {
           setEventDateTime(eventData.dates[i].eventDateTime);
@@ -58,7 +58,7 @@ export const TicketFront = ({ ticketData, eventData }) => {
 
       {/* Image Section */}
       {eventData && (
-        <div className="flex-none lg:max-w-[400px] overflow-hidden">
+        <div className="flex-none lg:max-w-[455px] overflow-hidden">
           <img src={eventData.banner} alt="Band" className="object-cover" />
         </div>
       )}

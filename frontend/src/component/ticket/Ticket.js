@@ -6,6 +6,8 @@ import { TicketBack } from "./TicketBack";
 import { useEventQuery } from "../../api/events.query"
 
 export const Ticket = ({ ticketData }) => {
+
+  // get eventID from ticketData
   const { data: eventData } = useEventQuery(0);
   console.log(eventData);
 
@@ -49,7 +51,7 @@ export const Ticket = ({ ticketData }) => {
         </a.div>
       )}
 
-      <TicketMenu />
+      <TicketMenu eventData={eventData}/>
     </a.div>
   );
 };
