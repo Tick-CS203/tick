@@ -8,7 +8,7 @@ export const getEvents = async () => {
     return axiosInstance.get(`/event`).then((res) => res.data);
 }
 
-export const getFilteredEvents = async (category, maxPrice, eventDateTime) => {
+export const getFilteredEvents = async (category, maxPrice, eventDate) => {
     let query = `/event?`;
 
     if (category) {
@@ -19,8 +19,8 @@ export const getFilteredEvents = async (category, maxPrice, eventDateTime) => {
         query += `maxPrice=${maxPrice}&`;
     }
 
-    if (eventDateTime) {
-        query += `eventDateTime=${eventDateTime}&`;
+    if (eventDate) {
+        query += `eventDate=${eventDate}&`;
     }
 
     if (query.endsWith('&')) {

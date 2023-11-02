@@ -11,12 +11,14 @@ export const Events = () => {
   const [enteredEventDateTime, setEnteredEventDateTime] = useState("");
 
   const { data: events, isLoading, isSuccess, isError, error } = useEventsQuery();
+  console.log(events);
 
   const { data: filteredEvents } = useFilteredEventsQuery(
       enteredCategory,
       enteredMaxPrice,
       enteredEventDateTime
   );
+  console.log(filteredEvents);
 
   const filterEvents = (event) => {
       event.preventDefault();
@@ -54,7 +56,7 @@ export const Events = () => {
                     className="bg-black border-b-[1px] border-main-yellow w-4/5 text-main-yellow"
                     type="date"
                     onChange={(event) => {
-                        setEnteredEventDateTime(convertToLocalDateTime(event.target.value));
+                        setEnteredEventDateTime(event.target.value);
                         }}/>
                 </div>
 

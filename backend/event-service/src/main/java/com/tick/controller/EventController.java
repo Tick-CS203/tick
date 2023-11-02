@@ -1,5 +1,6 @@
 package com.tick.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import java.util.*;
@@ -33,9 +34,9 @@ public class EventController {
     public List<Event> getEvents (
         @RequestParam(name = "category", required = false) String category,
         @RequestParam(name = "maxPrice", required = false) Double maxPrice,
-        @RequestParam(name = "eventDateTime", required = false) LocalDateTime eventDateTime
+        @RequestParam(name = "eventDateTime", required = false) LocalDate eventDate
     ) {
-        return eventService.filterEvents(category, maxPrice, eventDateTime);
+        return eventService.filterEvents(category, maxPrice, eventDate);
     }
 
     @PutMapping("/event")

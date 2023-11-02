@@ -15,12 +15,12 @@ export const useEventsQuery = () => {
     });
 };
 
-export const useFilteredEventsQuery = (category, maxPrice, eventDateTime) => {
+export const useFilteredEventsQuery = (category, maxPrice, eventDate) => {
     return useQuery({
-        queryKey: ["event", category, maxPrice, eventDateTime],
+        queryKey: ["event", category, maxPrice, eventDate],
         queryFn: async () => {
             try {
-                const response = await getFilteredEvents(category, maxPrice, eventDateTime);
+                const response = await getFilteredEvents(category, maxPrice, eventDate);
                 return response;
             } catch (error) {
                 console.log(error);
