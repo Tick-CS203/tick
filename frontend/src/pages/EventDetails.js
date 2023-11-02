@@ -35,17 +35,19 @@ export const EventDetails = () => {
     return { days, hours, minutes, seconds };
   };
 
-  const [timeRemaining, setTimeRemaining] = useState(calculateTimeRemaining());
+  const [timeRemaining, setTimeRemaining] = useState(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeRemaining(calculateTimeRemaining());
-    }, 1000);
+    if (event) {
+      const interval = setInterval(() => {
+        setTimeRemaining(calculateTimeRemaining());
+      }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, []); 
 
   return (
     <>
@@ -101,7 +103,8 @@ export const EventDetails = () => {
                 </div>
               </div>
               
-              <div className="py-5">
+              {timeRemaining && timeRemaining > 0 && 
+                <div className="py-5">
                 <p className="font-inter font-black text-white text-s py-5">
                   Event starts in:
                 </p>
@@ -123,9 +126,9 @@ export const EventDetails = () => {
                     <span class="num" id="sec-box">{timeRemaining.seconds.toString().padStart(2, '0')}</span>
                     <span class="text">SECONDS</span>
                   </div>
-                </div>
+                </div> 
                 
-              </div>
+              </div>}
 
               <div className="py-5">
                 <p className="font-inter font-black text-main-blue italic text-2xl">
