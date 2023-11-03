@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { Event } from "../component/homepage/Event";
 import { Slider, InputNumber, DatePicker } from "antd";
 import BlueFire from "../assets/blue-fire.png"
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import dayjs from 'dayjs';
+
 
 export const Events = () => {
   const [enteredCategory, setEnteredCategory] = useState("");
@@ -34,14 +37,14 @@ export const Events = () => {
 
   const onStartDateChange = (selectedDate) => {
     if (selectedDate) {
-      setEnteredStartDate(dayjs(selectedDate).format('YYYY-MM-DD')+"T00:00:00");
-    } 
+      setEnteredStartDate(dayjs(selectedDate).format('YYYY-MM-DD') + "T00:00:00");
+    }
   };
 
   const onEndDateChange = (selectedDate) => {
     if (selectedDate) {
-      setEnteredEndDate(dayjs(selectedDate).format('YYYY-MM-DD')+"T00:00:00");
-    } 
+      setEnteredEndDate(dayjs(selectedDate).format('YYYY-MM-DD') + "T00:00:00");
+    }
   };
 
   return (
@@ -52,38 +55,38 @@ export const Events = () => {
         <p className="text-main-red"> Error 404: Events not found </p>
       )}
 
-      <div className="flex lg:flex-row flex-col w-full gap-4">
+      <div className="flex lg:flex-row flex-col w-full gap-4 justify-between">
         <form
-          className="flex flex-wrap gap-4 lg:w-1/5 w-full"
+          className="flex flex-wrap gap-4 lg:w-2/5 w-full"
           onSubmit={filterEvents}
         >
           <div className="flex flex-col gap-y-10 justify-left">
-          <div className="flex flex-row items-end">
+            <div className="flex flex-row items-end">
 
-<div className="flex flex-col ">
-    <label className="text-main-yellow font-inter italic font-extrabold text-l">
-      START DATE
-    </label>
-    {isSuccess && (
-      <DatePicker 
-      className="bg-black border-b-[1px] mt-2 border-main-yellow text-main-yellow"
-      onChange={onStartDateChange}/>
-    )}
-  </div>
+              <div className="flex flex-col mr-3">
+                <label className="text-main-yellow font-inter italic font-extrabold text-l">
+                  START DATE
+                </label>
+                {isSuccess && (
+                  <DatePicker
+                    className="bg-black border-b-[1px] mt-2 border-main-yellow text-main-yellow"
+                    onChange={onStartDateChange} />
+                )}
+              </div>
 
-  <HiOutlineArrowNarrowRight size={"2.5em"} color="yellow"/>
+              <HiOutlineArrowNarrowRight size={"2.5em"} color="yellow" />
 
-  <div className="flex flex-col ml-3">
-    <label className="text-main-yellow font-inter italic font-extrabold text-l">
-      END DATE
-    </label>
-    {isSuccess && (
-      <DatePicker 
-      className="bg-black border-b-[1px] mt-2 border-main-yellow text-main-yellow"
-      onChange={onEndDateChange}/>
-    )}
-  </div>
-</div>
+              <div className="flex flex-col ml-3">
+                <label className="text-main-yellow font-inter italic font-extrabold text-l">
+                  END DATE
+                </label>
+                {isSuccess && (
+                  <DatePicker
+                    className="bg-black border-b-[1px] mt-2 border-main-yellow text-main-yellow"
+                    onChange={onEndDateChange} />
+                )}
+              </div>
+            </div>
 
 
             <div className="flex flex-col">
@@ -141,7 +144,7 @@ export const Events = () => {
           </div>
         </form>
 
-        <div className="lg:w-4/5">
+        <div className="lg:w-3/5">
           {isSuccess && filteredEvents && (
             <>
               <h2 className="text-white font-inter italic font-extrabold">
@@ -159,12 +162,10 @@ export const Events = () => {
                   </Link>
                 ))}
               </div>
-              </div>
-              
-            </>
+        </>
           )}
-        </div>
       </div>
+    </div >
     </>
   );
 };
