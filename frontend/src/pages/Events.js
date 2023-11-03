@@ -55,9 +55,9 @@ export const Events = () => {
         <p className="text-main-red"> Error 404: Events not found </p>
       )}
 
-      <div className="flex lg:flex-row flex-col w-full gap-4 justify-between">
+      <div className="flex lg:flex-row flex-col w-full gap-4 justify-center">
         <form
-          className="flex flex-wrap gap-4 lg:w-2/5 w-full"
+          className="flex flex-wrap gap-4 lg:w-2/5 w-full justify-center"
           onSubmit={filterEvents}
         >
           <div className="flex flex-col gap-y-10 justify-left">
@@ -144,13 +144,13 @@ export const Events = () => {
           </div>
         </form>
 
-        <div className="lg:w-3/5">
+        <div className="lg:w-3/5 w-full">
           {isSuccess && filteredEvents && (
             <>
-              <h2 className="text-white font-inter italic font-extrabold">
+              <h2 className="text-white font-inter italic font-extrabold lg:text-left text-center">
                 WE FOUND {filteredEvents.length} RELATED EVENT(S) FOR YOU
               </h2>
-              <div className="flex flex-wrap justify-between gap-y-4">
+              <div className="flex flex-wrap lg:justify-between gap-y-4 justify-center">
                 {filteredEvents.map((event) => (
                   <Link to={`/event/${event.eventID}`} key={event.eventID}>
                     <Event
