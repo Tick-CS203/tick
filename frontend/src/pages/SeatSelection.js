@@ -128,8 +128,8 @@ export const SeatSelection = () => {
     <>
       <div style={{
         position: "fixed",
-        top: 15,
-        left: 280,
+        bottom: 25,
+        right: 50,
         zIndex: 9999,
       }}>
         <div style={{
