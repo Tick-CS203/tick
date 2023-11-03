@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Event } from "../component/homepage/Event";
 import { Slider, InputNumber } from "antd";
 import BlueFire from "../assets/blue-fire.png"
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 
 export const Events = () => {
   const [enteredCategory, setEnteredCategory] = useState("");
@@ -46,9 +47,9 @@ export const Events = () => {
           onSubmit={filterEvents}
         >
           <div className="flex flex-col gap-y-10 justify-left">
-            <div className="flex flex-row">
-              
-            <div className="flex flex-col">
+            <div className="flex flex-row items-end">
+
+            <div className="flex flex-col ">
                 <label className="text-main-yellow font-inter italic font-extrabold text-l">
                   START DATE
                 </label>
@@ -63,7 +64,9 @@ export const Events = () => {
                 )}
               </div>
 
-              <div className="flex flex-col">
+              <HiOutlineArrowNarrowRight size={"2.5em"} color="yellow"/>
+
+              <div className="flex flex-col ml-3">
                 <label className="text-main-yellow font-inter italic font-extrabold text-l">
                   END DATE
                 </label>
@@ -140,6 +143,7 @@ export const Events = () => {
         <div className="w-3/5">
           {isSuccess && filteredEvents && (
             <>
+              <div className="flex flex-col justify-center">
               <h2 className="text-white font-inter italic font-extrabold">
                 WE FOUND {filteredEvents.length} RELATED EVENT(S) FOR YOU
               </h2>
@@ -155,6 +159,8 @@ export const Events = () => {
                   </Link>
                 ))}
               </div>
+              </div>
+              
             </>
           )}
         </div>
