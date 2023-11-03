@@ -1,0 +1,7 @@
+.scaling-container {
+    transition: transform 0.1s ease;
+}
+
+.scaling-container:hover {
+    transform: scale(1.05);
+}

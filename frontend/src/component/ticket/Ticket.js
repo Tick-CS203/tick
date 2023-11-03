@@ -4,6 +4,7 @@ import { TicketFront } from "./TicketFront";
 import { TicketMenu } from "./TicketMenu";
 import { TicketBack } from "./TicketBack";
 import { useEventQuery } from "../../api/events.query"
+import "./ScalingContainer.css";
 
 export const Ticket = ({ ticketData }) => {
 
@@ -27,31 +28,32 @@ export const Ticket = ({ ticketData }) => {
       className="flex lg:flex-row flex-col w-full lg:gap-x-5 gap-y-5 perspective-600 cursor-pointer"
       onClick={handleFlip}
     >
-      {!isFlipped && (
-        <a.div
-          className="w-full will-change-transform will-change-opacity"
-          style={{
-            opacity: opacity.to((o) => 1 - o), 
-            transform,
-          }}
-        >
-          <TicketFront ticketData={ticketData} eventData={eventData} />
-        </a.div>
-      )}
+    <div className="scaling-container w-full">
+        {!isFlipped && (
+          <a.div
+            className="w-full will-change-transform will-change-opacity"
+            style={{
+              opacity: opacity.to((o) => 1 - o),
+              transform,
+            }}
+          >
+            <TicketFront ticketData={ticketData} eventData={eventData} />
+          </a.div>
+        )}
 
-      {isFlipped && (
-        <a.div
-          className="w-full will-change-transform will-change-opacity"
-          style={{
-            opacity,
-            transform: transform.to((t) => `${t} rotateX(180deg)`),
-          }}
-        >
-          <TicketBack ticketData={ticketData} eventData={eventData} />
-        </a.div>
-      )}
-
-      <TicketMenu eventData={eventData}/>
-    </a.div>
+        {isFlipped && (
+          <a.div
+            className="w-full will-change-transform will-change-opacity"
+            style={{
+              opacity,
+              transform: transform.to((t) => `${t} rotateX(180deg)`),
+            }}
+          >
+            <TicketBack ticketData={ticketData} eventData={eventData} />
+          </a.div>
+        )}
+      </div>
+      <TicketMenu eventData={eventData} />
+    </a.div >
   );
 };
