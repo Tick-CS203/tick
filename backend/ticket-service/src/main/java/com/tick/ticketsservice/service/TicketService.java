@@ -61,7 +61,7 @@ public class TicketService {
         List<Ticket> tickets = ticketRepository.findAll();
         tickets.forEach(ticket -> {
             CompositeKey key = ticket.getKey();
-            if (eventId.equals(key.getEventDate()))
+            if (eventId.equals(key.getEventDateID()))
                 ticketRepository.deleteById(key);
         });
         return "event " + eventId + "'s tickets have been deleted";
