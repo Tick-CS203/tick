@@ -78,9 +78,10 @@ public class EventService {
                 }).orElseThrow(() -> new EventNotFoundException(eventRequest));
     }
 
-    public String deleteEvent(String eventID) {
+    public Event deleteEvent(String eventID) {
+        Event event = eventRepository.findById(eventID);
         eventRepository.deleteById(eventID);
-        return eventID + " event deleted successfully";
+        return event;
     }
 
     public Boolean eventHasAPriceLessThanOrEqualToMaxPrice(Event event, Double maxPrice) {

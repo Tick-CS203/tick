@@ -56,11 +56,12 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteEvent(@PathVariable String id) {
+    public Event deleteEvent(@PathVariable String id) {
         return eventService.deleteEvent(id);
     }
 
     @PostMapping("/{eventID}")
+    @ResponseStatus(HttpStatus.CREATED)
     public Event addEventDate(@PathVariable String eventID, @RequestBody @Valid EventDate date) {
         return eventService.addEventDate(eventID, date);
     }
