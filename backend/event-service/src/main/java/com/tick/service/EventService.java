@@ -25,23 +25,23 @@ public class EventService {
     public Event addEvent(Event event) {
         Map<String, Map<String, Map<String, Integer>>> map = venue.getSeatMap(event.getVenueID());
         event.setSeatMap(map);
+        String eventID = event.getEventID();
         for (EventDate date : event.getDate()) {
-            date.setSeatAvailability(map);
+            date.populateEventDate(eventID, map);
         }
 
-        return eventRepository.save(event);
+        return eventRepository.save(updateModified(event));
     }
 
     public Event addEventDate(String eventID, EventDate date) {
-        Event event = eventRepository.findById(eventID)
-                .orElseThrow(() -> new EventNotFoundException(eventID));
-        date.setSeatAvailability(venue.getSeatMap(event.getVenueID()));
-        return eventRepository.save(event.addEventDate(date));
+        Event event = getEventByID(eventID);
+        Map<String, Map<String, Map<String, Integer>>> map = venue.getSeatMap(event.getVenueID());
+        return eventRepository.save(
+                updateModified(event.addEventDate(date.populateEventDate(eventID, map))));
     }
 
     public Event deleteEventDate(String eventID, String eventDateID) {
-        Event event = eventRepository.findById(eventID)
-                .orElseThrow(() -> new EventNotFoundException(eventID));
+        Event event = getEventByID(eventID);
 
         return eventRepository.save(event.removeEventDate(eventDateID));
     }
@@ -67,7 +67,7 @@ public class EventService {
 
     public Event getEventByID(String eventID) {
         return eventRepository.findById(eventID).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found"));
+                () -> new EventNotFoundException());
     }
 
     public Event updateEvent(Event eventRequest) {

@@ -45,6 +45,7 @@ public class Event {
     private String venueID;
     @Null
     private Map<String, Map<String, Map<String, Integer>>> seatMap;
+    @NotNull
     private List<@Valid EventDate> date;
     private Links links;
 
@@ -65,8 +66,12 @@ public class Event {
     }
 
     public Event addEventDate(EventDate date) {
-        findEventDate(date.getID());
-        this.date.add(date);
+        try {
+            findEventDate(date.getEventDateID());
+            throw new EventDateExistsException();
+        } catch (EventDateNotFoundException e) {
+            this.date.add(date);
+        }
         return this;
     }
 
@@ -77,7 +82,7 @@ public class Event {
 
     private EventDate findEventDate(String eventDateID) {
         for (EventDate date : this.date) {
-            if (eventDateID.equals(date.getID())) {
+            if (eventDateID.equals(date.getEventDateID())) {
                 return date;
             }
         }

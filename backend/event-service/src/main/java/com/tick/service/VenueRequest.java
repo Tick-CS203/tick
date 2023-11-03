@@ -1,5 +1,8 @@
 package com.tick.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tick.exception.VenueNotFoundException;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,19 +17,28 @@ public class VenueRequest {
         this.host = host;
     }
 
-    public Map<String, Map<String, Map<String, Integer>>> getSeatMap(String venueID) {
+    public Map<?, ?> getVenue(String venueID) throws JsonProcessingException {
         String url = "http://" + host + ":8080/venue/" + venueID;
         try {
-            Map<?, ?> map = WebClient.create(url).get()
-            .exchangeToMono(response -> {
-                if (response.statusCode().value() == 404) {
-                    return response.createError();
-                }
-                return response.bodyToMono(Map.class);
-            }).block();
-            return (Map<String, Map<String, Map<String, Integer>>>) map;
-        } catch (WebClientResponseException e) {
+            String map = WebClient.create(url).get()
+                    .exchangeToMono(response -> {
+                        if (response.statusCode().value() == 404) {
+                            return response.createError();
+                        }
+                        return response.bodyToMono(String.class);
+                    }).block();
+            return new ObjectMapper().readValue(map, new TypeReference<Map>(){});
+        } catch (WebClientException e) {
             throw new VenueNotFoundException(venueID);
+        }
+    }
+
+    public Map<String, Map<String, Map<String, Integer>>> getSeatMap(String venueID) {
+        try {
+            return (Map<String, Map<String, Map<String, Integer>>>) getVenue(venueID).get("seatMap");
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
