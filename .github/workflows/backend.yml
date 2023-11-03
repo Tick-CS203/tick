@@ -32,7 +32,7 @@ jobs:
       - name: Export env variables
         run: |
           while read line; do
-          export $line;
+          export "$line";
           done < .env
           true
 
