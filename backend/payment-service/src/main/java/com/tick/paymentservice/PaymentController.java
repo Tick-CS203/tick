@@ -17,6 +17,11 @@ public class PaymentController {
     private String successURL;
     private String canceledURL;
 
+    @GetMapping
+    public String health_check() {
+        return "Service is running";
+    }
+
     public PaymentController(@Value("${stripe.apikey}") String apiKey,
             @Value("${frontend.successURL}") String successURL, @Value("${frontend.canceledURL}") String canceledURL) {
         this.apiKey = apiKey;

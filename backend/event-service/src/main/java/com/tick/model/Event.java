@@ -84,4 +84,8 @@ public class Event {
 
         throw new EventDateNotFoundException(eventDateID);
     }
+    
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
+    }
 }

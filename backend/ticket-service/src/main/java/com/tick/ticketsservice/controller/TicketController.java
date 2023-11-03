@@ -66,12 +66,13 @@ public class TicketController {
     }
 
     @GetMapping("/ticket")
-    public Ticket tickeyByKey(
-            @RequestParam(name = "event") String event,
-            @RequestParam(name = "eventDate") String eventDate,
-            @RequestParam(name = "section") String section,
-            @RequestParam(name = "row") String row,
-            @RequestParam(name = "seatNumber") String seatNumber) {
+    public Ticket ticketByKey(
+            @RequestParam(name="event") String event,
+            @RequestParam(name="eventDate") String eventDate,
+            @RequestParam(name="section") String section,
+            @RequestParam(name="row") String row,
+            @RequestParam(name="seatNumber") String seatNumber
+    ) {
         try {
             return ticketService
                     .getTicketByKey(new CompositeKey(event, eventDate, section, row, Integer.parseInt(seatNumber)));
@@ -79,8 +80,8 @@ public class TicketController {
             return new Ticket();
         }
     }
-
-    // if event is cancelled
+    
+    //if event is cancelled
     @DeleteMapping("/event/{eventId}")
     public String deleteByEventId(@PathVariable String eventId) {
         return ticketService.deleteTicketByEvent(eventId);
@@ -92,7 +93,8 @@ public class TicketController {
     }
 
     @PostMapping("/allocate/{id}/{date}")
-    public List<Ticket> allocateSeats(@PathVariable String id,
+    public List<Ticket> allocateSeats(
+            @PathVariable String id,
             @PathVariable String date,
             @RequestBody List<SelectedRow> selectedRows,
             TokenAuthentication auth) {
