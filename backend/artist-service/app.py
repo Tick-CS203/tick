@@ -14,7 +14,6 @@ def get_artists():
         with open('./pickle/cosine_similarity_matrix.pkl', 'rb') as file:
             cosine_sim = pickle.load(file)
             df = pd.DataFrame(cosine_sim)['artist']
-            print(df)
 
         return jsonify(df.values.tolist())
     except FileNotFoundError:
