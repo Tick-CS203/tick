@@ -31,15 +31,10 @@ public class Event {
     @Id
     @NotBlank
     private String eventID;
-    @NotBlank
     private String name;
-    @NotBlank
     private String description;
-    @NotBlank
     private String category;
-    @NotBlank
     private String banner;
-    @NotBlank
     private String artist;
     @Null
     private LocalDateTime lastUpdated;
@@ -50,7 +45,6 @@ public class Event {
     private String venueID;
     @Null
     private Map<String, Map<String, Map<String, Integer>>> seatMap;
-    @NotEmpty
     private List<@Valid EventDate> date;
     private Links links;
 
