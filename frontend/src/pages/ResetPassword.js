@@ -38,8 +38,7 @@ export const ResetPassword = () => {
     event.preventDefault();
 
     try {
-      const data = await Auth.forgotPasswordSubmit(username, enteredCode, enteredNewPassword);
-      console.log(data);
+      await Auth.forgotPasswordSubmit(username, enteredCode, enteredNewPassword);
       navigate("/login");
     } catch(err) {
       console.log(err);

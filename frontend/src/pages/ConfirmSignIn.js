@@ -2,25 +2,57 @@ import { Auth } from "aws-amplify";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OtpInput from "otp-input-react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setTokens, setUserID } from "../store/userSlice";
+import { axiosInstance } from "../api/axios.js";
 import "./OTP.css";
 
-export const ConfirmSignUp = () => {
-  const navigate = useNavigate();
+export const ConfirmSignIn = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-  const [enteredOTP, setEnteredOTP] = useState("");
-  const { username } = useSelector((state) => state.user);
+    const cognitoUser = useSelector(state => state.user.user);
+  
+    const [enteredOTP, setEnteredOTP] = useState("");
 
-  async function confirmSignUp(event) {
-    event.preventDefault();
-
-    try {
-      await Auth.confirmSignUp(username, enteredOTP);
-      navigate("/");
-    } catch (error) {
-      console.log("error confirming sign up", error);
+    async function fetchUserId(accessToken) {
+      try {
+        const response = await axiosInstance.post(
+          "/token/access",
+          JSON.stringify({ token: accessToken })
+        );
+        return response.data.id;
+      } catch (e) {
+        console.log(e);
+      }
     }
-  }
+
+    async function confirmSignIn(event) {
+        event.preventDefault();
+  
+        try {
+            const loggedInUser = await Auth.confirmSignIn(
+                cognitoUser,   
+                enteredOTP,     
+                'SMS_MFA'       
+            );
+
+            dispatch(
+                setTokens({
+                    accessToken: loggedInUser.signInUserSession.accessToken.jwtToken,
+                    refreshToken: loggedInUser.signInUserSession.refreshToken.token,
+                    idToken: loggedInUser.signInUserSession.idToken.jwtToken,
+                })
+            );
+
+            let userId = await fetchUserId(loggedInUser.signInUserSession.accessToken.jwtToken);
+            dispatch(setUserID(userId));
+
+            navigate("/");
+        } catch (error) {
+            console.log("error confirming sign in", error);
+        }
+    }
 
   return (
     <div className="relative grid grid-cols-1 h-screen w-full">
@@ -44,7 +76,7 @@ export const ConfirmSignUp = () => {
 
       <form
         className="flex flex-col justify-center max-w-[650px] w-full mx-auto"
-        onSubmit={confirmSignUp}
+        onSubmit={confirmSignIn}
       >
         <h2 className="text-main-yellow font-inter italic font-extrabold text-4xl">
           ENTER OTP CODE
@@ -52,7 +84,7 @@ export const ConfirmSignUp = () => {
 
         <div className="flex items-end py-2">
           <label className="text-white font-inter text-xs mb-20">
-            We sent a code to your email
+            We sent a code to your mobile
           </label>
           <OtpInput
             value={enteredOTP}

@@ -4,10 +4,12 @@ files=$(ls -d */)
 build() {
     cd $1;
     if [ -f mvnw ] ; then
-        ./mvnw clean package ${maventest-"-Dmaven.test.skip"} || exit 1;
+        chmod +x mvnw
+        bash mvnw clean package ${maventest-"-Dmaven.test.skip"} || exit 1;
         cp target/*.jar app.jar;
     elif [ -f gradlew ] ; then
-        ./gradlew clean $gradletest bootJar || exit 1;
+        chmod +x gradlew
+        bash gradlew clean $gradletest bootJar || exit 1;
         cp build/libs/*.jar app.jar;
     else
         echo "No executable found";

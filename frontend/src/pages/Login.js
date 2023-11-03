@@ -2,8 +2,9 @@ import { Auth } from "aws-amplify";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { setTokens, setUsername } from "../store/userSlice";
+import { setTokens, setUsername, setUser, setUserID } from "../store/userSlice";
 import { Recaptcha } from "../component/signup/Recaptcha";
+import { axiosInstance } from "../api/axios.js";
 
 export const Login = (props) => {
   const navigate = useNavigate();
@@ -17,29 +18,51 @@ export const Login = (props) => {
   async function signIn(event) {
     event.preventDefault();
 
-    try {
-      if (!didRecaptcha) {
-        setDidRecaptcha(false);
-        return;
+    async function fetchUserId(accessToken) {
+      try {
+        const response = await axiosInstance.post(
+          "/token/access",
+          JSON.stringify({ token: accessToken })
+        );
+        return response.data.id;
+      } catch (e) {
+        console.log(e);
       }
-      if (recaptchaErrorMessage) {
-        return;
-      }
-      const user = await Auth.signIn(enteredUsername, enteredPassword);
-      console.log(user);
-      dispatch(
-        setTokens({
-          accessToken: user.signInUserSession.accessToken.jwtToken,
-          refreshToken: user.signInUserSession.refreshToken.token,
-          idToken: user.signInUserSession.idToken.jwtToken,
-        })
-      );
-      dispatch(setUsername(enteredUsername));
-      navigate("/");
-    } catch (error) {
-      console.log(error);
     }
-  }
+  
+    try {
+        if (!didRecaptcha) {
+          setDidRecaptcha(false);
+          return;
+        }
+        if (recaptchaErrorMessage) {
+          return;
+        }
+      
+        const user = await Auth.signIn(enteredUsername, enteredPassword);
+        
+        if (user.challengeName === 'SMS_MFA') {
+            dispatch(setUser(user));
+            navigate("/confirmsignin");
+        } else {
+            // If MFA is not enabled, continue with the sign-in process without directing to ConfirmSignIn
+            dispatch(
+                setTokens({
+                    accessToken: user.signInUserSession.accessToken.jwtToken,
+                    refreshToken: user.signInUserSession.refreshToken.token,
+                    idToken: user.signInUserSession.idToken.jwtToken,
+                })
+            );
+          
+          let userId = fetchUserId(user.signInUserSession.accessToken.jwtToken);
+          dispatch(setUserID(userId));
+          dispatch(setUsername(enteredUsername));
+          navigate(-1);
+       }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
   return (
     <div className="relative grid grid-cols-1 h-screen w-full">

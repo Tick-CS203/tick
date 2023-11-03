@@ -22,7 +22,6 @@ export const Home = () => {
   ];
   
   const { data: events } = useEventsQuery();
-  console.log(events);
 
   return (
     <>
