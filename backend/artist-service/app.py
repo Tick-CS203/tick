@@ -4,11 +4,11 @@ import pickle
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/artist')
 def index():
     return render_template('index.html')
 
-@app.route('/artists')
+@app.route('/artist/all')
 def get_artists():
     try: 
         with open('./pickle/cosine_similarity_matrix.pkl', 'rb') as file:
@@ -21,7 +21,7 @@ def get_artists():
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
-@app.route('/recommend', methods=['POST'])
+@app.route('/artist/recommend', methods=['POST'])
 def get_recommendations():
     input_artist = request.form.get('artist')
     if not input_artist:
@@ -41,3 +41,6 @@ def get_recommendations():
         return f"An error occurred: {str(e)}"
     
     return jsonify(recommendations.values.flatten().tolist())
+
+if __name__ == "__main__":
+    app.run(debug=True)
