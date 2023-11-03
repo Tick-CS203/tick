@@ -2,9 +2,8 @@ import { useEventsQuery, useFilteredEventsQuery } from "../api/events.query.js";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Event } from "../component/homepage/Event";
-import { Slider, InputNumber } from "antd";
+import { Slider, InputNumber, DatePicker } from "antd";
 import BlueFire from "../assets/blue-fire.png"
-import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 
 export const Events = () => {
   const [enteredCategory, setEnteredCategory] = useState("");
@@ -33,6 +32,18 @@ export const Events = () => {
     event.preventDefault();
   };
 
+  const onStartDateChange = (selectedDate) => {
+    if (selectedDate) {
+      setEnteredStartDate(dayjs(selectedDate).format('YYYY-MM-DD')+"T00:00:00");
+    } 
+  };
+
+  const onEndDateChange = (selectedDate) => {
+    if (selectedDate) {
+      setEnteredEndDate(dayjs(selectedDate).format('YYYY-MM-DD')+"T00:00:00");
+    } 
+  };
+
   return (
     <>
       {isLoading && <p className="text-white"> Loading... </p>}
@@ -41,47 +52,38 @@ export const Events = () => {
         <p className="text-main-red"> Error 404: Events not found </p>
       )}
 
-      <div className="flex lg:flex-row flex-col w-full justify-around gap-4">
+      <div className="flex lg:flex-row flex-col w-full gap-4">
         <form
-          className="flex flex-wrap justify-around gap-4 w-2/5"
+          className="flex flex-wrap gap-4 lg:w-1/5 w-full"
           onSubmit={filterEvents}
         >
           <div className="flex flex-col gap-y-10 justify-left">
-            <div className="flex flex-row items-end">
+          <div className="flex flex-row items-end">
 
-            <div className="flex flex-col ">
-                <label className="text-main-yellow font-inter italic font-extrabold text-l">
-                  START DATE
-                </label>
-                {isSuccess && (
-                  <input
-                    className="bg-black border-b-[1px] border-main-yellow text-main-yellow"
-                    type="date"
-                    onChange={(event) => {
-                      setEnteredStartDate(event.target.value);
-                    }}
-                  />
-                )}
-              </div>
+<div className="flex flex-col ">
+    <label className="text-main-yellow font-inter italic font-extrabold text-l">
+      START DATE
+    </label>
+    {isSuccess && (
+      <DatePicker 
+      className="bg-black border-b-[1px] mt-2 border-main-yellow text-main-yellow"
+      onChange={onStartDateChange}/>
+    )}
+  </div>
 
-              <HiOutlineArrowNarrowRight size={"2.5em"} color="yellow"/>
+  <HiOutlineArrowNarrowRight size={"2.5em"} color="yellow"/>
 
-              <div className="flex flex-col ml-3">
-                <label className="text-main-yellow font-inter italic font-extrabold text-l">
-                  END DATE
-                </label>
-                {isSuccess && (
-                  <input
-                    className="bg-black border-b-[1px] border-main-yellow text-main-yellow"
-                    type="date"
-                    onChange={(event) => {
-                      setEnteredEndDate(event.target.value);
-                    }}
-                  />
-                )}
-              </div>
-            </div>
-              
+  <div className="flex flex-col ml-3">
+    <label className="text-main-yellow font-inter italic font-extrabold text-l">
+      END DATE
+    </label>
+    {isSuccess && (
+      <DatePicker 
+      className="bg-black border-b-[1px] mt-2 border-main-yellow text-main-yellow"
+      onChange={onEndDateChange}/>
+    )}
+  </div>
+</div>
 
 
             <div className="flex flex-col">
@@ -110,8 +112,8 @@ export const Events = () => {
             </div>
 
             <div className="flex flex-col">
-              <label className="text-main-blue font-inter italic font-extrabold text-l ">
-                PRICE RANGE
+              <label className="text-main-blue font-inter italic font-extrabold text-l">
+                MAXIMUM PRICE
               </label>
               {isSuccess && (
                 <>
@@ -122,7 +124,6 @@ export const Events = () => {
                     onChange={(value) => {
                       setEnteredMaxPrice(value);
                     }}
-                    tooltip={{ open: true }}
                   />
                   <InputNumber
                     min={1}
@@ -140,14 +141,13 @@ export const Events = () => {
           </div>
         </form>
 
-        <div className="w-3/5">
+        <div className="lg:w-4/5">
           {isSuccess && filteredEvents && (
             <>
-              <div className="flex flex-col justify-center">
               <h2 className="text-white font-inter italic font-extrabold">
                 WE FOUND {filteredEvents.length} RELATED EVENT(S) FOR YOU
               </h2>
-              <div className="flex flex-wrap justify-around gap-y-4">
+              <div className="flex flex-wrap justify-between gap-y-4">
                 {filteredEvents.map((event) => (
                   <Link to={`/event/${event.eventID}`} key={event.eventID}>
                     <Event

@@ -25,7 +25,15 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/event/:id" element={<EventDetails />} />
-          <Route path="/event" element={<Events />} />
+          <Route path="/event" element={
+                // configure Antd theme
+                <ConfigProvider
+                  theme={{
+                    algorithm: theme.darkAlgorithm,
+                  }}
+                >
+                  <Events />
+                </ConfigProvider>} />
           <Route
             path="/ticket"
             element={
@@ -42,6 +50,7 @@ function App() {
           <Route
             path="/seatmap/:id"
             element={
+              // configure Antd theme
               <Auth>
                 <ConfigProvider
                   theme={{
