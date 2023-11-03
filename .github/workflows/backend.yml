@@ -29,11 +29,18 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Export env variables
+        run: |
+          while read line; do
+          export "$line";
+          done < .env
+          true
+
       - name: Build jar and image
         run: |
           cd backend
           echo Building jar
-          ./build.sh test # change "all" to "test" to test jars
+          bash build.sh all # change "all" to "test" to test jars
           docker compose build
 
       - name: Check image
