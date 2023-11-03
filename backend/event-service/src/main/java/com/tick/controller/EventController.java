@@ -70,4 +70,9 @@ public class EventController {
     public Event deleteEventDate(@PathVariable String eventID, @PathVariable String eventDateID) {
         return eventService.deleteEventDate(eventID, eventDateID);
     }
+
+    @GetMapping("/search/{substring}") 
+    public List<Event> searchForEventName(@PathVariable String substring) {
+        return eventService.searchForEventName(substring);
+    }
 }

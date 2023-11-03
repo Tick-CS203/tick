@@ -116,4 +116,8 @@ public class EventService {
         e.setLastUpdated(LocalDateTime.now());
         return e;
     }
+
+    public List<Event> searchForEventName(String substring) {
+        return eventRepository.findByNameRegex(substring);
+    }
 }
