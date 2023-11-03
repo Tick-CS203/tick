@@ -3,15 +3,6 @@ path, polygon {
   cursor: pointer;
 }
 
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 path:hover, polygon:hover {
   fill: #F6E902;
 }
