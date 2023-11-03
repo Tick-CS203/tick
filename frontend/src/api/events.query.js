@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getEvent, getEvents, getFilteredEvents } from "../service/events.service";
+import { getEvent, getEvents, getFilteredEvents, getEventsByName } from "../service/events.service";
 
 export const useEventQuery = (event_id) => {
     return useQuery({
@@ -29,4 +29,11 @@ export const useFilteredEventsQuery = (category, maxPrice, eventStartDate, event
         },
     });
 }
+
+export const useEventSearchQuery = (searchString) => {
+    return useQuery({
+        queryKey: ["event", "search"],
+        queryFn: () => getEventsByName(searchString),
+    });
+};
 

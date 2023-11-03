@@ -32,3 +32,7 @@ export const getFilteredEvents = async (category, maxPrice, eventStartDate, even
     }
     return axiosInstance.get(query).then((res) => res.data);
 }
+
+export const getEventsByName = async (searchString) => {
+    return axiosInstance.get(`/event/search/${searchString}`).then((res) => res.data);
+}
