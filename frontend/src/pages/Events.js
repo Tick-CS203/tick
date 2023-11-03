@@ -8,7 +8,8 @@ import BlueFire from "../assets/blue-fire.png"
 export const Events = () => {
   const [enteredCategory, setEnteredCategory] = useState("");
   const [enteredMaxPrice, setEnteredMaxPrice] = useState(400);
-  const [enteredEventDateTime, setEnteredEventDateTime] = useState("");
+  const [enteredStartDate, setEnteredStartDate] = useState("");
+  const [enteredEndDate, setEnteredEndDate] = useState("");
 
   const {
     data: events,
@@ -22,7 +23,8 @@ export const Events = () => {
   const { data: filteredEvents } = useFilteredEventsQuery(
     enteredCategory,
     enteredMaxPrice,
-    enteredEventDateTime
+    enteredStartDate,
+    enteredEndDate
   );
   console.log(filteredEvents);
 
@@ -44,20 +46,40 @@ export const Events = () => {
           onSubmit={filterEvents}
         >
           <div className="flex flex-col gap-y-10 justify-left">
+            <div className="flex flex-row">
+              
             <div className="flex flex-col">
-              <label className="text-main-yellow font-inter italic font-extrabold text-l">
-                DATE
-              </label>
-              {isSuccess && (
-                <input
-                  className="bg-black border-b-[1px] border-main-yellow text-main-yellow"
-                  type="date"
-                  onChange={(event) => {
-                    setEnteredEventDateTime(event.target.value);
-                  }}
-                />
-              )}
+                <label className="text-main-yellow font-inter italic font-extrabold text-l">
+                  START DATE
+                </label>
+                {isSuccess && (
+                  <input
+                    className="bg-black border-b-[1px] border-main-yellow text-main-yellow"
+                    type="date"
+                    onChange={(event) => {
+                      setEnteredStartDate(event.target.value);
+                    }}
+                  />
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-main-yellow font-inter italic font-extrabold text-l">
+                  END DATE
+                </label>
+                {isSuccess && (
+                  <input
+                    className="bg-black border-b-[1px] border-main-yellow text-main-yellow"
+                    type="date"
+                    onChange={(event) => {
+                      setEnteredEndDate(event.target.value);
+                    }}
+                  />
+                )}
+              </div>
             </div>
+              
+
 
             <div className="flex flex-col">
               <label
@@ -111,7 +133,7 @@ export const Events = () => {
                 </>
               )}
             </div>
-            <img className="w-[80px] h-[80px]" src={BlueFire} alt="Blue Fire"/>
+            <img className="w-[80px] h-[80px]" src={BlueFire} alt="Blue Fire" />
           </div>
         </form>
 
