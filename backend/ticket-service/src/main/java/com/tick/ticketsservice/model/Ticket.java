@@ -37,7 +37,7 @@ public class Ticket {
         @NotBlank
         private String eventID;
         @NotBlank
-        private String eventDate;
+        private String eventDateID;
         @NotBlank
         private String section;
         @NotBlank

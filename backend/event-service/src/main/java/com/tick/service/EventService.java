@@ -79,7 +79,7 @@ public class EventService {
     }
 
     public Event deleteEvent(String eventID) {
-        Event event = eventRepository.findById(eventID);
+        Event event = getEventByID(eventID);
         eventRepository.deleteById(eventID);
         return event;
     }
