@@ -95,16 +95,6 @@ services:
       - STRIPE_APIKEY=${STRIPE_APIKEY}
       - FRONTEND_SUCCESSURL=${FRONTEND_SUCCESSURL}
       - FRONTEND_SUCCESSURL=${FRONTEND_CANCELLEDURL}
-  image-service:
-    build:
-      context: image-service
-      dockerfile: ../Dockerfile
-    image: image-service
-    container_name: ${IMAGE_HOST}
-    environment:
-      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
-      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
-      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME}
   session-service:
     build:
       context: session-service
