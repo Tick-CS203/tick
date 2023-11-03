@@ -18,8 +18,7 @@ export const ForgotPassword = () => {
     event.preventDefault();
 
     try {
-      const data = await Auth.forgotPassword(enteredUsername);
-      console.log(data);
+      await Auth.forgotPassword(enteredUsername);
       dispatch(setUsername(enteredUsername));
       navigate("/resetpassword")
     } catch(err) {

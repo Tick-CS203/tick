@@ -21,8 +21,8 @@ export const Navbar = () => {
   return (
     <nav className="bg-black">
       <div className="flex flex-wrap items-center justify-between mx-auto py-4 px-8">
-        <div className="font-lemon text-main-yellow text-xl">
-          <Link to="/">TICK</Link>
+        <div className="text-main-yellow text-xl">
+          <Link to="/" className="font-lemon">TICK</Link>
         </div>
         <input
           placeholder="Search Event"
