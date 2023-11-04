@@ -7,6 +7,7 @@ import OtpInput from "otp-input-react";
 import "./OTP.css";
 import { setTokens, setUsername, setUserID } from "../store/userSlice";
 import { axiosInstance } from "../api/axios.js";
+import toast from "react-hot-toast";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export const Login = () => {
       );
       return response.data.id;
     } catch (e) {
-      console.log(e);
+      toast.error("Error fetching userID", e);
     }
   }
 
@@ -67,7 +68,7 @@ export const Login = () => {
         navigate(-1);
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error);
     }
   }
 
@@ -97,7 +98,7 @@ export const Login = () => {
 
       navigate(-1);
     } catch (error) {
-      console.log("error confirming sign in", error);
+      toast.error("Error confirming sign in", error);
     }
   }
 
@@ -105,9 +106,10 @@ export const Login = () => {
     if (user && user.challengeName === "SMS_MFA") {
       try {
         const userRes = await Auth.signIn(enteredUsername, enteredPassword);
+        toast.success("New OTP code sent");
         setUser(userRes);
       } catch (error) {
-        console.log("Error resending MFA code:", error);
+        toast.error("Error resending MFA code:", error);
       }
     }
   };
