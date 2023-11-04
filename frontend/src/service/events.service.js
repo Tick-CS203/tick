@@ -20,16 +20,18 @@ export const getFilteredEvents = async (category, maxPrice, eventStartDate, even
     }
 
     if (eventStartDate.length > 0) {
-        query += `eventDate=${eventStartDate}&`;
+        query += `beforeDate=${eventStartDate}&`;
     }
 
     if (eventEndDate.length > 0) {
-        query += `eventDate=${eventEndDate}&`;
+        query += `afterDate=${eventEndDate}&`;
     }
 
     if (query.endsWith('&')) {
         query = query.slice(0, -1);
     }
+
+    console.log(query)
     return axiosInstance.get(query).then((res) => res.data);
 }
 

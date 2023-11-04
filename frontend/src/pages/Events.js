@@ -146,7 +146,7 @@ export const Events = () => {
         <div className="lg:w-3/5 w-full">
           {isSuccess && filteredEvents && (
             <>
-              <h2 className="text-white font-inter italic font-extrabold lg:text-left text-center">
+              <h2 className="text-white font-inter italic font-extrabold lg:text-left">
                 WE FOUND {filteredEvents.length} RELATED EVENT(S) FOR YOU
               </h2>
               <div className="mt-4 flex flex-wrap gap-4">
