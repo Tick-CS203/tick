@@ -1,13 +1,14 @@
 FROM python:3.9.18-slim
 
 # pip freeze > requirements.txt
-COPY requirements.txt .
+WORKDIR /app
 
+COPY requirements.txt /app
 RUN pip install -r requirements.txt
 
-COPY /templates .
-COPY app.py .
-COPY /pickle .
+COPY templates /app/templates
+COPY app.py /app
+COPY pickle /app/pickle
 
 EXPOSE 5000
 
