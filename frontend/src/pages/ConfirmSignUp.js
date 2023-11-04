@@ -19,8 +19,18 @@ export const ConfirmSignUp = () => {
       await Auth.confirmSignUp(username, enteredOTP);
       navigate("/");
     } catch (error) {
-      toast.error("error confirming sign up", error);
-    }
+        let errorMessage = "There was an error confirming the sign up.";
+        if (error.code === 'CodeMismatchException') {
+          errorMessage = "The verification code you entered is incorrect. Please try again.";
+        } else if (error.code === 'ExpiredCodeException') {
+          errorMessage = "Your verification code has expired. Please request a new code.";
+        } else if (error.code === 'NotAuthorizedException') {
+          errorMessage = "You are not authorized to perform this operation.";
+        } else if (error.code === 'TooManyFailedAttemptsException') {
+          errorMessage = "Too many failed attempts. Please try again after some time.";
+        } 
+        toast.error(errorMessage);
+      }
   }
 
   async function resendConfirmationCode() {
