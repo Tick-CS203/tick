@@ -11,19 +11,19 @@ export const getEvents = async () => {
 export const getFilteredEvents = async (category, maxPrice, eventStartDate, eventEndDate) => {
     let query = `/event?`;
 
-    if (category) {
+    if (category.length > 0) {
         query += `category=${category}&`;
     }
 
-    if (maxPrice) {
+    if (maxPrice.length > 0) {
         query += `maxPrice=${maxPrice}&`;
     }
 
-    if (eventStartDate) {
+    if (eventStartDate.length > 0) {
         query += `eventDate=${eventStartDate}&`;
     }
 
-    if (eventEndDate) {
+    if (eventEndDate.length > 0) {
         query += `eventDate=${eventEndDate}&`;
     }
 

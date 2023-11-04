@@ -150,7 +150,7 @@ export const Events = () => {
               <h2 className="text-white font-inter italic font-extrabold lg:text-left text-center">
                 WE FOUND {filteredEvents.length} RELATED EVENT(S) FOR YOU
               </h2>
-              <div className="flex flex-wrap lg:justify-between gap-y-4 justify-center">
+              <div className="mt-4 flex flex-wrap gap-4">
                 {filteredEvents.map((event) => (
                   <Link to={`/event/${event.eventID}`} key={event.eventID}>
                     <Event
