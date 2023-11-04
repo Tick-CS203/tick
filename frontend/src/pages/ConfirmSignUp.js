@@ -23,6 +23,15 @@ export const ConfirmSignUp = () => {
     }
   }
 
+  async function resendConfirmationCode() {
+    try {
+      await Auth.resendSignUp(username);
+      toast.success("A new code has been sent to your email.");
+    } catch (error) {
+      toast.error("Failed to resend code", error);
+    }
+  }
+
   return (
     <div className="relative grid grid-cols-1 h-screen w-full">
       <img
@@ -77,7 +86,7 @@ export const ConfirmSignUp = () => {
             <p className="text-white font-inter mr-1">
               Didn't receive the code?
             </p>
-            <button type="button" className="text-main-yellow font-inter">
+            <button type="button" className="text-main-yellow font-inter" onClick={resendConfirmationCode}>
               Click to resend
             </button>
           </div>

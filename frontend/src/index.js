@@ -12,7 +12,7 @@ import { persistor, store } from "./store/store";
 import { PersistGate } from 'redux-persist/integration/react';
 
 import { Amplify } from "aws-amplify";
-import awsconfig from "./aws-exports-prod";
+import awsconfig from "./aws-exports";
 Amplify.configure(awsconfig);
 
 const queryClient = new QueryClient();
