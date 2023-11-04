@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, abort
 import pandas as pd
 import pickle
 
@@ -17,9 +17,9 @@ def get_artists():
 
         return jsonify(df.values.tolist())
     except FileNotFoundError:
-        return "Pickle file not found"
+        abort(404, "Pickle file not found")
     except Exception as e:
-        return f"An error occurred: {str(e)}"
+        abort(404, f"An error occurred: {str(e)}")
 
 @app.route('/artist/recommend', methods=['POST'])
 def get_recommendations():
@@ -36,9 +36,9 @@ def get_recommendations():
             recommendations = pd.DataFrame(cosine_sim.nlargest(11, input_artist_lower)['artist'])
             recommendations = recommendations[recommendations['artist'] != input_artist_lower]
     except FileNotFoundError:
-        return "Pickle file not found"
+        abort(404, "Pickle file not found")
     except Exception as e:
-        return f"An error occurred: {str(e)}"
+        abort(404, f"An error occurred: {str(e)}")
     
     return jsonify(recommendations.values.flatten().tolist())
 
