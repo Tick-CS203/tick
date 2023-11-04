@@ -2,7 +2,7 @@ import { Steps, Select } from "antd";
 import { useState, useEffect } from "react";
 import { NationalStadium } from "../component/seatselection/NationalStadium";
 import { RowData } from "../component/seatselection/RowData";
-import { axiosLocalHostInstance2 } from "../api/axios";
+import { axiosInstance } from "../api/axios";
 import { useParams } from "react-router-dom";
 import { useEventQuery } from "../api/events.query";
 import { useSelector } from "react-redux";
@@ -44,8 +44,8 @@ export const SeatSelection = () => {
   }, [countdown]);
 
   const startCheckoutHandler = async () => {
-    const redirectURL = await axiosLocalHostInstance2.post(
-      "/api/payment/create-checkout-session",
+    const redirectURL = await axiosInstance.post(
+      "/payment/create-checkout-session",
       JSON.stringify(items)
     );
     console.log(redirectURL);
@@ -248,7 +248,8 @@ export const SeatSelection = () => {
                   </tbody>
                 </table>
                 <button
-                  className="bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto"
+                  className={`bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto ${
+                    items.length === 0 ? "opacity-30" : ""}`}
                   disabled={items.length === 0}
                   onClick={startCheckoutHandler}
                 >
