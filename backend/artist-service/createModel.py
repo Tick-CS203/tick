@@ -1,5 +1,6 @@
 import pandas as pd
 import pickle
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -46,15 +47,27 @@ df2['tag'] = df2['tag'].str.replace(
 df2['tag'] = df2['tag'].apply(clean)
 
 # limit number of rows (to avoid kernel crashing)
-df2 = df2[:50000]
+df2 = df2[:100000]
 
 # vectorise tags
 vectorizer = TfidfVectorizer()
 vectorized = vectorizer.fit_transform(df2['tag'])
 similarities = cosine_similarity(vectorized)
 
-# matrix of similarities
-df3 = pd.DataFrame(similarities, columns=df2['artist'], index=df2['artist']).reset_index()
+# Create an empty DataFrame to store the top 10 similar artists for each artist
+top_similar_artists_df = pd.DataFrame(index=df2['artist'], columns=[f"SimilarArtist_{i+1}" for i in range(10)])
 
-with open('./pickle/cosine_similarity_matrix.pkl', 'wb') as file:
-    pickle.dump(df3, file)
+# Calculate cosine similarity for each artist compared to other artists in the dataset
+for index, row in df2.iterrows():
+    artist_name = row['artist']
+    artist_tags = row['tag']
+    vectorised_artist_tags = vectorizer.transform([artist_tags])
+    similarities = cosine_similarity(vectorized, vectorised_artist_tags)
+
+    # Find the top 10 artists for each artist and add it in the dataframe
+    similar_indices = np.argsort(similarities.flatten())[:-12:-1]
+    similar_artists = df2['artist'].iloc[similar_indices].tolist()[1:]
+    top_similar_artists_df.loc[artist_name] = similar_artists
+
+with open('./pickle/top_10_similar_artists.pkl', 'wb') as file:
+    pickle.dump(top_similar_artists_df, file)

@@ -11,15 +11,12 @@ def index():
 @app.route('/artist/all')
 def get_artists():
     try: 
-        with open('./pickle/cosine_similarity_matrix.pkl', 'rb') as file:
-            cosine_sim = pickle.load(file)
-            df = pd.DataFrame(cosine_sim)['artist']
+        with open('./pickle/top_10_similar_artists.pkl', 'rb') as file:
+            top_10 = pickle.load(file)
 
-        return jsonify(df.values.tolist())
+        return jsonify(top_10.index.tolist())
     except FileNotFoundError:
         abort(404, "Pickle file not found")
-    except Exception as e:
-        abort(404, f"An error occurred: {str(e)}")
 
 @app.route('/artist/recommend', methods=['POST'])
 def get_recommendations():
@@ -30,17 +27,16 @@ def get_recommendations():
     input_artist_lower = input_artist.lower()
 
     try: 
-        with open('./pickle/cosine_similarity_matrix.pkl', 'rb') as file:
-            cosine_sim = pickle.load(file)
+        with open('./pickle/top_10_similar_artists.pkl', 'rb') as file:
+            top_10 = pickle.load(file)
 
-            recommendations = pd.DataFrame(cosine_sim.nlargest(11, input_artist_lower)['artist'])
-            recommendations = recommendations[recommendations['artist'] != input_artist_lower]
+            if input_artist_lower not in top_10.index:
+                abort(404, "Artist not in database")
+
     except FileNotFoundError:
         abort(404, "Pickle file not found")
-    except Exception as e:
-        abort(404, f"An error occurred: {str(e)}")
     
-    return jsonify(recommendations.values.flatten().tolist())
+    return jsonify(top_10.loc[input_artist_lower].tolist())
 
 if __name__ == "__main__":
     app.run(debug=True)
