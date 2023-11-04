@@ -104,11 +104,10 @@ export const Events = () => {
                 >
                   <option value=""></option>
                   <option value="Kpop">Kpop</option>
+                  <option value="Rock">Rock</option>
                   <option value="Classical">Classical</option>
-                  <option value="Dance">Dance</option>
-                  <option value="Comedy">Comedy</option>
+                  <option value="Pop">Pop</option>
                   <option value="Theatre">Theatre</option>
-                  <option value="Concert">Concert</option>
                   <option value="Musical">Musical</option>
                 </select>
               )}
