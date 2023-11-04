@@ -7,7 +7,7 @@ public class EventDateNotFoundException extends WebException {
     }
 
     public EventDateNotFoundException(String message) {
-        super("Event date not found" + message);
+        super("Event date not found: " + message);
         status = 404;
     }
 }

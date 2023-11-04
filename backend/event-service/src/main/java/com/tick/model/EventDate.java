@@ -12,6 +12,7 @@ import jakarta.validation.constraints.*;
 @Document
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class EventDate {
 
     @Id

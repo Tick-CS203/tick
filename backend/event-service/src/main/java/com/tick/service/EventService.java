@@ -4,9 +4,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.tick.exception.*;
 import com.tick.model.*;
@@ -66,6 +64,7 @@ public class EventService {
     }
 
     public Event getEventByID(String eventID) {
+        if (eventID == null) throw new EventNotFoundException();
         return eventRepository.findById(eventID).orElseThrow(
                 () -> new EventNotFoundException());
     }

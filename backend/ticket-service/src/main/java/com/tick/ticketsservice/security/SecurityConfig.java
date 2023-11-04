@@ -24,7 +24,9 @@ public class SecurityConfig {
                         registry -> {
                             registry.requestMatchers((HttpMethod) null, "/tickets/user").hasAuthority("access")
                                     .requestMatchers(HttpMethod.POST, "/tickets/allocate/**").hasAuthority("purchasing")
-                                    .requestMatchers(HttpMethod.GET, "/tickets").permitAll()
+                                    .requestMatchers((HttpMethod) null, "/tickets").permitAll()
+                                    .requestMatchers(HttpMethod.GET, "/tickets/ticket").permitAll()
+                                    .requestMatchers(HttpMethod.GET, "/tickets/event/*").permitAll()
                                     .requestMatchers(HttpMethod.POST, "/tickets/recaptcha").permitAll()
                                     .requestMatchers(HttpMethod.GET).permitAll();
                         })

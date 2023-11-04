@@ -1,7 +1,9 @@
 package com.tick.ticketsservice.model;
 
+import com.tick.ticketsservice.exception.*;
 import java.time.*;
 import java.util.*;
+import java.lang.reflect.*;
 
 import lombok.*;
 
@@ -25,30 +27,72 @@ class Links {
 @Document
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Event {
     @Id
     @NotBlank
     private String eventID;
-    @NotBlank
     private String name;
-    @NotBlank
     private String description;
-    @NotBlank
     private String category;
-    @NotBlank
     private String banner;
-    @NotBlank
     private String artist;
     @Null
     private LocalDateTime lastUpdated;
     private List<Price> prices;
     @Min(value = 1)
-    private int ticketLimit;
+    @NotNull
+    private Integer ticketLimit;
     @NotBlank
     private String venueID;
     @Null
     private Map<String, Map<String, Map<String, Integer>>> seatMap;
-    @NotEmpty
+    @NotNull
     private List<@Valid EventDate> date;
     private Links links;
+
+    public Event upsert(Event e) {
+        try {
+            Class<Event> eventClass = Event.class;
+            for (Field field : eventClass.getDeclaredFields()) {
+                Object value = field.get(e);
+                if (value != null) {
+                    field.set(this, value);
+                }
+            }
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace();
+        }
+
+        return this;
+    }
+
+    public Event addEventDate(EventDate date) {
+        try {
+            findEventDate(date.getEventDateID());
+            throw new EventDateExistsException();
+        } catch (EventDateNotFoundException e) {
+            this.date.add(date);
+        }
+        return this;
+    }
+
+    public Event removeEventDate(String eventDateID) {
+        this.date.remove(findEventDate(eventDateID));
+        return this;
+    }
+
+    public EventDate findEventDate(String eventDateID) {
+        for (EventDate date : this.date) {
+            if (eventDateID.equals(date.getEventDateID())) {
+                return date;
+            }
+        }
+
+        throw new EventDateNotFoundException(eventDateID);
+    }
+    
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
+    }
 }

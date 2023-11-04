@@ -12,11 +12,12 @@ import jakarta.validation.constraints.*;
 @Document
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class EventDate {
 
     @Id
     @NotBlank
-    private String ID;
+    private String eventDateID;
 
     @Null
     private String eventID;
@@ -24,4 +25,11 @@ public class EventDate {
     private LocalDateTime eventDateTime;
     @Null
     private Map<String, Map<String, Map<String, Integer>>> seatAvailability;
+
+    public EventDate populateEventDate(String eventID,
+            Map<String, Map<String, Map<String, Integer>>> map) {
+        this.eventID = eventID;
+        seatAvailability = map;
+        return this;
+    }
 }
