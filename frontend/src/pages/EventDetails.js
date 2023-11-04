@@ -1,4 +1,5 @@
 import { useEventQuery } from "../api/events.query.js";
+import { useVenueQuery } from "../api/venue.query.js";
 import { useParams } from "react-router-dom";
 import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
@@ -6,14 +7,17 @@ import './countdown.css';
 import { Modal } from 'antd';
 import SeatMapImage from '../assets/taylor-seating-map.jpeg'
 
-const venueName = "Singapore Indoor Stadium";
-
 export const EventDetails = () => {
   const { id } = useParams();
   const [showSeatMap, setShowSeatMap] = useState(false);
 
   const { data: event, isLoading, isSuccess, isError } = useEventQuery(id);
   console.log(event);
+
+  const venueID = event.venueID;
+
+  const {data: venue} = useVenueQuery(venueID);
+  console.log(venue);
 
   const formatEventDateTime = (dateTimeString) => {
     const options = {
@@ -94,7 +98,7 @@ export const EventDetails = () => {
                     alt="Icon"
                   />
                   <span className="text-white pl-5 font-semibold">
-                    {venueName}
+                    {venue.name}
                   </span>
                 </p>
 
@@ -241,7 +245,7 @@ export const EventDetails = () => {
 
               <a 
                 className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full text-center"
-                href={"http://maps.google.com/?q=" + venueName}
+                href={"http://maps.google.com/?q=" + venue.name}
                 target="_blank"
                 rel="noopener noreferrer"
               >
