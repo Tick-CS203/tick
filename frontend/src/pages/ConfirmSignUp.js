@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import OtpInput from "otp-input-react";
 import { useSelector } from "react-redux";
 import "./OTP.css";
+import toast from "react-hot-toast";
 
 export const ConfirmSignUp = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export const ConfirmSignUp = () => {
       await Auth.confirmSignUp(username, enteredOTP);
       navigate("/");
     } catch (error) {
-      console.log("error confirming sign up", error);
+      toast.error("error confirming sign up", error);
     }
   }
 
