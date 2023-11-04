@@ -110,8 +110,17 @@ export const Login = () => {
 
       navigate(-1);
     } catch (error) {
-      toast.error("Error confirming sign in", error);
-    }
+        let errorMessage = "Error confirming sign in. Please try again.";
+    
+        if (error.code === 'CodeMismatchException') {
+          errorMessage = "Invalid code entered, please try again.";
+        } else if (error.code === 'ExpiredCodeException') {
+          errorMessage = "The code has expired, please request a new one.";
+        } else if (error.code === 'TooManyRequestsException') {
+          errorMessage = "Too many attempts, please try again later.";
+        } 
+        toast.error(errorMessage);
+      }
   }
 
   const handleResend = async () => {
