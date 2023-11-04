@@ -1,4 +1,12 @@
 services:
+  artist-service:
+    build:
+      context: artist-service
+    image: artist-service
+    container_name: artist_container
+    hostname: ${ARTIST_HOST}
+    ports:
+      - '${ARTIST_PORT}:5000'
   token-service:
     build:
       context: token-service
@@ -56,12 +64,14 @@ services:
     depends_on:
       - ${EVENT_DB}
       - venue-service
+      - artist-service
     environment:
       - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=event
       - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${EVENT_DB}:27017/?retryWrites=true&w=majority
       - SPRING_DATA_MONGODB_DATABASE=event
       - SERVER_ERROR_INCLUDE-MESSAGE=always
       - VENUE_HOST=${VENUE_HOST}
+      - ARTIST_HOST=${ARTIST_HOST}
     ports:
       - '${EVENT_PORT}:8080'
   ticket-service:

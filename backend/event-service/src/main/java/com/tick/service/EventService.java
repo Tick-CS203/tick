@@ -9,7 +9,6 @@ import org.springframework.web.reactive.function.client.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-
 import com.tick.exception.*;
 import com.tick.model.*;
 import com.tick.repository.EventRepository;
@@ -73,7 +72,8 @@ public class EventService {
     }
 
     public Event getEventByID(String eventID) {
-        if (eventID == null) throw new EventNotFoundException();
+        if (eventID == null)
+            throw new EventNotFoundException();
         return eventRepository.findById(eventID).orElseThrow(
                 () -> new EventNotFoundException());
     }
@@ -134,23 +134,26 @@ public class EventService {
         List<Event> recommendedEvents = new ArrayList<>();
 
         try {
-            List<String> recommendedArtists = WebClient.create("http://" + artist_host + ":5000/recommend")
-                .post()
-                .body(BodyInserters.fromFormData("artist", artist))
-                .exchangeToMono(response -> {
-                    if (response.statusCode().value() == 404)
-                        return response.createError();
-                    return response.bodyToMono(List.class);
+            List<String> recommendedArtists = WebClient.create("http://" + artist_host + ":5000/artist/recommend")
+                    .post()
+                    .body(BodyInserters.fromFormData("artist", artist))
+                    .exchangeToMono(response -> {
+                        if (response.statusCode().value() == 404)
+                            return response.createError();
+                        return response.bodyToMono(List.class);
                     }).block();
-            
+
+            System.out.println(recommendedArtists);
+
             for (String recommendedArtist : recommendedArtists) {
                 List<Event> event = eventRepository.findByArtist(recommendedArtist);
                 if (event.size() >= 1) {
                     recommendedEvents.add(event.get(0));
                 }
-            } 
+            }
         } catch (WebClientResponseException e) {
-            throw new ArtistNotFoundException();
+            e.printStackTrace();
+            throw new ArtistNotFoundException(artist);
         }
         return recommendedEvents;
     }

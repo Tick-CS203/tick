@@ -76,8 +76,8 @@ public class EventController {
         return eventService.searchForEventName(substring);
     }
     
-    @GetMapping("/recommend")
-    public List<Event> getRecommendedEvents(@RequestParam String artist) {
+    @GetMapping("/recommend/{artist}")
+    public List<Event> getRecommendedEvents(@PathVariable String artist) {
         return eventService.getRecommendedEvents(artist);
     }
 }
