@@ -26,8 +26,8 @@ export const Home = () => {
   console.log(events);
 
   const [searchString, setSearchString] = useState("");
-  const { data: searchResults } = useEventSearchQuery(searchString)
-  console.log(searchResults)
+  const { data: searchResults } = useEventSearchQuery(searchString);
+  console.log(searchResults);
 
   const onEnterKeyPress = (event) => {
     if (event.keyCode === 13) {
@@ -101,7 +101,8 @@ export const Home = () => {
         </div>
       </div>
 
-      {searchString.length > 0 && searchResults &&
+      {searchString.length > 0 &&
+        searchResults &&
         searchResults.map((event) => {
           return (
             <Event
@@ -125,18 +126,20 @@ export const Home = () => {
         Top Picks Of The Month
       </p>
 
-      {events &&
-        events.map((event) => {
-          return (
-            <Event
-              key={event.eventID}
-              eventId={event.eventID}
-              imageURL={event.banner}
-              eventName={event.name}
-              eventDates={event.date}
-            />
-          );
-        })}
+      <div className="flex flex-row gap-4">
+        {events &&
+          events.map((event) => {
+            return (
+              <Event
+                key={event.eventID}
+                eventId={event.eventID}
+                imageURL={event.banner}
+                eventName={event.name}
+                eventDates={event.date}
+              />
+            );
+          })}
+      </div>
     </>
   );
 };
