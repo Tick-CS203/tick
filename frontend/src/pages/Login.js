@@ -36,8 +36,9 @@ export const Login = () => {
   async function signIn(event) {
     event.preventDefault();
 
-      const signInUser = await Auth.signIn(enteredUsername, enteredPassword);
+    const signInUser = await Auth.signIn(enteredUsername, enteredPassword);
 
+    try {
       if (signInUser.challengeName === "SMS_MFA") {
         setUser(signInUser); // Use local setUser instead of Redux
         setIsConfirmSignIn(true);
@@ -91,7 +92,7 @@ export const Login = () => {
     } catch (error) {
       toast.error("Error confirming sign in", error);
     }
-}
+  }
 
   const handleResend = async () => {
     if (user && user.challengeName === "SMS_MFA") {
