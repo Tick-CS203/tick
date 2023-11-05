@@ -34,6 +34,7 @@ export const useEventSearchQuery = (searchString) => {
     return useQuery({
         queryKey: ["event", "search"],
         queryFn: () => getEventsByName(searchString),
+        enabled: searchString.length > 0
     });
 };
 

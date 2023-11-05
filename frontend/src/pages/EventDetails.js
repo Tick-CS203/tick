@@ -248,7 +248,7 @@ export const EventDetails = () => {
                     RECOMMENDATIONS BASED ON SIMILAR ARTISTS
                   </p>
 
-                  <div className="flex flex-row gap-4 pt-5 overflow-hidden">
+                  <div className="flex flex-row gap-4 pt-5 overflow-x-auto">
                     {recommendedEvents.map((event) => {
                       return (
                         <Event
