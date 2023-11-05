@@ -7,7 +7,6 @@ import BlueFire from "../assets/blue-fire.png"
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import dayjs from 'dayjs';
 
-
 export const Events = () => {
   const [enteredCategory, setEnteredCategory] = useState("");
   const [enteredMaxPrice, setEnteredMaxPrice] = useState(400);
