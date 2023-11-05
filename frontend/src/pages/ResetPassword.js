@@ -2,6 +2,7 @@ import { Auth } from "aws-amplify";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 export const ResetPassword = () => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ export const ResetPassword = () => {
       await Auth.forgotPasswordSubmit(username, enteredCode, enteredNewPassword);
       navigate("/login");
     } catch(err) {
-      console.log(err);
+      toast.error(err);
     }
   }
 

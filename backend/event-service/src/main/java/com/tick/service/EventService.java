@@ -1,26 +1,31 @@
 package com.tick.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.*;
+
 import java.time.LocalDateTime;
 import java.util.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.tick.exception.*;
 import com.tick.model.*;
 import com.tick.repository.EventRepository;
-
-import lombok.AllArgsConstructor;
+import com.tick.exception.ArtistNotFoundException;
 
 @Service
-@AllArgsConstructor
 public class EventService {
-    @Autowired
     private EventRepository eventRepository;
-    @Autowired
     private VenueRequest venue;
+    private String artist_host;
+
+    @Autowired
+    public EventService(EventRepository repo, VenueRequest venue, @Value("${ARTIST_HOST}") String artist_host) {
+        this.eventRepository = repo;
+        this.artist_host = artist_host;
+        this.venue = venue;
+    }
 
     public Event addEvent(Event event) {
         Map<String, Map<String, Map<String, Integer>>> map = venue.getSeatMap(event.getVenueID());
@@ -66,6 +71,8 @@ public class EventService {
     }
 
     public Event getEventByID(String eventID) {
+        if (eventID == null)
+            throw new EventNotFoundException();
         return eventRepository.findById(eventID).orElseThrow(
                 () -> new EventNotFoundException());
     }
@@ -119,5 +126,34 @@ public class EventService {
 
     public List<Event> searchForEventName(String substring) {
         return eventRepository.findByNameRegex(substring);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Event> getRecommendedEvents(String artist) {
+        List<Event> recommendedEvents = new ArrayList<>();
+
+        try {
+            List<String> recommendedArtists = WebClient.create("http://" + artist_host + ":5000/artist/recommend")
+                    .post()
+                    .body(BodyInserters.fromFormData("artist", artist))
+                    .exchangeToMono(response -> {
+                        if (response.statusCode().value() == 404)
+                            return response.createError();
+                        return response.bodyToMono(List.class);
+                    }).block();
+
+            System.out.println(recommendedArtists);
+
+            for (String recommendedArtist : recommendedArtists) {
+                List<Event> event = eventRepository.findByArtist(recommendedArtist);
+                if (event.size() >= 1) {
+                    recommendedEvents.add(event.get(0));
+                }
+            }
+        } catch (WebClientResponseException e) {
+            e.printStackTrace();
+            throw new ArtistNotFoundException(artist);
+        }
+        return recommendedEvents;
     }
 }

@@ -109,7 +109,8 @@ export const ConfirmSignIn = () => {
               Didn't receive the code?
             </p>
             <button type="button" className="text-main-yellow font-inter">
-              Click to resend
+              {" "}
+              Click to resend{" "}
             </button>
           </div>
         </div>

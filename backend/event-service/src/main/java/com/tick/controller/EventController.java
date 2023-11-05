@@ -75,4 +75,9 @@ public class EventController {
     public List<Event> searchForEventName(@PathVariable String substring) {
         return eventService.searchForEventName(substring);
     }
+    
+    @GetMapping("/recommend/{artist}")
+    public List<Event> getRecommendedEvents(@PathVariable String artist) {
+        return eventService.getRecommendedEvents(artist);
+    }
 }

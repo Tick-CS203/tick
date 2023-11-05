@@ -79,7 +79,7 @@ public class TicketService {
     public List<Ticket> allocateSeats(String eventID, String eventDateID, List<SelectedRow> selectedRows, String user) {
         Event event = eventsvc.get(eventID);
 
-        EventDate date = findEventDate(event, eventDateID);
+        EventDate date = event.findEventDate(eventDateID);
 
         Map<String, Map<String, Map<String, Integer>>> seatAvailability = date.getSeatAvailability();
         Map<String, Map<String, Map<String, Integer>>> seatMap = event.getSeatMap();
@@ -160,14 +160,5 @@ public class TicketService {
 
     private LocalDateTime createOrderDate() {
         return LocalDateTime.now();
-    }
-
-    private EventDate findEventDate(Event event, String eventDateID) {
-        for (EventDate d : event.getDate()) {
-            if (d.getID().toString().equals(eventDateID))
-                return d;
-        }
-
-        throw new EventDateNotFoundException();
     }
 }

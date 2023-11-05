@@ -27,6 +27,7 @@ class Links {
 @Document
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Event {
     @Id
     @NotBlank
@@ -40,7 +41,8 @@ public class Event {
     private LocalDateTime lastUpdated;
     private List<Price> prices;
     @Min(value = 1)
-    private int ticketLimit;
+    @NotNull
+    private Integer ticketLimit;
     @NotBlank
     private String venueID;
     @Null
@@ -80,7 +82,7 @@ public class Event {
         return this;
     }
 
-    private EventDate findEventDate(String eventDateID) {
+    public EventDate findEventDate(String eventDateID) {
         for (EventDate date : this.date) {
             if (eventDateID.equals(date.getEventDateID())) {
                 return date;
