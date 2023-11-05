@@ -5,15 +5,15 @@ const venueName = "Singapore Indoor Stadium";
 export const TicketFront = ({ ticketData, eventData }) => {
 
   const [eventDateTime, setEventDateTime] = useState(
-    new Date("2023-09-22T14:41:23.497")
+    new Date("2023-09-22T00:00:00.497")
   );
 
-  // need to match eventDateID with ticket eventDateID
+  // match event eventDateID with ticket eventDateID
   useEffect(() => {
-    if (eventData && eventData.dates) {
-      for (let i = 0; i < eventData.dates.length; i++) {
-        if (eventData.dates[i].eventDateID === ticketData.key.eventDateID) {
-          setEventDateTime(eventData.dates[i].eventDateTime);
+    if (eventData && eventData.date) {
+      for (let i = 0; i < eventData.date.length; i++) {
+        if (eventData.date[i].eventDateID === ticketData.key.eventDateID) {
+          setEventDateTime(new Date(eventData.date[i].eventDateTime));
           break;
         }
       }

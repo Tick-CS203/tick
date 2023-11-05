@@ -9,7 +9,7 @@ import "./ScalingContainer.css";
 export const Ticket = ({ ticketData }) => {
 
   // get eventID from ticketData
-  const { data: eventData } = useEventQuery(0);
+  const { data: eventData } = useEventQuery(ticketData?.key.eventID);
   console.log(eventData);
 
   const [isFlipped, setIsFlipped] = useState(false);
