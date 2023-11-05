@@ -2,12 +2,20 @@ import {
   useEventQuery,
   useRecommendedEventsQuery,
 } from "../api/events.query.js";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+
 import { Event } from "../component/homepage/Event.js";
+import { useState, useEffect } from "react";
+
+import './countdown.css';
+import { Modal } from 'antd';
+import SeatMapImage from '../assets/taylor-seating-map.jpeg'
+
+const venueName = "Singapore Indoor Stadium";
 
 export const EventDetails = () => {
   const { id } = useParams();
+  const [showSeatMap, setShowSeatMap] = useState(false);
 
   const { data: event, isLoading, isSuccess, isError } = useEventQuery(id);
   const { data: recommendedEvents } = useRecommendedEventsQuery(event?.artist);
@@ -24,8 +32,44 @@ export const EventDetails = () => {
     return new Date(dateTimeString).toLocaleString(undefined, options);
   };
 
+  const calculateTimeRemaining = () => {
+    const eventStartTime = new Date(event.date[0].eventDateTime).getTime();
+    const currentTime = new Date().getTime();
+    const timeRemaining = eventStartTime - currentTime;
+
+    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+    return { days, hours, minutes, seconds };
+  };
+
+  const [timeRemaining, setTimeRemaining] = useState(null);
+
+  useEffect(() => {
+    if (event) {
+      const interval = setInterval(() => {
+        setTimeRemaining(calculateTimeRemaining());
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, []); 
+
   return (
     <>
+      <Modal
+        footer={null}
+        title="Venue Seatmap"
+        open={showSeatMap}
+        onOk={()=> setShowSeatMap(false)}
+        onCancel={()=> setShowSeatMap(false)}
+      >
+        <img src={SeatMapImage} alt="seatMap"/>
+      </Modal>
       {isLoading && <p className="text-white"> Loading... </p>}
 
       {isError && <p className="text-white"> Error 404: Event not found </p>}
@@ -55,7 +99,7 @@ export const EventDetails = () => {
                     alt="Icon"
                   />
                   <span className="text-white pl-5 font-semibold">
-                    Singapore Indoor Stadium
+                    {venueName}
                   </span>
                 </p>
 
@@ -73,10 +117,38 @@ export const EventDetails = () => {
                             {formatEventDateTime(eventDate.eventDateTime)}
                           </span>
                         ))
+                      ))
                       : "Date not available"}
                   </span>
                 </div>
               </div>
+              
+              {timeRemaining && timeRemaining > 0 && 
+                <div className="py-5">
+                <p className="font-inter font-black text-white text-s py-5">
+                  Event starts in:
+                </p>
+
+                <div class="countdowntimer">
+                  <div class="box">
+                    <span class="num" id="day-box">{timeRemaining.days.toString().padStart(2, '0')}</span>
+                    <span class="text">DAYS</span>
+                  </div>
+                  <div class="box">
+                    <span class="num" id="hr-box">{timeRemaining.hours.toString().padStart(2, '0')}</span>
+                    <span class="text">HOURS</span>
+                  </div>
+                  <div class="box">
+                    <span class="num" id="min-box">{timeRemaining.minutes.toString().padStart(2, '0')}</span>
+                    <span class="text">MINUTES</span>
+                  </div>
+                  <div class="box">
+                    <span class="num" id="sec-box">{timeRemaining.seconds.toString().padStart(2, '0')}</span>
+                    <span class="text">SECONDS</span>
+                  </div>
+                </div> 
+                
+              </div>}
 
               <div className="py-5">
                 <p className="font-inter font-black text-main-blue italic text-2xl">
@@ -188,13 +260,20 @@ export const EventDetails = () => {
                 Purchase Tickets
               </Link>
 
-              <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full">
+              <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full" 
+                onClick={() => setShowSeatMap(true)}
+              >
                 View Seatmap
               </button>
 
-              <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full">
+              <a 
+                className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full text-center"
+                href={"http://maps.google.com/?q=" + venueName}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Open in Maps
-              </button>
+              </a>
 
               <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full">
                 Bookmark Event
