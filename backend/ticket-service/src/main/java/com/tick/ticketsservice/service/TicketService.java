@@ -149,8 +149,9 @@ public class TicketService {
                 .exchangeToMono(response -> response.bodyToMono(RecaptchaResponse.class)).block();
 
         if (recap.getSuccess().equals("true"))
-            return ResponseEntity.noContent().build();
-        return ResponseEntity.badRequest().body(recap.getError());
+            return ResponseEntity.ok(recap);
+        else
+        return ResponseEntity.badRequest().body(recap);
     }
 
     private String createOrderId() {

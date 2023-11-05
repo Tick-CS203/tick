@@ -30,8 +30,7 @@ public class VenueService {
     }
 
     public Venue deleteVenue(String id) {
-        Venue venue = repo.findById(id)
-                .orElseThrow(() -> new VenueNotFoundException());
+        Venue venue = getVenue(id);
         repo.deleteById(id);
         return venue;
     }

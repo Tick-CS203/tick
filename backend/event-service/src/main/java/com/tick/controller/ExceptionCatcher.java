@@ -32,7 +32,7 @@ public class ExceptionCatcher {
     }
 
     @ExceptionHandler(WebException.class)
-    public ResponseEntity<?> generic_exception(VenueNotFoundException e) {
+    public ResponseEntity<?> generic_exception(WebException e) {
         return ResponseEntity.status(e.getStatus()).body(new ErrorMessage(e));
     }
 }
