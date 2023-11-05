@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PhoneNumberValidation from "../component/signup/PhoneNumberValidation";
 import { useDispatch } from "react-redux";
 import { setUsername } from "../store/userSlice";
+import toast from "react-hot-toast";
 
 export const SignUp = () => {
   const navigate = useNavigate();
@@ -78,7 +79,7 @@ export const SignUp = () => {
       );
       navigate("/confirmsignup");
     } catch (error) {
-      console.log("error signing up:", error);
+      toast.error("error signing up:", error);
     }
   }
 

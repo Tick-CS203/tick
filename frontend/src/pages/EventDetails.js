@@ -1,7 +1,12 @@
-import { useEventQuery } from "../api/events.query.js";
-import { useParams } from "react-router-dom";
-import React, {useState, useEffect} from "react";
-import { Link } from "react-router-dom";
+import {
+  useEventQuery,
+  useRecommendedEventsQuery,
+} from "../api/events.query.js";
+import { Link, useParams } from "react-router-dom";
+
+import { Event } from "../component/homepage/Event.js";
+import { useState, useEffect } from "react";
+
 import './countdown.css';
 import { Modal } from 'antd';
 import SeatMapImage from '../assets/taylor-seating-map.jpeg'
@@ -13,7 +18,7 @@ export const EventDetails = () => {
   const [showSeatMap, setShowSeatMap] = useState(false);
 
   const { data: event, isLoading, isSuccess, isError } = useEventQuery(id);
-  console.log(event);
+  const { data: recommendedEvents } = useRecommendedEventsQuery(event?.artist);
 
   const formatEventDateTime = (dateTimeString) => {
     const options = {
@@ -108,9 +113,10 @@ export const EventDetails = () => {
                   <span className="text-white pl-5 font-semibold">
                     {event.date && event.date.length > 0
                       ? event.date.map((eventDate, index) => (
-                        <span key={index}>
-                          {formatEventDateTime(eventDate.eventDateTime)}
-                        </span>
+                          <span key={index}>
+                            {formatEventDateTime(eventDate.eventDateTime)}
+                          </span>
+                        ))
                       ))
                       : "Date not available"}
                   </span>
@@ -223,6 +229,27 @@ export const EventDetails = () => {
                   e-tickets.
                 </p>
               </div>
+              {recommendedEvents && recommendedEvents.length > 0 && (
+                <div className="py-5">
+                  <p className="font-inter font-black text-white italic text-2xl">
+                    RECOMMENDATIONS BASED ON SIMILAR ARTISTS
+                  </p>
+
+                  <div className="flex flex-row gap-4 pt-5 overflow-hidden">
+                    {recommendedEvents.map((event) => {
+                      return (
+                        <Event
+                          key={event.eventID}
+                          eventId={event.eventID}
+                          imageURL={event.banner}
+                          eventName={event.name}
+                          eventDates={event.date}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="pt-5 lg:w-2/12 w-full min-w-fit flex flex-col items-start space-y-3">

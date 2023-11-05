@@ -12,7 +12,6 @@ import java.util.*;
 import com.tick.exception.*;
 import com.tick.model.*;
 import com.tick.repository.EventRepository;
-
 import com.tick.exception.ArtistNotFoundException;
 
 @Service
