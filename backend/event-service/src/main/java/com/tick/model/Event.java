@@ -38,12 +38,13 @@ public class Event {
     private List<EventDate> date;
     private Links links;
 
-    public Event(String name, String description, String category, String banner, LocalDateTime lastUpdated, List<Price> prices,
+    public Event(String name, String description, String category, String banner, String artist, LocalDateTime lastUpdated, List<Price> prices,
             int ticketLimit, String venueID, Map<String, Map<String, Map<String, Integer>>> seatMap, List<EventDate> date, Links links) {
         this.name = name;
         this.description = description;
         this.category = category;
         this.banner = banner;
+        this.artist = artist;
         this.lastUpdated = lastUpdated;
         this.prices = prices;
         this.ticketLimit = ticketLimit;

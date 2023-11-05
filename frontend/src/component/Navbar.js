@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUserState } from "../store/userSlice";
+import toast from "react-hot-toast";
 
 export const Navbar = () => {
   const { accessToken } = useSelector((state) => state.user);
@@ -14,7 +15,7 @@ export const Navbar = () => {
       dispatch(resetUserState());
       navigate("/");
     } catch (error) {
-      console.log(error);
+      toast.error("Error logging out", error);
     }
   };
 
