@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -27,7 +26,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public List<Event> filterEvents(String category, Double maxPrice, LocalDate eventDate) {
+    public List<Event> filterEvents(String category, Double maxPrice, LocalDateTime eventDateTime) {
         List<Event> intermediaryEvents = eventRepository.findAll();
 
         Iterator<Event> iter = intermediaryEvents.iterator();
@@ -51,10 +50,10 @@ public class EventService {
         }
 
         iter = intermediaryEvents.iterator();
-        if (eventDate != null){
+        if (eventDateTime != null){
             while (iter.hasNext()) {
                 Event currEvent = iter.next();
-                if (!eventHasFilteredDate(currEvent, eventDate)){
+                if (!eventHasFilteredDate(currEvent, eventDateTime)){
                     iter.remove();
                 }
             }
@@ -95,11 +94,10 @@ public class EventService {
         return false;
     }
 
-    public Boolean eventHasFilteredDate(Event event, LocalDate eventDate) {
+    public Boolean eventHasFilteredDate(Event event, LocalDateTime eventDate) {
         List<EventDate> eventDates = event.getDate();
         for (EventDate currEventDate : eventDates) {
-            LocalDate dateOfEvent = currEventDate.getEventDateTime().toLocalDate();
-            if (dateOfEvent.equals(eventDate)){
+            if (currEventDate.getEventDateTime().toLocalDate().equals(eventDate.toLocalDate())){
                 return true;
             }
         }
