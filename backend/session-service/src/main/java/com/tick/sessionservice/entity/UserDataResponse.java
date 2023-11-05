@@ -7,6 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDataResponse {
     private String id;
-    private String token;
     private long expiry;
 }

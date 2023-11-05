@@ -1,16 +1,16 @@
 import ReCAPTCHA from "react-google-recaptcha";
-import { axiosLocalHostInstance } from "../../api/axios";
+import { axiosInstance } from "../../api/axios";
 
 export const Recaptcha = (props) => {
   
   async function onChange(value) {
     props.setDidRecaptcha(true)
     try {
-      const response = await axiosLocalHostInstance.post("/tickets/recaptcha", {
+      const response = await axiosInstance.post("/tickets/recaptcha", {
         recaptchaToken: value,
       });
       console.log(response)
-      if (!response.data.success) {
+      if (!response.status == 200) {
         props.setRecaptchaErrorMessage(response.data["error-codes"][0])
       }
     } catch (error) {

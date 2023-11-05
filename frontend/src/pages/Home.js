@@ -23,7 +23,6 @@ export const Home = () => {
   ];
 
   const { data: events } = useEventsQuery();
-  console.log(events);
 
   const [searchString, setSearchString] = useState("");
   const { data: searchResults } = useEventSearchQuery(searchString);

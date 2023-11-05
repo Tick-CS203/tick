@@ -1,4 +1,12 @@
 services:
+  artist-service:
+    build:
+      context: artist-service
+    image: artist-service
+    container_name: artist_container
+    hostname: ${ARTIST_HOST}
+    ports:
+      - '${ARTIST_PORT}:5000'
   token-service:
     build:
       context: token-service
@@ -7,7 +15,7 @@ services:
     container_name: token_container
     hostname: ${TOKEN_HOST}
     environment:
-      - jwt.keyURL=
+      - jwt.keyURL=https://cognito-idp.ap-southeast-1.amazonaws.com/ap-southeast-1_E2biAnMuS/.well-known/jwks.json
       - jwt.key=purchasing
       - jwt.expiry.map={access:'120',purchasing:'5'}
     ports:
@@ -32,6 +40,21 @@ services:
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${BOOKMARK_PORT}:8080'
+  venue-service:
+    build:
+      context: venue-service
+      dockerfile: ../Dockerfile
+    image: venue-service
+    container_name: ${VENUE_HOST}
+    depends_on:
+      - ${VENUE_DB}
+    environment:
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=venue
+      - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${VENUE_DB}:27017/?retryWrites=true&w=majority
+      - SPRING_DATA_MONGODB_DATABASE=venue
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${VENUE_PORT}:8080'
   event-service:
     build:
       context: event-service
@@ -40,11 +63,15 @@ services:
     container_name: ${EVENT_HOST}
     depends_on:
       - ${EVENT_DB}
+      - venue-service
+      - artist-service
     environment:
       - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=event
       - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${EVENT_DB}:27017/?retryWrites=true&w=majority
       - SPRING_DATA_MONGODB_DATABASE=event
       - SERVER_ERROR_INCLUDE-MESSAGE=always
+      - VENUE_HOST=${VENUE_HOST}
+      - ARTIST_HOST=${ARTIST_HOST}
     ports:
       - '${EVENT_PORT}:8080'
   ticket-service:
@@ -66,6 +93,18 @@ services:
       - SERVER_ERROR_INCLUDE-MESSAGE=always
     ports:
       - '${TICKET_PORT}:8080'
+  payment-service:
+    build:
+      context: payment-service
+      dockerfile: ../Dockerfile
+    image: payment-service
+    container_name: ${PAYMENT_HOST}
+    secrets:
+      - STRIPE_APIKEY
+    environment:
+      - STRIPE_APIKEY=${STRIPE_APIKEY}
+      - FRONTEND_SUCCESSURL=${FRONTEND_SUCCESSURL}
+      - FRONTEND_SUCCESSURL=${FRONTEND_CANCELLEDURL}
   session-service:
     build:
       context: session-service
@@ -173,6 +212,18 @@ services:
       - '${BOOKMARK_DB_PORT}:5432'
     volumes:
       - bookmark_db:/var/lib/postgresql/data
+  venue-db:
+    image: mongo
+    container_name: ${VENUE_DB}
+    environment:
+      - MONGO_INITDB_ROOT_DB=venue
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - SERVER_ERROR_INCLUDE-MESSAGE=always
+    ports:
+      - '${VENUE_DB_PORT}:27017'
+    volumes:
+      - venue_db:/data/db
 volumes:
   bookmark_db:
     name: "bookmark-db"
@@ -182,3 +233,8 @@ volumes:
     name: "event-db"
   ticket_db:
     name: "ticket-db"
+  venue_db:
+    name: "venue-db"
+secrets:
+  STRIPE_APIKEY:
+    file: ./secret.txt

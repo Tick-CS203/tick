@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getEvent, getEvents, getFilteredEvents, getEventsByName } from "../service/events.service";
+import { getEvent, getEvents, getFilteredEvents, getEventsByName, getRecommendedEvents } from "../service/events.service";
 
 export const useEventQuery = (event_id) => {
     return useQuery({
@@ -37,3 +37,10 @@ export const useEventSearchQuery = (searchString) => {
     });
 };
 
+export const useRecommendedEventsQuery = (artist_name) => {
+    return useQuery({
+        queryKey: ["recommended"],
+        queryFn: () => getRecommendedEvents(artist_name),
+        enabled: !!artist_name,
+    });
+};
