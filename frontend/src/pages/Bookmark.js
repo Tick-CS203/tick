@@ -10,6 +10,7 @@ export const Bookmark = () => {
       <h1 className="text-white font-extrabold text-3xl mb-4 font-inter italic">Your Bookmarks</h1>
       <div className="flex flex-row gap-4 overflow-x-auto">
         {bookmarks && bookmarks['eventList'].map((bookmark) => <BookmarkedEvent bookmark={bookmark}/>)}
+        {(bookmarks && bookmarks['eventList'].length==0) && <p>You don't appear to have any bookmarks currently, head to our events page to start adding!</p>}
       </div>
     </>
   );
