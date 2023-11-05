@@ -18,6 +18,7 @@ import { Queue } from "./pages/Queue";
 import { Events } from "./pages/Events";
 import { ConfigProvider, theme } from "antd";
 import { Toaster } from "react-hot-toast";
+import { PaymentSuccess } from "./pages/PaymentSuccess";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                   <Events />
                 </ConfigProvider>} />
           <Route path="/ticket" element={<Auth><MyTickets /></Auth>} />
+          <Route path="/paymentsuccess" element={<Auth><PaymentSuccess /></Auth>} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/confirmsignup" element={<ConfirmSignUp />} />
