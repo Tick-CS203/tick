@@ -36,15 +36,6 @@ export const Login = () => {
   async function signIn(event) {
     event.preventDefault();
 
-    try {
-      if (!didRecaptcha) {
-        setDidRecaptcha(false);
-        return;
-      }
-      if (recaptchaErrorMessage) {
-        return;
-      }
-
       const signInUser = await Auth.signIn(enteredUsername, enteredPassword);
 
       if (signInUser.challengeName === "SMS_MFA") {
@@ -100,7 +91,7 @@ export const Login = () => {
     } catch (error) {
       toast.error("Error confirming sign in", error);
     }
-  }
+}
 
   const handleResend = async () => {
     if (user && user.challengeName === "SMS_MFA") {
