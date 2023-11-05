@@ -23,8 +23,8 @@ export const Navbar = () => {
     <nav className="bg-black">
       <div className="flex flex-wrap items-center justify-between mx-auto py-4 px-8">
         <div className="flex flex-row items-center gap-x-10">
-          <div className="font-lemon text-main-yellow text-xl">
-            <Link to="/">TICK</Link>
+          <div className="text-main-yellow text-xl">
+            <Link to="/" className="font-lemon">TICK</Link>
           </div>
           <div className="lg:flex hidden text-main-yellow font-inter text-sm font-semibold mr-10">
             <Link to="/event">All Events</Link>
