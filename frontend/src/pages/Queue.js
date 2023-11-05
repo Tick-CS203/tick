@@ -3,6 +3,7 @@ import { socket } from "../api/socket.js";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setPurchasing } from "../store/userSlice.js";
+import { setSocket } from "../store/socketSlice";
 
 export const Queue = () => {
   const { id } = useParams();
@@ -22,14 +23,6 @@ export const Queue = () => {
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const exitSession = () => {
-    socket.emit("exit_session", {
-      type: "CLIENT",
-      room: id,
-      token: accessToken,
-    });
   };
 
   useEffect(() => {
@@ -59,10 +52,7 @@ export const Queue = () => {
 
   useEffect(() => {
     socket.connect();
-    return () => {
-      exitSession();
-      socket.disconnect();
-    };
+    dispatch(setSocket(socket));
   }, []);
 
   return (
