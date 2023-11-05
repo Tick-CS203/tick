@@ -15,6 +15,8 @@ import { EventDetails } from "./pages/EventDetails";
 import { Auth } from "./component/signup/Auth";
 import { Navigate } from "react-router-dom";
 import { Queue } from "./pages/Queue";
+import { Events } from "./pages/Events";
+import { ConfigProvider, theme } from "antd";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -22,10 +24,19 @@ function App() {
     <div className="App">
       <Toaster />
       <Navbar />
-      <div className="bg-black px-8 pb-8">
+      <div className="bg-black px-8 pb-8 min-h-screen">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/event/:id" element={<EventDetails />} />
+          <Route path="/event" element={
+                // configure Antd theme
+                <ConfigProvider
+                  theme={{
+                    algorithm: theme.darkAlgorithm,
+                  }}
+                >
+                  <Events />
+                </ConfigProvider>} />
           <Route path="/ticket" element={<Auth><MyTickets /></Auth>} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
@@ -36,8 +47,19 @@ function App() {
           <Route
             path="/seatmap/:id"
             element={
+              // configure Antd theme
               <Auth>
-                <SeatSelection />
+                <ConfigProvider
+                  theme={{
+                    token: {
+                      // Seed Token
+                      colorPrimary: "#F6E902",
+                    },
+                    algorithm: theme.darkAlgorithm,
+                  }}
+                >
+                  <SeatSelection />
+                </ConfigProvider>
               </Auth>
             }
           />

@@ -22,17 +22,18 @@ export const Navbar = () => {
   return (
     <nav className="bg-black">
       <div className="flex flex-wrap items-center justify-between mx-auto py-4 px-8">
-        <div className="text-main-yellow text-xl">
-          <Link to="/" className="font-lemon">TICK</Link>
+        <div className="flex flex-row items-center gap-x-10">
+          <div className="font-lemon text-main-yellow text-xl">
+            <Link to="/">TICK</Link>
+          </div>
+          <div className="lg:flex hidden text-main-yellow font-inter text-sm font-semibold mr-10">
+            <Link to="/event">All Events</Link>
+          </div>
         </div>
-        <input
-          placeholder="Search Event"
-          className="bg-black placeholder-main-yellow text-main-yellow rounded p-1 border-solid border-main-yellow text-sm lg:block hidden"
-        />
 
         {accessToken && (
-          <div className="flex items-center">
-            <div className=" text-main-yellow font-inter text-sm font-semibold mr-10">
+          <div className="flex items-center gap-x-10">
+            <div className=" text-main-yellow font-inter text-sm font-semibold">
               <Link to="/ticket">My Tickets</Link>
             </div>
 

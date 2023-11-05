@@ -25,7 +25,7 @@ export const Event = (props) => {
         {props.eventDates.length === 1
           ? getDate(props.eventDates[0].eventDateTime)
           : `${getDate(props.eventDates[0].eventDateTime)} - ${
-              props.eventDates[props.eventDates.length - 1].eventDateTime
+              getDate(props.eventDates[props.eventDates.length - 1].eventDateTime)
             }`}
       </p>
     </Link>
