@@ -7,21 +7,29 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import jakarta.validation.constraints.*;
+
 @Document
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class EventDate {
 
     @Id
-    private String ID;
+    @NotBlank
+    private String eventDateID;
 
+    @Null
     private String eventID;
+    @NotNull
     private LocalDateTime eventDateTime;
+    @Null
     private Map<String, Map<String, Map<String, Integer>>> seatAvailability;
 
-    public EventDate(String eventID, LocalDateTime eventDateTime, Map<String, Map<String, Map<String, Integer>>> seatAvailability) {
+    public EventDate populateEventDate(String eventID,
+            Map<String, Map<String, Map<String, Integer>>> map) {
         this.eventID = eventID;
-        this.eventDateTime = eventDateTime;
-        this.seatAvailability = seatAvailability;
+        seatAvailability = map;
+        return this;
     }
 }

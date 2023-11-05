@@ -1,12 +1,17 @@
 package com.tick.model;
 
+import com.tick.exception.*;
 import java.time.*;
-import java.util.Map;
-import java.util.List;
-import lombok.Data;
+import java.util.*;
+import java.lang.reflect.*;
+
+import lombok.*;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import jakarta.validation.*;
+import jakarta.validation.constraints.*;
 
 @Data
 class Links {
@@ -21,36 +26,73 @@ class Links {
 
 @Document
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Event {
-
     @Id
+    @NotBlank
     private String eventID;
     private String name;
     private String description;
     private String category;
     private String banner;
     private String artist;
+    @Null
     private LocalDateTime lastUpdated;
     private List<Price> prices;
-    private int ticketLimit;
+    @Min(value = 1)
+    @NotNull
+    private Integer ticketLimit;
+    @NotBlank
     private String venueID;
+    @Null
     private Map<String, Map<String, Map<String, Integer>>> seatMap;
-    private List<EventDate> date;
+    @NotNull
+    private List<@Valid EventDate> date;
     private Links links;
 
-    public Event(String name, String description, String category, String banner, String artist, LocalDateTime lastUpdated, List<Price> prices,
-            int ticketLimit, String venueID, Map<String, Map<String, Map<String, Integer>>> seatMap, List<EventDate> date, Links links) {
-        this.name = name;
-        this.description = description;
-        this.category = category;
-        this.banner = banner;
-        this.artist = artist;
-        this.lastUpdated = lastUpdated;
-        this.prices = prices;
-        this.ticketLimit = ticketLimit;
-        this.venueID = venueID;
-        this.seatMap = seatMap;
-        this.date = date;
-        this.links = links;
+    public Event upsert(Event e) {
+        try {
+            Class<Event> eventClass = Event.class;
+            for (Field field : eventClass.getDeclaredFields()) {
+                Object value = field.get(e);
+                if (value != null) {
+                    field.set(this, value);
+                }
+            }
+        } catch (IllegalAccessException exception) {
+            exception.printStackTrace();
+        }
+
+        return this;
+    }
+
+    public Event addEventDate(EventDate date) {
+        try {
+            findEventDate(date.getEventDateID());
+            throw new EventDateExistsException();
+        } catch (EventDateNotFoundException e) {
+            this.date.add(date);
+        }
+        return this;
+    }
+
+    public Event removeEventDate(String eventDateID) {
+        this.date.remove(findEventDate(eventDateID));
+        return this;
+    }
+
+    public EventDate findEventDate(String eventDateID) {
+        for (EventDate date : this.date) {
+            if (eventDateID.equals(date.getEventDateID())) {
+                return date;
+            }
+        }
+
+        throw new EventDateNotFoundException(eventDateID);
+    }
+    
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
     }
 }

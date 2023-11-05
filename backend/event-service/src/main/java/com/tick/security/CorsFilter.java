@@ -1,8 +1,6 @@
 package com.tick.security;
 
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.*;
 
 public class CorsFilter {
     public static CorsConfigurationSource config() {
