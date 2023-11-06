@@ -8,11 +8,9 @@ export const Carousel = ({ images }) => { // Accept 'images' as a prop
   const prevImageIndex = (currentIndex - 1 + images.length) % images.length;
   const nextImageIndex = (currentIndex + 1) % images.length;
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     setCurrentIndex(nextImageIndex);
-  };
-
-  const getNextImage = useCallback(() => nextImage(), [nextImage])
+  }, [nextImageIndex]);
 
   const prevImage = () => {
     setCurrentIndex(prevImageIndex);
@@ -24,9 +22,9 @@ export const Carousel = ({ images }) => { // Accept 'images' as a prop
 
   // Auto-scroll interval (change image every 3 seconds)
   useEffect(() => {
-    const interval = setInterval(getNextImage, 3500);
+    const interval = setInterval(nextImage, 3500);
     return () => clearInterval(interval);
-  }, [currentIndex, getNextImage]);
+  }, [currentIndex, nextImage]);
 
   return (
     <div>
