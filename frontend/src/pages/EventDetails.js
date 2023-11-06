@@ -3,14 +3,17 @@ import {
   useRecommendedEventsQuery,
 } from "../api/events.query.js";
 import { useVenueQuery } from "../api/venue.query.js";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { addBookmark } from "../service/bookmarks.service"
 
 import { Event } from "../component/homepage/Event.js";
-import {  useState, useEffect  } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import "./countdown.css";
 import { Modal } from "antd";
 import SeatMapImage from "../assets/taylor-seating-map.jpeg";
+import toast from "react-hot-toast";
 
 export const EventDetails = () => {
   const { id } = useParams();
@@ -18,6 +21,7 @@ export const EventDetails = () => {
 
   const { data: event, isLoading, isSuccess, isError } = useEventQuery(id);
   const { data: recommendedEvents } = useRecommendedEventsQuery(event?.artist);
+  const { accessToken } = useSelector((state) => state.user)
 
   const { data: venueData } = useVenueQuery(event?.venueID);
   console.log(venueData);
@@ -50,6 +54,25 @@ export const EventDetails = () => {
 
     return { days, hours, minutes, seconds };
   };
+
+  const navigate = useNavigate()
+  const createBookmark = async (button) => {
+    addBookmark(accessToken, id, navigate)
+    const target = button.target
+    target.classList.add("text-slate-900", "bg-main-yellow")
+    toast.success(
+      <div className="flex space-x-2">
+        <p className="text-stone-900">Bookmark added!</p>
+        <Link
+          className="text-blue-800 underline"
+          onClick={() => {toast.dismiss()}}
+          to="/bookmarks">View</Link>
+      </div>, {
+      duration: 4000
+    }
+    )
+    target.innerHTML = "Added!"
+  }
 
   const [timeRemaining, setTimeRemaining] = useState(null);
 
@@ -119,10 +142,10 @@ export const EventDetails = () => {
                   <span className="text-white pl-5 font-semibold">
                     {event.date && event.date.length > 0
                       ? event.date.map((eventDate, index) => (
-                          <span key={index}>
-                            {formatEventDateTime(eventDate.eventDateTime)}
-                          </span>
-                        ))
+                        <span key={index}>
+                          {formatEventDateTime(eventDate.eventDateTime)}
+                        </span>
+                      ))
                       : "Date not available"}
                   </span>
                 </div>
@@ -274,7 +297,7 @@ export const EventDetails = () => {
               </Link>
 
               <button
-                className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full"
+                className="border-2 border-main-yellow text-main-yellow rounded-full py-2 px-8 w-full"
                 onClick={() => setShowSeatMap(true)}
               >
                 View Seatmap
@@ -282,7 +305,7 @@ export const EventDetails = () => {
 
               {venueData && (
                 <a
-                  className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full text-center"
+                  className="border-2 border-main-yellow text-main-yellow rounded-full py-2 px-8 w-full text-center"
                   href={"http://maps.google.com/?q=" + venueData.name}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -291,7 +314,9 @@ export const EventDetails = () => {
                 </a>
               )}
 
-              <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full">
+              <button
+                className="border-2 border-main-yellow text-main-yellow rounded-full py-2 px-8 w-full"
+                onClick={createBookmark}>
                 Bookmark Event
               </button>
             </div>
