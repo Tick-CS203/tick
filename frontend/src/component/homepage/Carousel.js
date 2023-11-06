@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { RxDotFilled } from 'react-icons/rx';
 import "./Carousel.css"
 
 export const Carousel = ({ images }) => { // Accept 'images' as a prop
@@ -24,7 +23,7 @@ export const Carousel = ({ images }) => { // Accept 'images' as a prop
   useEffect(() => {
     const interval = setInterval(nextImage, 3500); 
     return () => clearInterval(interval); 
-  }, [currentIndex]);
+  }, [currentIndex, nextImage]);
 
   return (
     <div>

@@ -63,7 +63,7 @@ export const EventDetails = () => {
         clearInterval(interval);
       };
     }
-  }, []);
+  }, [calculateTimeRemaining, event]);
 
   return (
     <>

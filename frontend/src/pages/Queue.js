@@ -55,7 +55,7 @@ export const Queue = () => {
     return () => {
       socket.off(userID);
     };
-  }, [userID]);
+  }, [userID, dispatch, enterSession, id, navigate]);
 
   useEffect(() => {
     socket.connect();
@@ -63,7 +63,7 @@ export const Queue = () => {
       exitSession();
       socket.disconnect();
     };
-  }, []);
+  }, [exitSession]);
 
   return (
     <>

@@ -18,7 +18,6 @@ export const Events = () => {
     isLoading,
     isSuccess,
     isError,
-    error,
   } = useEventsQuery();
   console.log(events);
 
