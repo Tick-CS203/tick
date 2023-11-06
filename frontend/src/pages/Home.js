@@ -22,10 +22,12 @@ export const Home = () => {
     MusicalImage,
   ];
 
-  const events = useEventsQuery();
+  const { eventData } = useEventsQuery();
+  const events = eventData ?? [];
 
   const [searchString, setSearchString] = useState("");
-  const searchResults = useEventSearchQuery(searchString);
+  const { resultsData } = useEventSearchQuery(searchString);
+  const searchResults = resultsData ?? [];
   console.log(searchResults);
 
   const onEnterKeyPress = (event) => {
@@ -100,13 +102,13 @@ export const Home = () => {
         </div>
       </div>
 
-      {searchString.length > 0 && searchResults.isSuccess && (
+      {searchString.length > 0 && searchResults && (
         <div>
           <p className="font-inter font-black text-white italic text-2xl uppercase pb-5">
             Search Results
           </p>
           <div className="flex flex-row gap-4 overflow-x-auto">
-            {searchResults.data.map((event) => {
+            {searchResults.map((event) => {
               return (
                 <Event
                   key={event.eventID}
@@ -133,8 +135,8 @@ export const Home = () => {
       </p>
 
       <div className="flex flex-row gap-4 overflow-x-auto">
-        {events.isSuccess &&
-          events.data.map((event) => {
+        {events &&
+          events.map((event) => {
             return (
               <Event
                 key={event.eventID}
