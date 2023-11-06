@@ -5,7 +5,7 @@ import DanceImage from "../assets/ahmad-odeh-TK_WT3dl2tw-unsplash.jpg";
 import ComedyImage from "../assets/luis-quintero-jKTCVwtltYQ-unsplash.jpg";
 import MusicalImage from "../assets/sudan-ouyang-UQuka_ruWxQ-unsplash.jpg";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Event } from "../component/homepage/Event";
@@ -22,16 +22,11 @@ export const Home = () => {
     MusicalImage,
   ];
 
-  const { data: events } = useEventsQuery();
+  const events = useEventsQuery();
 
   const [searchString, setSearchString] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const { data } = useEventSearchQuery(searchString);
+  const searchResults = useEventSearchQuery(searchString);
   console.log(searchResults);
-
-  useEffect(() => {
-    if (data) setSearchResults(data);
-  }, [data]);
 
   const onEnterKeyPress = (event) => {
     if (event.keyCode === 13) {
@@ -105,13 +100,13 @@ export const Home = () => {
         </div>
       </div>
 
-      {searchString.length > 0 && searchResults && (
+      {searchString.length > 0 && searchResults.isSuccess && (
         <div>
           <p className="font-inter font-black text-white italic text-2xl uppercase pb-5">
             Search Results
           </p>
           <div className="flex flex-row gap-4 overflow-x-auto">
-            {searchResults.map((event) => {
+            {searchResults.data.map((event) => {
               return (
                 <Event
                   key={event.eventID}
@@ -138,8 +133,8 @@ export const Home = () => {
       </p>
 
       <div className="flex flex-row gap-4 overflow-x-auto">
-        {events &&
-          events.map((event) => {
+        {events.isSuccess &&
+          events.data.map((event) => {
             return (
               <Event
                 key={event.eventID}
