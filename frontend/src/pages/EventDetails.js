@@ -6,7 +6,7 @@ import { useVenueQuery } from "../api/venue.query.js";
 import { Link, useParams } from "react-router-dom";
 
 import { Event } from "../component/homepage/Event.js";
-import {  useState, useEffect  } from "react";
+import { useState, useEffect } from "react";
 
 import "./countdown.css";
 import { Modal } from "antd";
@@ -34,26 +34,26 @@ export const EventDetails = () => {
     return new Date(dateTimeString).toLocaleString(undefined, options);
   };
 
-  const calculateTimeRemaining = () => {
-    const eventStartTime = new Date(event.date[0].eventDateTime).getTime();
-    const currentTime = new Date().getTime();
-    const timeRemaining = eventStartTime - currentTime;
-
-    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    const minutes = Math.floor(
-      (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
-    );
-    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-    return { days, hours, minutes, seconds };
-  };
-
   const [timeRemaining, setTimeRemaining] = useState(null);
 
   useEffect(() => {
+    const calculateTimeRemaining = () => {
+      const eventStartTime = new Date(event.date[0].eventDateTime).getTime();
+      const currentTime = new Date().getTime();
+      const timeRemaining = eventStartTime - currentTime;
+
+      const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor(
+        (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+      return { days, hours, minutes, seconds };
+    };
+
     if (event) {
       const interval = setInterval(() => {
         setTimeRemaining(calculateTimeRemaining());
@@ -63,7 +63,7 @@ export const EventDetails = () => {
         clearInterval(interval);
       };
     }
-  }, [calculateTimeRemaining, event]);
+  }, [event]);
 
   return (
     <>
@@ -119,10 +119,10 @@ export const EventDetails = () => {
                   <span className="text-white pl-5 font-semibold">
                     {event.date && event.date.length > 0
                       ? event.date.map((eventDate, index) => (
-                          <span key={index}>
-                            {formatEventDateTime(eventDate.eventDateTime)}
-                          </span>
-                        ))
+                        <span key={index}>
+                          {formatEventDateTime(eventDate.eventDateTime)}
+                        </span>
+                      ))
                       : "Date not available"}
                   </span>
                 </div>

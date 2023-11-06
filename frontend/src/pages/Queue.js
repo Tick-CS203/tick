@@ -12,27 +12,19 @@ export const Queue = () => {
   const [queueNumber, setQueueNumber] = useState(null);
   const { userID } = useSelector((state) => state.user);
 
-  const enterSession = () => {
-    try {
-      socket.emit("enter_session", {
-        type: "CLIENT",
-        room: id,
-        token: accessToken,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const exitSession = () => {
-    socket.emit("exit_session", {
-      type: "CLIENT",
-      room: id,
-      token: accessToken,
-    });
-  };
-
   useEffect(() => {
+    const enterSession = () => {
+      try {
+        socket.emit("enter_session", {
+          type: "CLIENT",
+          room: id,
+          token: accessToken,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
     function moveInQueue(res) {
       console.log(res);
       if ("queue_no" in res) {
@@ -55,15 +47,23 @@ export const Queue = () => {
     return () => {
       socket.off(userID);
     };
-  }, [userID, dispatch, enterSession, id, navigate]);
+  }, [userID, dispatch, id, navigate]);
 
   useEffect(() => {
+    const exitSession = () => {
+      socket.emit("exit_session", {
+        type: "CLIENT",
+        room: id,
+        token: accessToken,
+      });
+    };
+
     socket.connect();
     return () => {
       exitSession();
       socket.disconnect();
     };
-  }, [exitSession]);
+  }, []);
 
   return (
     <>
