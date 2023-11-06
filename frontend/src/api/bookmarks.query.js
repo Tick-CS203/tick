@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getBookmarks } from "../service/bookmarks.service";
-import { useNavigate } from "react-router-dom";
 
-export const useBookmarks = (accessToken) => {
-    const navigate = useNavigate()
+export const useBookmarks = (accessToken, navigate) => {
     return useQuery({
         queryKey: ["bookmarks"],
         queryFn: () => getBookmarks(accessToken, navigate),

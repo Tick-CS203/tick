@@ -1,11 +1,13 @@
 import { useSelector } from "react-redux";
 import { useBookmarks } from "../api/bookmarks.query";
 import { BookmarkedEvent } from "../component/bookmarks/BookmarkedEvent";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Bookmark = () => {
+  const navigate = useNavigate();
   const { accessToken } = useSelector((state) => state.user)
-  const { data: bookmarks } = useBookmarks(accessToken)
+  const { data: bookmarks } = useBookmarks(accessToken, navigate);
+  
   return (
     <>
       <h1 className="text-white font-extrabold text-3xl mb-4 font-inter italic">
