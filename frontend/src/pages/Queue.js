@@ -47,7 +47,7 @@ export const Queue = () => {
     return () => {
       socket.off(userID);
     };
-  }, [userID, dispatch, id, navigate]);
+  }, [userID, dispatch, accessToken, id, navigate]);
 
   useEffect(() => {
     const exitSession = () => {
@@ -63,7 +63,7 @@ export const Queue = () => {
       exitSession();
       socket.disconnect();
     };
-  }, []);
+  }, [accessToken, id]);
 
   return (
     <>

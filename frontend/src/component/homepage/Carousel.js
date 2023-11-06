@@ -12,7 +12,7 @@ export const Carousel = ({ images }) => { // Accept 'images' as a prop
     setCurrentIndex(nextImageIndex);
   };
 
-  const getNextImage = useCallback(() => nextImage(), [])
+  const getNextImage = useCallback(() => nextImage(), [nextImage])
 
   const prevImage = () => {
     setCurrentIndex(prevImageIndex);
