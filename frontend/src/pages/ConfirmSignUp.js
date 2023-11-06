@@ -15,22 +15,32 @@ export const ConfirmSignUp = () => {
   async function confirmSignUp(event) {
     event.preventDefault();
 
+    if (enteredOTP.length !== 6) {
+      toast.error(
+        "The verification code you entered is incorrect. Please try again."
+      );
+      return;
+    }
+
     try {
       await Auth.confirmSignUp(username, enteredOTP);
       navigate("/");
     } catch (error) {
-        let errorMessage = "There was an error confirming the sign up.";
-        if (error.code === 'CodeMismatchException') {
-          errorMessage = "The verification code you entered is incorrect. Please try again.";
-        } else if (error.code === 'ExpiredCodeException') {
-          errorMessage = "Your verification code has expired. Please request a new code.";
-        } else if (error.code === 'NotAuthorizedException') {
-          errorMessage = "You are not authorized to perform this operation.";
-        } else if (error.code === 'TooManyFailedAttemptsException') {
-          errorMessage = "Too many failed attempts. Please try again after some time.";
-        } 
-        toast.error(errorMessage);
+      let errorMessage = "There was an error confirming the sign up.";
+      if (error.code === "CodeMismatchException") {
+        errorMessage =
+          "The verification code you entered is incorrect. Please try again.";
+      } else if (error.code === "ExpiredCodeException") {
+        errorMessage =
+          "Your verification code has expired. Please request a new code.";
+      } else if (error.code === "NotAuthorizedException") {
+        errorMessage = "You are not authorized to perform this operation.";
+      } else if (error.code === "TooManyFailedAttemptsException") {
+        errorMessage =
+          "Too many failed attempts. Please try again after some time.";
       }
+      toast.error(errorMessage);
+    }
   }
 
   async function resendConfirmationCode() {
@@ -96,7 +106,11 @@ export const ConfirmSignUp = () => {
             <p className="text-white font-inter mr-1">
               Didn't receive the code?
             </p>
-            <button type="button" className="text-main-yellow font-inter" onClick={resendConfirmationCode}>
+            <button
+              type="button"
+              className="text-main-yellow font-inter"
+              onClick={resendConfirmationCode}
+            >
               Click to resend
             </button>
           </div>
