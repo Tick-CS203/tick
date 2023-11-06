@@ -27,7 +27,7 @@ export const Carousel = ({ images }) => { // Accept 'images' as a prop
   }, [currentIndex]);
 
   return (
-    <div className='flex-cols'>
+    <div>
       <div className='max-w-[1400px] h-[400px] w-full m-auto pt-4 relative group carousel-container'>
 
         {/* Right Panel */}
@@ -61,7 +61,6 @@ export const Carousel = ({ images }) => { // Accept 'images' as a prop
             imageIndex === currentIndex ? 'active-dot' : ''
           }`}
           >
-          <RxDotFilled />
         </div>
         ))}
       </div>

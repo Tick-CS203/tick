@@ -1,19 +1,26 @@
-import { useEventQuery } from "../api/events.query.js";
-import { useParams } from "react-router-dom";
-import React, {useState, useEffect} from "react";
-import { Link } from "react-router-dom";
-import './countdown.css';
-import { Modal } from 'antd';
-import SeatMapImage from '../assets/taylor-seating-map.jpeg'
+import {
+  useEventQuery,
+  useRecommendedEventsQuery,
+} from "../api/events.query.js";
+import { useVenueQuery } from "../api/venue.query.js";
+import { Link, useParams } from "react-router-dom";
 
-const venueName = "Singapore Indoor Stadium";
+import { Event } from "../component/homepage/Event.js";
+import {  useState, useEffect  } from "react";
+
+import "./countdown.css";
+import { Modal } from "antd";
+import SeatMapImage from "../assets/taylor-seating-map.jpeg";
 
 export const EventDetails = () => {
   const { id } = useParams();
   const [showSeatMap, setShowSeatMap] = useState(false);
 
   const { data: event, isLoading, isSuccess, isError } = useEventQuery(id);
-  console.log(event);
+  const { data: recommendedEvents } = useRecommendedEventsQuery(event?.artist);
+
+  const { data: venueData } = useVenueQuery(event?.venueID);
+  console.log(venueData);
 
   const formatEventDateTime = (dateTimeString) => {
     const options = {
@@ -33,8 +40,12 @@ export const EventDetails = () => {
     const timeRemaining = eventStartTime - currentTime;
 
     const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+    const hours = Math.floor(
+      (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor(
+      (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
+    );
     const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
     return { days, hours, minutes, seconds };
@@ -52,7 +63,7 @@ export const EventDetails = () => {
         clearInterval(interval);
       };
     }
-  }, []); 
+  }, []);
 
   return (
     <>
@@ -60,10 +71,10 @@ export const EventDetails = () => {
         footer={null}
         title="Venue Seatmap"
         open={showSeatMap}
-        onOk={()=> setShowSeatMap(false)}
-        onCancel={()=> setShowSeatMap(false)}
+        onOk={() => setShowSeatMap(false)}
+        onCancel={() => setShowSeatMap(false)}
       >
-        <img src={SeatMapImage} alt="seatMap"/>
+        <img src={SeatMapImage} alt="seatMap" />
       </Modal>
       {isLoading && <p className="text-white"> Loading... </p>}
 
@@ -85,7 +96,6 @@ export const EventDetails = () => {
                 <p className="font-inter font-black text-white italic text-3xl pt-5">
                   {event.name}
                 </p>
-
                 <p className="flex items-center pt-5 opacity-80">
                   <img
                     src="https://cdn-icons-png.flaticon.com/128/3177/3177361.png"
@@ -93,11 +103,12 @@ export const EventDetails = () => {
                     style={{ filter: "invert(1)" }}
                     alt="Icon"
                   />
-                  <span className="text-white pl-5 font-semibold">
-                    {venueName}
-                  </span>
+                  {venueData && (
+                    <span className="text-white pl-5 font-semibold">
+                      {venueData.name}
+                    </span>
+                  )}
                 </p>
-
                 <div className="flex items-center lg:pt-5 pt-2 opacity-80">
                   <img
                     src="https://cdn-icons-png.flaticon.com/128/3416/3416094.png"
@@ -108,41 +119,49 @@ export const EventDetails = () => {
                   <span className="text-white pl-5 font-semibold">
                     {event.date && event.date.length > 0
                       ? event.date.map((eventDate, index) => (
-                        <span key={index}>
-                          {formatEventDateTime(eventDate.eventDateTime)}
-                        </span>
-                      ))
+                          <span key={index}>
+                            {formatEventDateTime(eventDate.eventDateTime)}
+                          </span>
+                        ))
                       : "Date not available"}
                   </span>
                 </div>
               </div>
-              
-              {timeRemaining && timeRemaining > 0 && 
-                <div className="py-5">
-                <p className="font-inter font-black text-white text-s py-5">
-                  Event starts in:
-                </p>
 
-                <div class="countdowntimer">
-                  <div class="box">
-                    <span class="num" id="day-box">{timeRemaining.days.toString().padStart(2, '0')}</span>
-                    <span class="text">DAYS</span>
+              {timeRemaining && timeRemaining > 0 && (
+                <div className="py-5">
+                  <p className="font-inter font-black text-white text-s py-5">
+                    Event starts in:
+                  </p>
+
+                  <div class="countdowntimer">
+                    <div class="box">
+                      <span class="num" id="day-box">
+                        {timeRemaining.days.toString().padStart(2, "0")}
+                      </span>
+                      <span class="text">DAYS</span>
+                    </div>
+                    <div class="box">
+                      <span class="num" id="hr-box">
+                        {timeRemaining.hours.toString().padStart(2, "0")}
+                      </span>
+                      <span class="text">HOURS</span>
+                    </div>
+                    <div class="box">
+                      <span class="num" id="min-box">
+                        {timeRemaining.minutes.toString().padStart(2, "0")}
+                      </span>
+                      <span class="text">MINUTES</span>
+                    </div>
+                    <div class="box">
+                      <span class="num" id="sec-box">
+                        {timeRemaining.seconds.toString().padStart(2, "0")}
+                      </span>
+                      <span class="text">SECONDS</span>
+                    </div>
                   </div>
-                  <div class="box">
-                    <span class="num" id="hr-box">{timeRemaining.hours.toString().padStart(2, '0')}</span>
-                    <span class="text">HOURS</span>
-                  </div>
-                  <div class="box">
-                    <span class="num" id="min-box">{timeRemaining.minutes.toString().padStart(2, '0')}</span>
-                    <span class="text">MINUTES</span>
-                  </div>
-                  <div class="box">
-                    <span class="num" id="sec-box">{timeRemaining.seconds.toString().padStart(2, '0')}</span>
-                    <span class="text">SECONDS</span>
-                  </div>
-                </div> 
-                
-              </div>}
+                </div>
+              )}
 
               <div className="py-5">
                 <p className="font-inter font-black text-main-blue italic text-2xl">
@@ -223,6 +242,27 @@ export const EventDetails = () => {
                   e-tickets.
                 </p>
               </div>
+              {recommendedEvents && recommendedEvents.length > 0 && (
+                <div className="py-5">
+                  <p className="font-inter font-black text-white italic text-2xl">
+                    RECOMMENDATIONS BASED ON SIMILAR ARTISTS
+                  </p>
+
+                  <div className="flex flex-row gap-4 pt-5 overflow-x-auto">
+                    {recommendedEvents.map((event) => {
+                      return (
+                        <Event
+                          key={event.eventID}
+                          eventId={event.eventID}
+                          imageURL={event.banner}
+                          eventName={event.name}
+                          eventDates={event.date}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="pt-5 lg:w-2/12 w-full min-w-fit flex flex-col items-start space-y-3">
@@ -233,20 +273,23 @@ export const EventDetails = () => {
                 Purchase Tickets
               </Link>
 
-              <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full" 
+              <button
+                className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full"
                 onClick={() => setShowSeatMap(true)}
               >
                 View Seatmap
               </button>
 
-              <a 
-                className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full text-center"
-                href={"http://maps.google.com/?q=" + venueName}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Open in Maps
-              </a>
+              {venueData && (
+                <a
+                  className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full text-center"
+                  href={"http://maps.google.com/?q=" + venueData.name}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open in Maps
+                </a>
+              )}
 
               <button className="border-2 border-yellow-500 text-main-yellow rounded-full py-2 px-8 w-full">
                 Bookmark Event

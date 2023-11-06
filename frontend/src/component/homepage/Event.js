@@ -14,7 +14,7 @@ export const Event = (props) => {
   return (
     <Link className="flex flex-col w-[250px]" to={`/event/${props.eventId}`}>
       <img
-        className="object-none rounded w-[250px] h-[250px] p-0"
+        className="object-none rounded min-w-[250px] w-[250px] h-[250px] p-0"
         src={props.imageURL}
         alt={props.eventName}
       />
@@ -25,7 +25,7 @@ export const Event = (props) => {
         {props.eventDates.length === 1
           ? getDate(props.eventDates[0].eventDateTime)
           : `${getDate(props.eventDates[0].eventDateTime)} - ${
-              props.eventDates[props.eventDates.length - 1].eventDateTime
+              getDate(props.eventDates[props.eventDates.length - 1].eventDateTime)
             }`}
       </p>
     </Link>

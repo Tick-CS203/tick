@@ -10,7 +10,7 @@ export const Recaptcha = (props) => {
         recaptchaToken: value,
       });
       console.log(response)
-      if (!response.data.success) {
+      if (!response.status == 200) {
         props.setRecaptchaErrorMessage(response.data["error-codes"][0])
       }
     } catch (error) {
