@@ -3,6 +3,7 @@ import { useEventQuery } from "../../api/events.query"
 import { addBookmark, delBookmark } from "../../service/bookmarks.service"
 import { Event } from "../homepage/Event"
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 export const BookmarkedEvent = (props) => {
     const bookmark = props.bookmark
@@ -15,10 +16,12 @@ export const BookmarkedEvent = (props) => {
         if (target.getAttribute("data-added") == "true") {
             delBookmark(accessToken, event.eventID, navigate)
             target.innerHTML = "Add bookmark"
+            toast.error("Bookmark deleted")
             target.setAttribute("data-added", "false")
         } else {
             addBookmark(accessToken, event.eventID, navigate)
             target.innerHTML = "Delete bookmark"
+            toast.success("Bookmark added")
             target.setAttribute("data-added", "true")
         }
         target.classList.toggle("bg-main-red")
@@ -38,7 +41,7 @@ export const BookmarkedEvent = (props) => {
                     eventDates={event.date} />
                 }
                 {event && <button
-                    className="bg-main-red text-black border-2 border-black rounded-full px-2 py-1 mt-2 font-inter hover:bg-black hover:bg-rose-900 hover:text-white"
+                    className="w-full bg-main-red text-black border-2 border-black rounded-full px-2 py-1 mt-2 font-inter hover:bg-black hover:bg-rose-900 hover:text-white focus-visible:outline-none"
                     onClick={toggleBookmark}
                     data-added="true">
                     Delete bookmark

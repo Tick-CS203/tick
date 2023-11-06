@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import "./countdown.css";
 import { Modal } from "antd";
 import SeatMapImage from "../assets/taylor-seating-map.jpeg";
+import toast from "react-hot-toast";
 
 export const EventDetails = () => {
   const { id } = useParams();
@@ -55,8 +56,22 @@ export const EventDetails = () => {
   };
 
   const navigate = useNavigate()
-  const createBookmark = () => {
+  const createBookmark = async (button) => {
     addBookmark(accessToken, id, navigate)
+    const target = button.target
+    target.classList.add("text-[#000000]", "bg-yellow-500")
+    toast.success(
+      <div className="flex space-x-2">
+        <p className="text-stone-900">Bookmark added!</p>
+        <Link
+          className="text-blue-800 underline"
+          onClick={() => {toast.dismiss()}}
+          to="/bookmarks">View</Link>
+      </div>, {
+      duration: 4000
+    }
+    )
+    target.innerHTML = "Added!"
   }
 
   const [timeRemaining, setTimeRemaining] = useState(null);

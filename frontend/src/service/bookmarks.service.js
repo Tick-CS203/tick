@@ -45,6 +45,7 @@ export const addBookmark = async (accessToken, eventID, func) => {
       if (response.status != 201) {
         func("/login")
       }
+      return response.data
   } catch (e) {
     func("/login")
   }
