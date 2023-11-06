@@ -48,7 +48,7 @@ export const Login = () => {
   
     try {
       const signInUser = await Auth.signIn(enteredUsername, enteredPassword);
-  
+
       if (signInUser.challengeName === "SMS_MFA") {
         setUser(signInUser);
         setIsConfirmSignIn(true);
