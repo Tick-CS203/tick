@@ -5,7 +5,7 @@ import DanceImage from "../assets/ahmad-odeh-TK_WT3dl2tw-unsplash.jpg";
 import ComedyImage from "../assets/luis-quintero-jKTCVwtltYQ-unsplash.jpg";
 import MusicalImage from "../assets/sudan-ouyang-UQuka_ruWxQ-unsplash.jpg";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Event } from "../component/homepage/Event";
@@ -25,8 +25,13 @@ export const Home = () => {
   const { data: events } = useEventsQuery();
 
   const [searchString, setSearchString] = useState("");
-  const { data: searchResults } = useEventSearchQuery(searchString);
+  const [searchResults, setSearchResults] = useState([]);
+  const { data } = useEventSearchQuery(searchString);
   console.log(searchResults);
+
+  useEffect(() => {
+    if (data) setSearchResults(data);
+  }, [data]);
 
   const onEnterKeyPress = (event) => {
     if (event.keyCode === 13) {
