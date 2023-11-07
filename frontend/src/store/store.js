@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import cartReducer from "./cartSlice";
 import socketReducer from "./socketSlice";
@@ -11,15 +11,15 @@ const persistConfig = {
   storage,
 };
 
-const persistedUserReducer = persistReducer(persistConfig, userReducer);
-const persistedCartReducer = persistReducer(persistConfig, cartReducer);
+const rootReducer = combineReducers({
+  user: userReducer,
+  cart: cartReducer,
+  socket: socketReducer
+})
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({
-  reducer: {
-    user: persistedUserReducer,
-    cart: persistedCartReducer,
-    socket: socketReducer,
-  },
+  reducer: persistedReducer,
   middleware: [thunk],
 });
 
