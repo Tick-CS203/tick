@@ -148,21 +148,20 @@ export const Events = () => {
                 WE FOUND {filteredEvents.length} RELATED EVENT(S) FOR YOU
               </h2>
               <div className="mt-4 flex flex-wrap gap-4">
-                {filteredEvents.map((event) => (
-                  <Link to={`/event/${event.eventID}`} key={event.eventID}>
-                    <Event
-                      eventId={event.eventID}
-                      imageURL={event.banner}
-                      eventName={event.name}
-                      eventDates={event.date}
-                    />
-                  </Link>
+                {filteredEvents.map((event, key={}) => (
+                  <Event
+                    key={key}
+                    eventId={event.eventID}
+                    imageURL={event.banner}
+                    eventName={event.name}
+                    eventDates={event.date}
+                  />
                 ))}
               </div>
-        </>
+            </>
           )}
-      </div>
-    </div >
+        </div>
+      </div >
     </>
   );
 };
