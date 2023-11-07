@@ -11,7 +11,7 @@ jest.mock('react-redux', () => ({
 }));
 jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
-  Link: ({ children }) => <div>{children}</div>, // Mocked for simplicity
+  Link: ({ children }) => <span>{children}</span>, // Mocked for simplicity
 }));
 jest.mock('../api/bookmarks.query', () => ({
   useBookmarks: jest.fn(),
