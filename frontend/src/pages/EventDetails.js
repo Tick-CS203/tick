@@ -147,9 +147,9 @@ export const EventDetails = () => {
                   <span className="text-white pl-5 font-semibold">
                     {event.date && event.date.length > 0
                       ? event.date.map((eventDate, index) => (
-                        <span key={index}>
+                        <p key={index}>
                           {formatEventDateTime(eventDate.eventDateTime)}
-                        </span>
+                        </p>
                       ))
                       : "Date not available"}
                   </span>

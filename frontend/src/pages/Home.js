@@ -9,7 +9,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Event } from "../component/homepage/Event";
-import { useEventSearchQuery, useEventsQuery } from "../api/events.query";
+import { axiosInstance } from "../api/axios";
+import { useEventsQuery } from "../api/events.query";
 import { Carousel } from "../component/homepage/Carousel";
 
 export const Home = () => {
@@ -26,12 +27,17 @@ export const Home = () => {
   const events = eventData ?? [];
 
   const [searchString, setSearchString] = useState("");
-  const { resultsData } = useEventSearchQuery(searchString);
-  const searchResults = resultsData ?? [];
+  const [searchResults, setSearchResults] = useState([]);
 
-  const onEnterKeyPress = (event) => {
+  const onEnterKeyPress = async (event) => {
     if (event.keyCode === 13) {
       setSearchString(event.target.value);
+      if (event.target.value.length > 0) {
+        const response = await axiosInstance
+          .get(`/event/search/${event.target.value}`)
+          .then((res) => res.data);
+        setSearchResults(response);
+      }
     }
   };
 
