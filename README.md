@@ -17,6 +17,9 @@ Tick prioritizes user security by employing robust multi-factor authentication p
 4. **Recommended Events based on artists of similar genres**  
 Tick's recommendation engine leverages the cosine similarity of artist genres to provide personalized event suggestions. By analyzing the musical genres of artists, our algorithm identifies and recommends events with similar music styles, ensuring an experience that resonates with your music taste.
 
+5. **reCAPTCHA Integration**
+In our commitment to maintaining platform integrity, we implement reCAPTCHA to distinguish human users from bots. This security measure shields against fraudulent activities, ensuring a secure and authentic ticket purchasing process.
+
 
 ## Visit our website at 
 - Go to site settings and enable insecure content on Google Chrome
