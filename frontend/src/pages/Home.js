@@ -28,7 +28,6 @@ export const Home = () => {
   const [searchString, setSearchString] = useState("");
   const { resultsData } = useEventSearchQuery(searchString);
   const searchResults = resultsData ?? [];
-  console.log(searchResults);
 
   const onEnterKeyPress = (event) => {
     if (event.keyCode === 13) {
