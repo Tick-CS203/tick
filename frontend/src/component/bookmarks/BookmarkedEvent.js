@@ -13,7 +13,7 @@ export const BookmarkedEvent = (props) => {
     const navigate = useNavigate();
     const toggleBookmark = (button) => {
         const target = button.target
-        if (target.getAttribute("data-added") == "true") {
+        if (target.getAttribute("data-added") === "true") {
             delBookmark(accessToken, event.eventID, navigate)
             target.innerHTML = "Add bookmark"
             toast.error("Bookmark deleted")
