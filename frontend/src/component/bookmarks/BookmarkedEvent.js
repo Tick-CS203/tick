@@ -32,7 +32,7 @@ export const BookmarkedEvent = (props) => {
 
     return (
         <>
-            <div>
+            <div className="flex flex-col justify-between">
                 {event && <Event
                     key={event.eventID}
                     eventId={event.eventID}
