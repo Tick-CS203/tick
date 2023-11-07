@@ -102,7 +102,7 @@ export const Login = () => {
         })
       );
 
-      let userId = fetchUserId(
+      let userId = await fetchUserId(
         loggedInUser.signInUserSession.accessToken.jwtToken
       );
       dispatch(setUserID(userId));
