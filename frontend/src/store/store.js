@@ -12,11 +12,12 @@ const persistConfig = {
 };
 
 const persistedUserReducer = persistReducer(persistConfig, userReducer);
+const persistedCartReducer = persistReducer(persistConfig, cartReducer);
 
 export const store = configureStore({
   reducer: {
     user: persistedUserReducer,
-    cart: cartReducer,
+    cart: persistedCartReducer,
     socket: socketReducer,
   },
   middleware: [thunk],
