@@ -15,7 +15,8 @@ export const SignUp = () => {
   const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
   const [enteredMobileNumber, setEnteredMobileNumber] = useState("");
-  const [passwordValidationMessage, setPasswordValidationMessage] = useState("");
+  const [passwordValidationMessage, setPasswordValidationMessage] =
+    useState("");
   const [confirmPasswordMessage, setConfirmPasswordMessage] = useState("");
   const [emailValidationMessage, setEmailValidationMessage] = useState("");
 
@@ -24,7 +25,7 @@ export const SignUp = () => {
     const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
     const hasUppercase = /[A-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
-  
+
     if (password.length < minLength) {
       return "Password is too short. It must be at least 8 characters.";
     } else if (!hasSpecialCharacter) {
@@ -47,19 +48,60 @@ export const SignUp = () => {
   }
 
   function validateEmail(email) {
-    const hasAtSign = /[@]/.test(email);
+    const hasAtSign =
+      /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/.test(email);
 
-    if(!hasAtSign) {
-      return "Please enter a valid email address."
+    if (!hasAtSign) {
+      return "Please enter a valid email address.";
     } else {
       return "";
     }
   }
-  
+
   async function signUp(event) {
     event.preventDefault();
 
     try {
+      if (enteredPassword.length === 0) {
+        toast.error("Password cannot be empty");
+        return;
+      }
+
+      if (passwordValidationMessage.length > 0) {
+        toast.error(passwordValidationMessage);
+        return;
+      }
+
+      if (enteredConfirmPassword.length === 0) {
+        toast.error("Confirm Password cannot be empty");
+        return;
+      }
+
+      if (confirmPasswordMessage.length > 0) {
+        toast.error(confirmPasswordMessage);
+        return;
+      }
+
+      if (enteredEmail.length === 0) {
+        toast.error("Email cannot be empty");
+        return;
+      }
+
+      if (emailValidationMessage.length > 0) {
+        toast.error(emailValidationMessage);
+        return;
+      }
+
+      if (enteredUsername.length === 0) {
+        toast.error("Username cannot be empty");
+        return;
+      }
+
+      if (enteredMobileNumber.length === 0) {
+        toast.error("Mobile number cannot be empty");
+        return;
+      }
+
       const { user } = await Auth.signUp({
         username: enteredUsername,
         password: enteredPassword,
@@ -74,12 +116,24 @@ export const SignUp = () => {
           enabled: true,
         },
       });
-      dispatch(
-        setUsername(user.username)
-      );
+      dispatch(setUsername(user.username));
       navigate("/confirmsignup");
     } catch (error) {
-      toast.error("error signing up:", error);
+      let errorMessage = "An unexpected error occurred";
+
+      // eslint-disable-next-line default-case
+      switch (error.code) {
+        case "UsernameExistsException":
+          errorMessage = "Username taken";
+          break;
+        case "InvalidParameterException":
+          errorMessage = "Invalid phone number format";
+          break;
+        case "InvalidPasswordException":
+          errorMessage = "Password did not conform with policy";
+          break;
+      }
+      toast.error(errorMessage);
     }
   }
 
@@ -135,11 +189,14 @@ export const SignUp = () => {
               type="email"
               onChange={(event) => {
                 setEnteredEmail(event.target.value);
-                setEmailValidationMessage(validateEmail(event.target.value))
+                setEmailValidationMessage(validateEmail(event.target.value));
               }}
             />
             {emailValidationMessage && (
-              <p className="text-red-500 text-xs font-inter mt-2 flex"> {emailValidationMessage}</p>
+              <p className="text-red-500 text-xs font-inter mt-2 flex">
+                {" "}
+                {emailValidationMessage}
+              </p>
             )}
           </div>
         </div>
@@ -155,15 +212,20 @@ export const SignUp = () => {
               type="password"
               onChange={(event) => {
                 setEnteredPassword(event.target.value);
-                setPasswordValidationMessage(validatePassword(event.target.value))
+                setPasswordValidationMessage(
+                  validatePassword(event.target.value)
+                );
               }}
             />
             {passwordValidationMessage && (
-            <p className="text-red-500 text-xs font-inter mt-2 flex"> {passwordValidationMessage}</p>
-          )}
+              <p className="text-red-500 text-xs font-inter mt-2 flex">
+                {" "}
+                {passwordValidationMessage}
+              </p>
+            )}
           </div>
         </div>
-        
+
         <div className="flex justify-between items-end py-2">
           <label className="text-white font-inter font-bold text-xs ">
             Confirm Password
@@ -174,22 +236,27 @@ export const SignUp = () => {
               type="password"
               onChange={(event) => {
                 setEnteredConfirmPassword(event.target.value);
-                setConfirmPasswordMessage(passwordMatch(enteredPassword, event.target.value))
+                setConfirmPasswordMessage(
+                  passwordMatch(enteredPassword, event.target.value)
+                );
               }}
             />
             {confirmPasswordMessage && (
-            <p className="text-red-500 text-xs font-inter ">{confirmPasswordMessage}</p>
-          )}
+              <p className="text-red-500 text-xs font-inter ">
+                {confirmPasswordMessage}
+              </p>
+            )}
           </div>
         </div>
-        
 
         <div className="flex justify-between items-end py-2">
           <label className="text-white font-inter font-bold text-xs ">
             Mobile Number
           </label>
           <PhoneNumberValidation
-            onPhoneNumberChange={(value) => {setEnteredMobileNumber(value)}}
+            onPhoneNumberChange={(value) => {
+              setEnteredMobileNumber(value);
+            }}
           />
         </div>
 
