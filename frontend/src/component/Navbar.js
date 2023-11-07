@@ -33,6 +33,10 @@ export const Navbar = () => {
 
         {accessToken && (
           <div className="flex items-center gap-x-10">
+            <div className="text-main-yellow font-inter text-sm font-semibold">
+              <Link to="/bookmarks">My Bookmarks</Link>
+            </div>
+
             <div className=" text-main-yellow font-inter text-sm font-semibold">
               <Link to="/ticket">My Tickets</Link>
             </div>

@@ -35,12 +35,22 @@ export const Login = () => {
 
   async function signIn(event) {
     event.preventDefault();
-
-    const signInUser = await Auth.signIn(enteredUsername, enteredPassword);
-
+  
+    if (!didRecaptcha) {
+      setDidRecaptcha(false);
+      toast.error("Please complete the Recaptcha to proceed.");
+      return;
+    }
+    if (recaptchaErrorMessage) {
+      toast.error(recaptchaErrorMessage);
+      return;
+    }
+  
     try {
+      const signInUser = await Auth.signIn(enteredUsername, enteredPassword);
+
       if (signInUser.challengeName === "SMS_MFA") {
-        setUser(signInUser); // Use local setUser instead of Redux
+        setUser(signInUser);
         setIsConfirmSignIn(true);
       } else {
         // sign in flow without MFA enabled
@@ -51,8 +61,8 @@ export const Login = () => {
             idToken: signInUser.signInUserSession.idToken.jwtToken,
           })
         );
-
-        let userId = fetchUserId(
+  
+        const userId = await fetchUserId(
           signInUser.signInUserSession.accessToken.jwtToken
         );
         dispatch(setUserID(userId));
@@ -60,9 +70,19 @@ export const Login = () => {
         navigate(-1);
       }
     } catch (error) {
-      toast.error(error);
+      let errorMessage = "An unexpected error occurred";
+  
+      if (error.code === 'UserNotFoundException') {
+        errorMessage = "User does not exist";
+      } else if (error.code === 'NotAuthorizedException') {
+        errorMessage = "Incorrect username or password";
+      } else if (error.code === 'UserNotConfirmedException') {
+        errorMessage = "User is not confirmed";
+      } 
+      toast.error(errorMessage);
     }
   }
+  
 
   async function confirmSignIn(event) {
     event.preventDefault();
@@ -90,8 +110,17 @@ export const Login = () => {
 
       navigate(-1);
     } catch (error) {
-      toast.error("Error confirming sign in", error);
-    }
+        let errorMessage = "Error confirming sign in. Please try again.";
+    
+        if (error.code === 'CodeMismatchException') {
+          errorMessage = "Wrong code entered, please try again.";
+        } else if (error.code === 'ExpiredCodeException') {
+          errorMessage = "The code has expired, please request a new one.";
+        } else if (error.code === 'TooManyRequestsException') {
+          errorMessage = "Too many attempts, please try again later.";
+        } 
+        toast.error(errorMessage);
+      }
   }
 
   const handleResend = async () => {

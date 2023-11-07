@@ -14,6 +14,7 @@ import { ResetPassword } from "./pages/ResetPassword";
 import { EventDetails } from "./pages/EventDetails";
 import { Auth } from "./component/signup/Auth";
 import { Navigate } from "react-router-dom";
+import { Bookmark } from "./pages/Bookmark";
 import { Queue } from "./pages/Queue";
 import { Events } from "./pages/Events";
 import { ConfigProvider, theme } from "antd";
@@ -40,6 +41,7 @@ function App() {
                 </ConfigProvider>} />
           <Route path="/ticket" element={<Auth><MyTickets /></Auth>} />
           <Route path="/paymentsuccess" element={<Auth><PaymentSuccess /></Auth>} />
+          <Route path="/bookmarks" element={<Auth><Bookmark /></Auth>} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/confirmsignup" element={<ConfirmSignUp />} />
