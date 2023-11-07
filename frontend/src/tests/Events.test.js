@@ -1,7 +1,7 @@
 // Events.test.js
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
-import { Events } from './Events';
+import { Events } from '../pages/Events';
 import { useEventsQuery, useFilteredEventsQuery } from "../api/events.query.js";
 
 // Mock the external hooks from events.query.js
