@@ -34,8 +34,6 @@ public class EventController {
             @RequestParam(name = "maxPrice", required = false) Double maxPrice,
             @RequestParam(name = "beforeDate", required = false) LocalDateTime beforeDate,
             @RequestParam(name = "afterDate", required = false) LocalDateTime afterDate) {
-        if ((beforeDate == null || afterDate == null) && (beforeDate != afterDate))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Both beforeDate and afterDate must be set");
         return eventService.filterEvents(category, maxPrice, beforeDate, afterDate);
     }
 

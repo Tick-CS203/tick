@@ -63,7 +63,7 @@ public class EventService {
             Event currEvent = iter.next();
             if ((categoryFilter && !currEvent.getCategory().equals(category))
                     || (priceFilter && !eventHasAPriceLessThanOrEqualToMaxPrice(currEvent, maxPrice))
-                    || (beforeDate != null && !eventHasFilteredDate(currEvent, beforeDate, afterDate)))
+                    || (!eventHasFilteredDate(currEvent, beforeDate, afterDate)))
                 iter.remove();
         }
 
@@ -105,8 +105,8 @@ public class EventService {
         List<EventDate> eventDates = event.getDate();
         for (EventDate currEventDate : eventDates) {
             LocalDateTime dateTime = currEventDate.getEventDateTime();
-            if (dateTime.isAfter(beforeDate) &&
-                    dateTime.isBefore(afterDate)) {
+            if ((beforeDate == null || dateTime.isAfter(beforeDate)) &&
+                    (afterDate == null || dateTime.isBefore(afterDate))) {
                 return true;
             }
         }
