@@ -1,6 +1,5 @@
 import { useEventsQuery, useFilteredEventsQuery } from "../api/events.query.js";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { Event } from "../component/homepage/Event";
 import { Slider, InputNumber, DatePicker } from "antd";
 import BlueFire from "../assets/blue-fire.png"
@@ -9,7 +8,7 @@ import dayjs from 'dayjs';
 
 export const Events = () => {
   const [enteredCategory, setEnteredCategory] = useState("");
-  const [enteredMaxPrice, setEnteredMaxPrice] = useState(400);
+  const [enteredMaxPrice, setEnteredMaxPrice] = useState()
   const [enteredStartDate, setEnteredStartDate] = useState("");
   const [enteredEndDate, setEnteredEndDate] = useState("");
 

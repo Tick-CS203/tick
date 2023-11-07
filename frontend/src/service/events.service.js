@@ -31,7 +31,7 @@ export const getFilteredEvents = async (
     query += `category=${category}&`;
   }
 
-  if (maxPrice.length > 0) {
+  if (maxPrice > 0) {
     query += `maxPrice=${maxPrice}&`;
   }
 
