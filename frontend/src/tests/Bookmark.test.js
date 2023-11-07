@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Bookmark } from './Bookmark';
+import { Bookmark } from '../pages/Bookmark';
 import { useSelector } from 'react-redux';
 import { useBookmarks } from '../api/bookmarks.query';
 import { useNavigate } from 'react-router-dom';
