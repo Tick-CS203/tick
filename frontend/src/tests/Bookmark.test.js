@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Bookmark } from './Bookmark';
+import { Bookmark } from '../pages/Bookmark';
 import { useSelector } from 'react-redux';
 import { useBookmarks } from '../api/bookmarks.query';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ jest.mock('react-redux', () => ({
 }));
 jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
-  Link: ({ children }) => <div>{children}</div>, // Mocked for simplicity
+  Link: ({ children }) => <span>{children}</span>, // Mocked for simplicity
 }));
 jest.mock('../api/bookmarks.query', () => ({
   useBookmarks: jest.fn(),
