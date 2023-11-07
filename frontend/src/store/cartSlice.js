@@ -7,16 +7,17 @@ export const cartSlice = createSlice({
     updateCartQuantity: (state, action) => {
       const { type, category, section, row, purchaseLimit, price, priceID } = action.payload;
 
+      const existingCartItemIndex = state.items.findIndex(
+        (item) =>
+          item.category === category &&
+          item.section === section &&
+          item.row === row
+      );
+
       if (type === "ADD") {
         if (state.totalQuantity === purchaseLimit) {
-            return;
+          return;
         }
-        const existingCartItemIndex = state.items.findIndex(
-          (item) =>
-            item.category === category &&
-            item.section === section &&
-            item.row === row
-        );
 
         const existingCartItem = state.items[existingCartItemIndex];
         let updatedItem;
@@ -44,12 +45,7 @@ export const cartSlice = createSlice({
       }
 
       if (type === "REMOVE") {
-        const existingCartItemIndex = state.items.findIndex(
-          (item) =>
-            item.category === category &&
-            item.section === section &&
-            item.row === row
-        );
+        if (existingCartItemIndex === -1) return
         const existingItem = state.items[existingCartItemIndex];
         let updatedItems;
 
