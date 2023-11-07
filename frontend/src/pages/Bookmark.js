@@ -16,7 +16,7 @@ export const Bookmark = () => {
       <div className="flex flex-wrap gap-4 overflow-x-auto">
         {bookmarks && bookmarks['eventList'].map((bookmark, key = {}) =>
           <BookmarkedEvent key={key} bookmark={bookmark} />)}
-        {(bookmarks && bookmarks['eventList'].length == 0) &&
+        {(bookmarks && bookmarks['eventList'].length === 0) &&
           <p className="font-inter font-semibold">
             You don't appear to have any bookmarks currently, head over to <Link className="text-main-yellow underline" to="/event">
               All Events
