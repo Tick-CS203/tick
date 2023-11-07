@@ -54,7 +54,7 @@ export const SeatSelection = () => {
 
   const startCheckoutHandler = async () => {
     const redirectURL = await axiosInstance.post(
-      "/payment/create-checkout-session",
+      "/payment",
       JSON.stringify(items)
     ); 
     dispatch(updateEventID(id))
