@@ -1,8 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { socket } from "../api/socket.js";
+import { socketURL } from "../api/socket.js";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setPurchasing } from "../store/userSlice.js";
+import { setSocket } from "../store/socketSlice";
+import { io } from "socket.io-client";
 
 export const Queue = () => {
   const { id } = useParams();
@@ -11,20 +13,25 @@ export const Queue = () => {
   const { accessToken } = useSelector((state) => state.user);
   const [queueNumber, setQueueNumber] = useState(null);
   const { userID } = useSelector((state) => state.user);
+  const socket = io(socketURL, {
+    query: {
+      room: id, // hardcoded eventID
+    },
+  });
+
+  const enterSession = () => {
+    try {
+      socket.emit("enter_session", {
+        type: "CLIENT",
+        room: id,
+        token: accessToken,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
-    const enterSession = () => {
-      try {
-        socket.emit("enter_session", {
-          type: "CLIENT",
-          room: id,
-          token: accessToken,
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
     function moveInQueue(res) {
       console.log(res);
       if ("queue_no" in res) {
@@ -50,20 +57,9 @@ export const Queue = () => {
   }, [userID, dispatch, accessToken, id, navigate]);
 
   useEffect(() => {
-    const exitSession = () => {
-      socket.emit("exit_session", {
-        type: "CLIENT",
-        room: id,
-        token: accessToken,
-      });
-    };
-
     socket.connect();
-    return () => {
-      exitSession();
-      socket.disconnect();
-    };
-  }, [accessToken, id]);
+    dispatch(setSocket(socket));
+  }, []);
 
   return (
     <>
