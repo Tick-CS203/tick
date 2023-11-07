@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.tick.service.*;
 
@@ -32,9 +31,9 @@ public class EventController {
     public List<Event> getEvents(
             @RequestParam(name = "category", required = false) String category,
             @RequestParam(name = "maxPrice", required = false) Double maxPrice,
-            @RequestParam(name = "beforeDate", required = false) LocalDateTime beforeDate,
-            @RequestParam(name = "afterDate", required = false) LocalDateTime afterDate) {
-        return eventService.filterEvents(category, maxPrice, beforeDate, afterDate);
+            @RequestParam(name = "startDate", required = false) LocalDateTime startDate,
+            @RequestParam(name = "endDate", required = false) LocalDateTime endDate) {
+        return eventService.filterEvents(category, maxPrice, startDate, endDate);
     }
 
     @PutMapping

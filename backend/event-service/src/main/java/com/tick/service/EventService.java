@@ -52,7 +52,7 @@ public class EventService {
     }
 
     public List<Event> filterEvents(String category, Double maxPrice,
-            LocalDateTime beforeDate, LocalDateTime afterDate) {
+            LocalDateTime startDate, LocalDateTime endDate) {
         List<Event> intermediaryEvents = eventRepository.findAll();
 
         Iterator<Event> iter = intermediaryEvents.iterator();
@@ -63,7 +63,7 @@ public class EventService {
             Event currEvent = iter.next();
             if ((categoryFilter && !currEvent.getCategory().equals(category))
                     || (priceFilter && !eventHasAPriceLessThanOrEqualToMaxPrice(currEvent, maxPrice))
-                    || (!eventHasFilteredDate(currEvent, beforeDate, afterDate)))
+                    || (!eventHasFilteredDate(currEvent, startDate, endDate)))
                 iter.remove();
         }
 
@@ -101,12 +101,12 @@ public class EventService {
         return false;
     }
 
-    public Boolean eventHasFilteredDate(Event event, LocalDateTime beforeDate, LocalDateTime afterDate) {
+    public Boolean eventHasFilteredDate(Event event, LocalDateTime startDate, LocalDateTime endDate) {
         List<EventDate> eventDates = event.getDate();
         for (EventDate currEventDate : eventDates) {
             LocalDateTime dateTime = currEventDate.getEventDateTime();
-            if ((beforeDate == null || dateTime.isAfter(beforeDate)) &&
-                    (afterDate == null || dateTime.isBefore(afterDate))) {
+            if ((startDate == null || dateTime.isAfter(startDate)) &&
+                    (endDate == null || dateTime.isBefore(endDate))) {
                 return true;
             }
         }
