@@ -1,8 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { socket } from "../api/socket.js";
+import { socketURL } from "../api/socket.js";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setPurchasing } from "../store/userSlice.js";
+import { setSocket } from "../store/socketSlice";
+import { io } from "socket.io-client";
 
 export const Queue = () => {
   const { id } = useParams();
@@ -11,6 +13,11 @@ export const Queue = () => {
   const { accessToken } = useSelector((state) => state.user);
   const [queueNumber, setQueueNumber] = useState(null);
   const { userID } = useSelector((state) => state.user);
+  const socket = io(socketURL, {
+    query: {
+      room: id, // hardcoded eventID
+    },
+  });
 
   const enterSession = () => {
     try {
@@ -22,14 +29,6 @@ export const Queue = () => {
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const exitSession = () => {
-    socket.emit("exit_session", {
-      type: "CLIENT",
-      room: id,
-      token: accessToken,
-    });
   };
 
   useEffect(() => {
@@ -59,10 +58,7 @@ export const Queue = () => {
 
   useEffect(() => {
     socket.connect();
-    return () => {
-      exitSession();
-      socket.disconnect();
-    };
+    dispatch(setSocket(socket));
   }, []);
 
   return (

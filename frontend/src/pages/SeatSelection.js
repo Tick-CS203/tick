@@ -11,7 +11,7 @@ export const SeatSelection = () => {
   const { id } = useParams();
   const { data: eventData, isLoading, isSuccess, isError } = useEventQuery(id);
   console.log(eventData);
-  const { items, purchasingToken } = useSelector((state) => state.cart);
+  const { items } = useSelector((state) => state.cart);
 
   const [currEventDateTime, setCurrEventDateTime] = useState("");
   const [currSeatAvailability, setCurrSeatAvailability] = useState({});
@@ -20,8 +20,33 @@ export const SeatSelection = () => {
   const [filteredRows, setFilteredRows] = useState([]);
   const [availableSections, setAvailableSections] = useState({});
   const [eventDateOptions, setEventDateOptions] = useState([]);
+  const { socket } = useSelector((state) => state.socket);
+  const { accessToken, purchasingToken } = useSelector((state) => state.user);
   console.log(items);
   console.log(purchasingToken);
+
+  const exitSession = () => {
+    socket.emit("exit_session", {
+      type: "CLIENT",
+      room: id,
+      token: accessToken,
+    });
+  };
+
+  const handleUnload = () => {
+    exitSession();
+    socket.disconnect();
+    console.log("disconnected");
+    return "message";
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      handleUnload();
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, []);
 
   const startCheckoutHandler = async () => {
     const redirectURL = await axiosInstance.post(
@@ -163,7 +188,7 @@ export const SeatSelection = () => {
                           available={row.availability}
                           price={
                             eventData.prices[
-                            currCategory.charAt(currCategory.length - 1) - 1
+                              currCategory.charAt(currCategory.length - 1) - 1
                             ]
                           }
                           purchaseLimit={eventData.ticketLimit}
@@ -212,7 +237,8 @@ export const SeatSelection = () => {
                 </table>
                 <button
                   className={`bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto ${
-                    items.length === 0 ? "opacity-30" : ""}`}
+                    items.length === 0 ? "opacity-30" : ""
+                  }`}
                   disabled={items.length === 0}
                   onClick={startCheckoutHandler}
                 >
