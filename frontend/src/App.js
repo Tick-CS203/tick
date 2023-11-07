@@ -23,10 +23,10 @@ import { PaymentSuccess } from "./pages/PaymentSuccess";
 
 function App() {
   return (
-    <div className="App">
+    <div className="flex flex-col h-screen justify-between">
       <Toaster />
       <Navbar />
-      <div className="bg-black px-8 pb-8 min-h-screen">
+      <div className="mb-auto bg-black px-8 pb-8">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/event/:id" element={<EventDetails />} />
