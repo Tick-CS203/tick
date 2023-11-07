@@ -36,13 +36,13 @@ export const Events = () => {
   const onStartDateChange = (selectedDate) => {
     if (selectedDate) {
       setEnteredStartDate(dayjs(selectedDate).format('YYYY-MM-DD') + "T00:00:00");
-    }
+    } else setEnteredStartDate("")
   };
 
   const onEndDateChange = (selectedDate) => {
     if (selectedDate) {
       setEnteredEndDate(dayjs(selectedDate).format('YYYY-MM-DD') + "T00:00:00");
-    }
+    } else setEnteredEndDate("")
   };
 
   return (
