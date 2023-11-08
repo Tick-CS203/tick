@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { NationalStadium } from "../component/seatselection/NationalStadium";
 import { RowData } from "../component/seatselection/RowData";
 import { axiosInstance } from "../api/axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEventQuery } from "../api/events.query";
 import { useSelector, useDispatch } from "react-redux";
 import { updateEventDateID, updateEventID } from "../store/cartSlice";
@@ -21,42 +21,41 @@ export const SeatSelection = () => {
   const [filteredRows, setFilteredRows] = useState([]);
   const [availableSections, setAvailableSections] = useState({});
   const [eventDateOptions, setEventDateOptions] = useState([]);
-  
+
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { socket } = useSelector((state) => state.socket);
   const { accessToken, purchasingToken } = useSelector((state) => state.user);
   console.log(items);
   console.log(purchasingToken);
 
-  const exitSession = () => {
-    socket.emit("exit_session", {
-      type: "CLIENT",
-      room: id,
-      token: accessToken,
-    });
-  };
-
-  const handleUnload = () => {
-    exitSession();
-    socket.disconnect();
-    console.log("disconnected");
-    return "message";
-  };
-
   useEffect(() => {
+    const exitSession = () => {
+      socket.emit("exit_session", {
+        type: "CLIENT",
+        room: id,
+        token: accessToken,
+      });
+    };
+
+    const handleUnload = () => {
+      exitSession();
+      socket.disconnect();
+      console.log("disconnected");
+      return "message";
+    };
+
     window.addEventListener("beforeunload", handleUnload);
     return () => {
       handleUnload();
       window.removeEventListener("beforeunload", handleUnload);
     };
-  }, []);
+  }, [accessToken, id, socket]);
 
   const startCheckoutHandler = async () => {
     const redirectURL = await axiosInstance.post(
       "/payment",
       JSON.stringify(items)
-    ); 
+    );
     dispatch(updateEventID(id))
     dispatch(updateEventDateID(eventDateID))
     window.location.href = redirectURL.data;
@@ -193,7 +192,7 @@ export const SeatSelection = () => {
                           available={row.availability}
                           price={
                             eventData.prices[
-                              currCategory.charAt(currCategory.length - 1) - 1
+                            currCategory.charAt(currCategory.length - 1) - 1
                             ]
                           }
                           purchaseLimit={eventData.ticketLimit}
@@ -241,9 +240,8 @@ export const SeatSelection = () => {
                   </tbody>
                 </table>
                 <button
-                  className={`bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto ${
-                    items.length === 0 ? "opacity-30" : ""
-                  }`}
+                  className={`bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto ${items.length === 0 ? "opacity-30" : ""
+                    }`}
                   disabled={items.length === 0}
                   onClick={startCheckoutHandler}
                 >
