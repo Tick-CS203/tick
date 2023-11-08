@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.mockito.Mock;
@@ -16,7 +15,6 @@ import static org.mockito.Mockito.when;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.tick.bookmarks.repository.BookmarkRepository;
 import com.tick.bookmarks.service.BookmarkService;

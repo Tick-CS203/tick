@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -91,20 +92,23 @@ public class EventServiceTest {
         verify(eventRepository).findById(eventID);
     }
     
-    /* 
     
     @Test
     void updateEvent_ValidEventID_Success() {
-        Event event = new Event("test event", null, null, null, null, null,
-                5, null, null, null, null);
-        event.setEventID("100");
+        Event oldEvent = new Event();
+        oldEvent.setEventID("old_event_id");
+        oldEvent.setName("old_event_name");
+
+        Event newEvent = new Event();
+        newEvent.setEventID("old_event_id");
+        newEvent.setName("new_event_name");
     
-        when(eventRepository.findById(event.getEventID())).thenReturn(Optional.of(event));
+        when(eventRepository.findById(oldEvent.getEventID())).thenReturn(Optional.of(oldEvent));
+        when(eventRepository.save(any(Event.class))).thenReturn(newEvent);
+
+        eventService.updateEvent(newEvent);
     
-        eventService.updateEvent(event);
-    
-        verify(eventRepository).findById(event.getEventID());
+        verify(eventRepository).findById(oldEvent.getEventID());
+        verify(eventRepository).save(any(Event.class));
     }
-    
-    */
 }
