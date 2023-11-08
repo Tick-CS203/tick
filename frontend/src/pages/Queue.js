@@ -64,11 +64,11 @@ export const Queue = () => {
   return (
     <>
       <p className="font-inter font-black text-white italic text-xl py-5 relative uppercase">
-        Queue for Event {id}
+        Queue to buy tickets...
       </p>
       {queueNumber && (
         <p className="font-inter font-black text-white italic text-xl py-5 relative uppercase">
-          Your Queue Number is {queueNumber}
+          There are {queueNumber} people in front of you in the queue
         </p>
       )}
     </>
