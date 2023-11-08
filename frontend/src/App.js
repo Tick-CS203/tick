@@ -67,7 +67,7 @@ function App() {
               </Auth>
             }
           />
-          <Route path="/queue/:id" element={<Queue />} />
+          <Route path="/queue/:id" element={<Auth><Queue /></Auth>} />
           <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
       </div>
