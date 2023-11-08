@@ -1,12 +1,7 @@
 package com.tick.event;
 
 import java.net.URI;
-import java.util.ArrayList;
-
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -16,11 +11,9 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.tick.event.container.MongoDBContainer;
 import com.tick.model.Event;
-import com.tick.repository.EventRepository;
 
 /**
  * Run disposable database in Docker container
