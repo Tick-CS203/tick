@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUserState } from "../store/userSlice";
@@ -71,7 +71,7 @@ export const Navbar = () => {
           </div>
         )}
 
-        {!accessToken && (
+        {useLocation().pathname !== "/login" && !accessToken && (
           <button className="bg-main-yellow text-black px-3 py-1 rounded-xl font-inter text-sm font-semibold">
             <Link to="/login">Login</Link>
           </button>
