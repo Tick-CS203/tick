@@ -27,7 +27,7 @@ public class MongoDBContainer {
             .withExposedPorts(27017)
             
             /*  Copies an initialization file called init-schema.js into the container. This file contains a script for database initialization. */
-            .withCopyFileToContainer(MountableFile.forClasspathResource("./init-schema.js"), "/docker-entrypoint-initdb.d/init-script.js");
+            .withCopyFileToContainer(MountableFile.forClasspathResource("./init-schema.js"), "/docker-entrypoint-initdb.d/init-schema.js");
     static {
         MONGO_DB_CONTAINER.start();
     }
