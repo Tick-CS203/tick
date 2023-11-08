@@ -24,7 +24,6 @@ export const EventDetails = () => {
   const { accessToken } = useSelector((state) => state.user);
 
   const { data: venueData } = useVenueQuery(event?.venueID);
-  console.log(venueData);
 
   const formatEventDateTime = (dateTimeString) => {
     const options = {
@@ -40,6 +39,11 @@ export const EventDetails = () => {
 
   const navigate = useNavigate();
   const createBookmark = async (button) => {
+    if (!accessToken) {
+      navigate("/login")
+      return
+    }
+
     addBookmark(accessToken, id, navigate);
     const target = button.target;
     target.classList.add("text-slate-900", "bg-main-yellow");
