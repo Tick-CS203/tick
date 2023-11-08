@@ -13,25 +13,26 @@ export const Queue = () => {
   const { accessToken } = useSelector((state) => state.user);
   const [queueNumber, setQueueNumber] = useState(null);
   const { userID } = useSelector((state) => state.user);
+  console.log("event id is ", id)
   const socket = io(socketURL, {
     query: {
       room: id, // hardcoded eventID
     },
   });
 
-  const enterSession = () => {
-    try {
-      socket.emit("enter_session", {
-        type: "CLIENT",
-        room: id,
-        token: accessToken,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   useEffect(() => {
+    const enterSession = () => {
+      try {
+        socket.emit("enter_session", {
+          type: "CLIENT",
+          room: id,
+          token: accessToken,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
     function moveInQueue(res) {
       console.log(res);
       if ("queue_no" in res) {
@@ -54,12 +55,12 @@ export const Queue = () => {
     return () => {
       socket.off(userID);
     };
-  }, [userID, dispatch, accessToken, id, navigate]);
+  }, [userID, dispatch, accessToken, id, navigate, socket]);
 
   useEffect(() => {
     socket.connect();
     dispatch(setSocket(socket));
-  }, []);
+  }, [dispatch, socket]);
 
   return (
     <>

@@ -52,22 +52,22 @@ export const SeatSelection = () => {
   }, [accessToken, id, socket]);
 
   // Countdown timer state
-  const [countdown, setCountdown] = useState(600); // 600 seconds = 10 mins
-
-  // Countdown timer function
-  const startCountdown = () => {
-    if (countdown > 0) {
-      setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000); // Update countdown every 1 second
-    } else {
-      window.location.href = "/"; // Redirect to homepage
-      alert("Error: Time limit exceeded. Please try again.");
-    }
-  };
+  const [countdown, setCountdown] = useState(300); // 300 seconds = 5 mins
 
   // Start the countdown when the component mounts
   useEffect(() => {
+    // Countdown timer function
+    const startCountdown = () => {
+      if (countdown > 0) {
+        setTimeout(() => {
+          setCountdown(countdown - 1);
+        }, 1000); // Update countdown every 1 second
+      } else {
+        window.location.href = "/"; // Redirect to homepage
+        alert("Error: Time limit exceeded. Please try again.");
+      }
+    };
+
     startCountdown();
   }, [countdown]);
 
