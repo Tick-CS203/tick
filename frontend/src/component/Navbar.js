@@ -3,7 +3,8 @@ import { Auth } from "aws-amplify";
 import { useDispatch, useSelector } from "react-redux";
 import { resetUserState } from "../store/userSlice";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { axiosInstance } from "../api/axios";
 
 export const Navbar = () => {
   const { accessToken } = useSelector((state) => state.user);
@@ -11,6 +12,20 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   const [showSidebar, setShowSidebar] = useState(false);
+
+  const verifyToken = async () => {
+    const response = await axiosInstance
+      .post("/token/access", { token: accessToken })
+      .then(res => console.log(res.data))
+      .catch(e => {
+        if (e.response.status == 400) handleLogout();
+      });
+    return response;
+  }
+
+  useEffect(() => {
+    verifyToken();
+  }, [])
 
   const handleLogout = async () => {
     try {
