@@ -42,10 +42,10 @@ public class TicketService {
     }
 
     // if user transfers ticket
-    public Ticket updateTicket(Ticket updatedTicket) {
+    public Ticket updateTicket(Ticket updatedTicket) throws TicketNotFoundException{
         return ticketRepository.save(
                 ticketRepository.findById(updatedTicket.getKey()).map(
-                        ticket -> updatedTicket).orElse(null));
+                        ticket -> updatedTicket).orElseThrow(() -> new TicketNotFoundException()));
     }
 
     // if user deactivates account
