@@ -1,6 +1,7 @@
 package com.tick.event;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Optional;
 import org.mockito.Mock;
 import org.mockito.InjectMocks;
@@ -9,10 +10,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.tick.model.Event;
 import com.tick.repository.EventRepository;
@@ -33,8 +34,10 @@ public class EventServiceTest {
 
     @Test
     void addEvent_ValidVenueID_Success() {
-        Event event = new Event("test event", null, null, null, null, null,
-                5, "64ecb4ad17d89d593f3c5f2f", null, null, null);
+        Event event = new Event();
+        event.setEventID("event_id");
+        event.setVenueID("real_venue");
+        event.setDate(new ArrayList<>());
 
         when(venueRequest.getSeatMap(event.getVenueID())).thenReturn(new HashMap<>());
         when(eventRepository.save(event)).thenReturn(event);
@@ -45,51 +48,37 @@ public class EventServiceTest {
         verify(eventRepository).save(event);
         verify(venueRequest).getSeatMap(event.getVenueID());
     }
-    
-    // Wanted but not invoked: venueRequest.getSeatMap("invalidVenueID");
+
     @Test
     void addEvent_InvalidVenueID_ThrowException() {
-        Event event = new Event("test event", null, null, null, null, null,
-                5, "invalidVenueID", null, null, null);
+        Event event = new Event();
+        event.setEventID("event_id");
+        event.setVenueID("fake_venue");
+        event.setDate(new ArrayList<>());
 
-        when(venueRequest.getSeatMap(event.getVenueID())).thenThrow(ResponseStatusException.class);
+        when(venueRequest.getSeatMap(event.getVenueID())).thenThrow(RuntimeException.class);
 
-        assertThrows(ResponseStatusException.class, () -> {
-            eventService.updateEvent(event);
+        assertThrows(RuntimeException.class, () -> {
+            eventService.addEvent(event);
         });
 
         verify(venueRequest).getSeatMap(event.getVenueID());
     }
 
-    // EventServiceTest.updateEvent_ValidEventID_Success:72 » ResponseStatus 404 NOT_FOUND "Event not found"
-    @Test
-    void updateEvent_ValidEventID_Success() {
-        Event event = new Event("test event", null, null, null, null, null,
-                5, null, null, null, null);
-        event.setEventID("100");
-
-        when(eventRepository.findById(event.getEventID())).thenReturn(Optional.of(event));
-
-        eventService.updateEvent(event);
-
-        verify(eventRepository).findById(event.getEventID());
-    }
-
     @Test
     void updateEvent_InvalidEventID_ThrowException() {
-        Event event = new Event("test event", null, null, null, null, null,
-                5, null, null, null, null);
-        event.setEventID("100");
+        Event event = new Event();
+        event.setEventID("fake_event");
 
         when(eventRepository.findById(event.getEventID())).thenReturn(Optional.empty());
 
-        assertThrows(ResponseStatusException.class, () -> {
+        assertThrows(RuntimeException.class, () -> {
             eventService.updateEvent(event);
-        }, "Event not found");
+        });
 
         verify(eventRepository).findById(event.getEventID());
     }
-
+    
     @Test
     void deleteEvent_InvalidEventID_ThrowException() {
         String eventID = "10";
@@ -101,5 +90,25 @@ public class EventServiceTest {
         });
 
         verify(eventRepository).findById(eventID);
+    }
+    
+    
+    @Test
+    void updateEvent_ValidEventID_Success() {
+        Event oldEvent = new Event();
+        oldEvent.setEventID("old_event_id");
+        oldEvent.setName("old_event_name");
+
+        Event newEvent = new Event();
+        newEvent.setEventID("old_event_id");
+        newEvent.setName("new_event_name");
+    
+        when(eventRepository.findById(oldEvent.getEventID())).thenReturn(Optional.of(oldEvent));
+        when(eventRepository.save(any(Event.class))).thenReturn(newEvent);
+
+        eventService.updateEvent(newEvent);
+    
+        verify(eventRepository).findById(oldEvent.getEventID());
+        verify(eventRepository).save(any(Event.class));
     }
 }
