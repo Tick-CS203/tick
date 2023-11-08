@@ -187,19 +187,19 @@ p1tfdlBt+RrSUzryw/aU68ll37/zgYdyX/Y1nymiYaCVtCx5luTnmhf561JQfs6b01bDbonDSBD3pp+G
           </h2>
 
           <div className="flex items-end py-2">
-            <label className="text-white font-inter text-xs mb-20">
-              We sent a code to your mobile
+            <label className="text-white font-inter text-xs mb-10">
+              We sent a code to your mobile number for authentication
             </label>
-            <OtpInput
-              value={enteredOTP}
-              onChange={(value) => setEnteredOTP(value)}
-              OTPLength={6}
-              otpType="number"
-              disabled={false}
-              autoFocus
-              className="otp-container"
-            ></OtpInput>
           </div>
+          <OtpInput
+            value={enteredOTP}
+            onChange={(value) => setEnteredOTP(value)}
+            OTPLength={6}
+            otpType="number"
+            disabled={false}
+            autoFocus
+            className="otp-container font-bold justify-center"
+          ></OtpInput>
           <div className="flex items-start justify-between mt-16">
             <button
               type="submit"
@@ -207,20 +207,20 @@ p1tfdlBt+RrSUzryw/aU68ll37/zgYdyX/Y1nymiYaCVtCx5luTnmhf561JQfs6b01bDbonDSBD3pp+G
             >
               Confirm
             </button>
-            <div className="flex flex-row">
-              <p className="text-white font-inter mr-1">
-                Didn't receive the code?
-              </p>
-              <button
-                type="button"
-                className="text-main-yellow font-inter"
-                onClick={handleResend}
-              >
-                {" "}
-                Click to resend{" "}
-              </button>
+            <div className="flex flex-wrap justify-end">
+              <div>
+                <p className="text-white font-inter mr-1">
+                  Didn't receive the code?
+                </p>
+            </div><div>
+                <button
+                  type="button"
+                  className="text-main-yellow font-inter"
+                  onClick={handleResend}
+                > Click to resend </button>
+                </div>
+              </div>
             </div>
-          </div>
         </form>
       </div>
     );
