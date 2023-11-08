@@ -10,10 +10,6 @@ export const ForgotPassword = () => {
   const dispatch = useDispatch();
 
   const [enteredUsername, setEnteredUsername] = useState("");
-  const [enteredCode, setEnteredCode] = useState("");
-  const [enteredNewPassword, setEnteredNewPassword] = useState("");
-  const [enteredConfirmNewPassword, setEnteredConfirmNewPassword] =
-    useState("");
 
   // Send confirmation code to user's email
   async function forgotPassword(event) {

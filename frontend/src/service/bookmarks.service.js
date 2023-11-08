@@ -8,7 +8,7 @@ export const getBookmarks = async (accessToken, func) => {
           Authorization: accessToken
         }
       })
-      if (response.status != 200) {
+      if (response.status !== 200) {
         func("/login")
       }
       return response.data
@@ -25,7 +25,7 @@ export const delBookmark = async (accessToken, eventID, func) => {
           Authorization: accessToken
         }
       })
-      if (response.status != 200) {
+      if (response.status !== 200) {
         func("/login")
       }
       return response.data
@@ -42,7 +42,7 @@ export const addBookmark = async (accessToken, eventID, func) => {
           Authorization: accessToken
         }
       })
-      if (response.status != 201) {
+      if (response.status !== 201) {
         func("/login")
       }
       return response.data

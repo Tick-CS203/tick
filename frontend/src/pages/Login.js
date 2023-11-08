@@ -35,7 +35,7 @@ export const Login = () => {
 
   async function signIn(event) {
     event.preventDefault();
-  
+
     if (!didRecaptcha) {
       setDidRecaptcha(false);
       toast.error("Please complete the Recaptcha to proceed.");
@@ -45,7 +45,7 @@ export const Login = () => {
       toast.error(recaptchaErrorMessage);
       return;
     }
-  
+
     try {
       const signInUser = await Auth.signIn(enteredUsername, enteredPassword);
 
@@ -61,7 +61,7 @@ export const Login = () => {
             idToken: signInUser.signInUserSession.idToken.jwtToken,
           })
         );
-  
+
         const userId = await fetchUserId(
           signInUser.signInUserSession.accessToken.jwtToken
         );
@@ -71,18 +71,18 @@ export const Login = () => {
       }
     } catch (error) {
       let errorMessage = "An unexpected error occurred";
-  
+
       if (error.code === 'UserNotFoundException') {
         errorMessage = "User does not exist";
       } else if (error.code === 'NotAuthorizedException') {
         errorMessage = "Incorrect username or password";
       } else if (error.code === 'UserNotConfirmedException') {
         errorMessage = "User is not confirmed";
-      } 
+      }
       toast.error(errorMessage);
     }
   }
-  
+
 
   async function confirmSignIn(event) {
     event.preventDefault();
@@ -102,7 +102,7 @@ export const Login = () => {
         })
       );
 
-      let userId = fetchUserId(
+      let userId = await fetchUserId(
         loggedInUser.signInUserSession.accessToken.jwtToken
       );
       dispatch(setUserID(userId));
@@ -110,17 +110,17 @@ export const Login = () => {
 
       navigate(-1);
     } catch (error) {
-        let errorMessage = "Error confirming sign in. Please try again.";
-    
-        if (error.code === 'CodeMismatchException') {
-          errorMessage = "Wrong code entered, please try again.";
-        } else if (error.code === 'ExpiredCodeException') {
-          errorMessage = "The code has expired, please request a new one.";
-        } else if (error.code === 'TooManyRequestsException') {
-          errorMessage = "Too many attempts, please try again later.";
-        } 
-        toast.error(errorMessage);
+      let errorMessage = "Error confirming sign in. Please try again.";
+
+      if (error.code === 'CodeMismatchException') {
+        errorMessage = "Wrong code entered, please try again.";
+      } else if (error.code === 'ExpiredCodeException') {
+        errorMessage = "The code has expired, please request a new one.";
+      } else if (error.code === 'TooManyRequestsException') {
+        errorMessage = "Too many attempts, please try again later.";
       }
+      toast.error(errorMessage);
+    }
   }
 
   const handleResend = async () => {
@@ -187,19 +187,19 @@ p1tfdlBt+RrSUzryw/aU68ll37/zgYdyX/Y1nymiYaCVtCx5luTnmhf561JQfs6b01bDbonDSBD3pp+G
           </h2>
 
           <div className="flex items-end py-2">
-            <label className="text-white font-inter text-xs mb-20">
-              We sent a code to your mobile
+            <label className="text-white font-inter text-xs mb-10">
+              We sent a code to your mobile number for authentication
             </label>
-            <OtpInput
-              value={enteredOTP}
-              onChange={(value) => setEnteredOTP(value)}
-              OTPLength={6}
-              otpType="number"
-              disabled={false}
-              autoFocus
-              className="otp-container"
-            ></OtpInput>
           </div>
+          <OtpInput
+            value={enteredOTP}
+            onChange={(value) => setEnteredOTP(value)}
+            OTPLength={6}
+            otpType="number"
+            disabled={false}
+            autoFocus
+            className="otp-container font-bold justify-center"
+          ></OtpInput>
           <div className="flex items-start justify-between mt-16">
             <button
               type="submit"
@@ -207,20 +207,20 @@ p1tfdlBt+RrSUzryw/aU68ll37/zgYdyX/Y1nymiYaCVtCx5luTnmhf561JQfs6b01bDbonDSBD3pp+G
             >
               Confirm
             </button>
-            <div className="flex flex-row">
-              <p className="text-white font-inter mr-1">
-                Didn't receive the code?
-              </p>
-              <button
-                type="button"
-                className="text-main-yellow font-inter"
-                onClick={handleResend}
-              >
-                {" "}
-                Click to resend{" "}
-              </button>
+            <div className="flex flex-wrap justify-end">
+              <div>
+                <p className="text-white font-inter mr-1">
+                  Didn't receive the code?
+                </p>
+            </div><div>
+                <button
+                  type="button"
+                  className="text-main-yellow font-inter"
+                  onClick={handleResend}
+                > Click to resend </button>
+                </div>
+              </div>
             </div>
-          </div>
         </form>
       </div>
     );
@@ -321,13 +321,16 @@ xYqq4Rxr2gQ609XoD4nPppNHFLmccJ4HXbWe/NCLlwsIE6uD+Uq1TCz3psXupcVTpu4pUSTw5YteSDuJ
             </button>
 
             <div>
-              <div className="flex flex-row">
-                <p className="text-white font-inter mr-1">
-                  Don't have an account?
-                </p>
-                <button type="button" className="text-main-yellow font-inter">
-                  <Link to="/signup">Sign Up</Link>
-                </button>
+              <div className="flex flex-wrap justify-end">
+                <div>
+                  <p className="text-white font-inter mr-1">
+                    Don't have an account?
+                  </p>
+                </div><div>
+                  <Link className="text-main-yellow font-inter" to="/signup">
+                    Sign Up
+                  </Link>
+                </div>
               </div>
               <div className="flex justify-end">
                 <button type="button" className="text-main-yellow font-inter">

@@ -11,7 +11,7 @@ export const ResetPassword = () => {
 
   const [enteredCode, setEnteredCode] = useState("");
   const [enteredNewPassword, setEnteredNewPassword] = useState("");
-  const [enteredConfirmNewPassword, setEnteredConfirmNewPassword] = useState("");
+  const setEnteredConfirmNewPassword = useState("")[1];
   const [passwordValidationMessage, setPasswordValidationMessage] = useState("");
   const [confirmPasswordMessage, setConfirmPasswordMessage] = useState("");
 

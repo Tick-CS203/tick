@@ -19,13 +19,14 @@ import { Queue } from "./pages/Queue";
 import { Events } from "./pages/Events";
 import { ConfigProvider, theme } from "antd";
 import { Toaster } from "react-hot-toast";
+import { PaymentSuccess } from "./pages/PaymentSuccess";
 
 function App() {
   return (
-    <div className="App">
+    <div className="flex flex-col h-screen justify-between bg-black">
       <Toaster />
       <Navbar />
-      <div className="bg-black px-8 pb-8 min-h-screen">
+      <div className="mb-auto px-8 pb-8">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/event/:id" element={<EventDetails />} />
@@ -39,6 +40,7 @@ function App() {
                   <Events />
                 </ConfigProvider>} />
           <Route path="/ticket" element={<Auth><MyTickets /></Auth>} />
+          <Route path="/paymentsuccess" element={<Auth><PaymentSuccess /></Auth>} />
           <Route path="/bookmarks" element={<Auth><Bookmark /></Auth>} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
@@ -65,7 +67,7 @@ function App() {
               </Auth>
             }
           />
-          <Route path="/queue/:id" element={<Queue />} />
+          <Route path="/queue/:id" element={<Auth><Queue /></Auth>} />
           <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
       </div>

@@ -50,16 +50,16 @@ export const RowData = (props) => {
       <p className="text-white">{props.available} seats available</p>
       <div className="flex justify-end mt-4">
         <button
-          className="ms-96 bg-main-yellow px-3 py-2 font-inter font-bold rounded-l-md border border-black border-solid"
+          className="text-black ms-96 bg-main-yellow px-3 py-2 font-inter font-bold rounded-l-md border border-black border-solid"
           onClick={decreaseQuantity}
         >
           -
         </button>
-        <button className="bg-main-yellow min-w-[80px] py-2 font-inter font-bold border border-black border-solid">
+        <button className="text-black bg-main-yellow min-w-[80px] py-2 font-inter font-bold border border-black border-solid">
           {quantity}
         </button>
         <button
-          className="bg-main-yellow px-3 py-2 font-inter font-bold rounded-r-md border border-black border-solid"
+          className="text-black bg-main-yellow px-3 py-2 font-inter font-bold rounded-r-md border border-black border-solid"
           onClick={increaseQuantity}
         >
           +

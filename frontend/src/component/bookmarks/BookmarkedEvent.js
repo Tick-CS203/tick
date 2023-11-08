@@ -13,15 +13,15 @@ export const BookmarkedEvent = (props) => {
     const navigate = useNavigate();
     const toggleBookmark = (button) => {
         const target = button.target
-        if (target.getAttribute("data-added") == "true") {
+        if (target.getAttribute("data-added") === "true") {
             delBookmark(accessToken, event.eventID, navigate)
             target.innerHTML = "Add bookmark"
-            toast.error("Bookmark deleted")
+            toast.success("Bookmark deleted!")
             target.setAttribute("data-added", "false")
         } else {
             addBookmark(accessToken, event.eventID, navigate)
             target.innerHTML = "Delete bookmark"
-            toast.success("Bookmark added")
+            toast.success("Bookmark added!")
             target.setAttribute("data-added", "true")
         }
         target.classList.toggle("bg-main-red")
@@ -32,7 +32,7 @@ export const BookmarkedEvent = (props) => {
 
     return (
         <>
-            <div>
+            <div className="flex flex-col justify-between">
                 {event && <Event
                     key={event.eventID}
                     eventId={event.eventID}

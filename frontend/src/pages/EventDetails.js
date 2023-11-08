@@ -4,7 +4,7 @@ import {
 } from "../api/events.query.js";
 import { useVenueQuery } from "../api/venue.query.js";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { addBookmark } from "../service/bookmarks.service"
+import { addBookmark } from "../service/bookmarks.service";
 
 import { Event } from "../component/homepage/Event.js";
 import { useState, useEffect } from "react";
@@ -21,10 +21,9 @@ export const EventDetails = () => {
 
   const { data: event, isLoading, isSuccess, isError } = useEventQuery(id);
   const { data: recommendedEvents } = useRecommendedEventsQuery(event?.artist);
-  const { accessToken } = useSelector((state) => state.user)
+  const { accessToken } = useSelector((state) => state.user);
 
   const { data: venueData } = useVenueQuery(event?.venueID);
-  console.log(venueData);
 
   const formatEventDateTime = (dateTimeString) => {
     const options = {
@@ -38,45 +37,55 @@ export const EventDetails = () => {
     return new Date(dateTimeString).toLocaleString(undefined, options);
   };
 
-  const calculateTimeRemaining = () => {
-    const eventStartTime = new Date(event.date[0].eventDateTime).getTime();
-    const currentTime = new Date().getTime();
-    const timeRemaining = eventStartTime - currentTime;
-
-    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    const minutes = Math.floor(
-      (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
-    );
-    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-    return { days, hours, minutes, seconds };
-  };
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const createBookmark = async (button) => {
-    addBookmark(accessToken, id, navigate)
-    const target = button.target
-    target.classList.add("text-slate-900", "bg-main-yellow")
+    if (!accessToken) {
+      navigate("/login")
+      return
+    }
+
+    addBookmark(accessToken, id, navigate);
+    const target = button.target;
+    target.classList.add("text-slate-900", "bg-main-yellow");
     toast.success(
       <div className="flex space-x-2">
         <p className="text-stone-900">Bookmark added!</p>
         <Link
           className="text-blue-800 underline"
-          onClick={() => {toast.dismiss()}}
-          to="/bookmarks">View</Link>
-      </div>, {
-      duration: 4000
-    }
-    )
-    target.innerHTML = "Added!"
-  }
-
+          onClick={() => {
+            toast.dismiss();
+          }}
+          to="/bookmarks"
+        >
+          View
+        </Link>
+      </div>,
+      {
+        duration: 4000,
+      }
+    );
+    target.innerHTML = "Added!";
+  };
   const [timeRemaining, setTimeRemaining] = useState(null);
 
   useEffect(() => {
+    const calculateTimeRemaining = () => {
+      const eventStartTime = new Date(event.date[0].eventDateTime).getTime();
+      const currentTime = new Date().getTime();
+      const timeRemaining = eventStartTime - currentTime;
+
+      const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor(
+        (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+      return { days, hours, minutes, seconds };
+    };
+
     if (event) {
       const interval = setInterval(() => {
         setTimeRemaining(calculateTimeRemaining());
@@ -86,7 +95,7 @@ export const EventDetails = () => {
         clearInterval(interval);
       };
     }
-  }, []);
+  }, [event]);
 
   return (
     <>
@@ -316,7 +325,8 @@ export const EventDetails = () => {
 
               <button
                 className="border-2 border-main-yellow text-main-yellow rounded-full py-2 px-8 w-full"
-                onClick={createBookmark}>
+                onClick={createBookmark}
+              >
                 Bookmark Event
               </button>
             </div>
