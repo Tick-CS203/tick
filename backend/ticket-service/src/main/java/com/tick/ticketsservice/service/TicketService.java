@@ -1,11 +1,11 @@
 package com.tick.ticketsservice.service;
 
 import java.util.*;
-import reactor.core.publisher.Mono;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
+import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.reactive.function.client.*;
 
 import com.tick.ticketsservice.model.*;
 import com.tick.ticketsservice.model.Ticket.CompositeKey;
@@ -15,21 +15,16 @@ import com.tick.ticketsservice.exception.*;
 @Service
 public class TicketService {
     private TicketRepository ticketRepository;
-    private String event_host;
-    private String token_host;
+    private EventService eventsvc;
 
     @Autowired
     public TicketService(TicketRepository repo,
-            @Value("${EVENT_HOST}") String event_host,
-            @Value("${TOKEN_HOST}") String token_host
-            ) {
+            @Value("${EVENT_HOST}") String event_host) {
         ticketRepository = repo;
-        this.event_host = event_host;
-        this.token_host = token_host;
+        eventsvc = new EventService(event_host);
     }
 
-
-    public List<Ticket> getAllTickets(){
+    public List<Ticket> getAllTickets() {
         return ticketRepository.findAll();
     }
 
@@ -42,80 +37,51 @@ public class TicketService {
         return ticketRepository.findByUser(userId);
     }
 
-    public Ticket getTicketByKey(CompositeKey key){
-        return ticketRepository.findByKey(key).orElse(null);
+    public Ticket getTicketByKey(CompositeKey key) {
+        return ticketRepository.findById(key).orElse(null);
     }
 
-    //if user transfers ticket
-    public Ticket updateTicket(Ticket updatedTicket) {
+    // if user transfers ticket
+    public Ticket updateTicket(Ticket updatedTicket) throws TicketNotFoundException{
         return ticketRepository.save(
-                ticketRepository.findByKey(updatedTicket.getKey()).map(
-                    ticket -> updatedTicket).orElse(null));
+                ticketRepository.findById(updatedTicket.getKey()).map(
+                        ticket -> updatedTicket).orElseThrow(() -> new TicketNotFoundException()));
     }
 
-    //if user deactivates account
+    // if user deactivates account
     public List<Ticket> releaseTicket(String userId) {
-         List<Ticket> tickets = ticketRepository.findByUser(userId);
-         tickets.forEach(ticket -> ticket.setUser(null));
+        List<Ticket> tickets = ticketRepository.findByUser(userId);
+        tickets.forEach(ticket -> ticket.setUser(null));
 
-         return ticketRepository.saveAll(tickets);
+        return ticketRepository.saveAll(tickets);
     }
 
-    //if event is cancelled
-    public String deleteTicketByEvent(String eventId){
+    // if event is cancelled
+    public String deleteTicketByEvent(String eventId) {
         List<Ticket> tickets = ticketRepository.findAll();
         tickets.forEach(ticket -> {
             CompositeKey key = ticket.getKey();
-            if (eventId.equals(key.getEventDate())) ticketRepository.deleteByKey(key);
+            if (eventId.equals(key.getEventDateID()))
+                ticketRepository.deleteById(key);
         });
         return "event " + eventId + "'s tickets have been deleted";
     }
 
-    //if user transfers ticket
-    //is it possible for user to get a refund?
+    // if user transfers ticket
+    // is it possible for user to get a refund?
     public String deleteTicketByTicketId(CompositeKey key) {
-        ticketRepository.deleteByKey(key);
+        ticketRepository.deleteById(key);
         return key + "ticket has been deleted";
     }
 
-    // [{category: "CAT1", section: "PC1", row: "C", quantity: 2}, {category: "CAT2", section: "140", row: "B", quantity: 1}]
-    public List<Ticket> allocateSeats(String eventID, String eventDate, List<SelectedRow> selectedRows, String token) {
-        Event event;
-        String user;
+    // [{category: "CAT1", section: "PC1", row: "C", quantity: 2}, {category:
+    // "CAT2", section: "140", row: "B", quantity: 1}]
+    public List<Ticket> allocateSeats(String eventID, String eventDateID, List<SelectedRow> selectedRows, String user) {
+        Event event = eventsvc.get(eventID);
 
-        try {
-            event = WebClient.create("http://" + event_host + ":8080/event/" + eventID)
-                .get().exchangeToMono(response -> {
-                    if (response.statusCode().value() == 404)
-                        return response.createError();
-                    return response.bodyToMono(Event.class);
-                }).block();
-            user  = WebClient.create("http://" + token_host + ":8080/token/purchasing")
-                .post().body(Mono.just("{\"token\":\""+token+"\"}"), String.class)
-                .header("Content-Type", "application/json")
-                .exchangeToMono(response -> {
-                    if (response.statusCode().value() == 400)
-                        return response.createError();
-                    return response.bodyToMono(TokenResponse.class);
-                }).block().id();
-        } catch (WebClientResponseException e) {
-            int code = e.getStatusCode().value();
-            if (code == 400) throw new UnauthorisedException();
-            throw new EventNotFoundException();
-        }
-
-        EventDate date = null;
-        for (EventDate d : event.getDate()) {
-            if (d.getEventID().toString().equals(eventDate)) {
-                date = d;
-                break;
-            }
-        }
-
-        if (date == null) throw new RuntimeException();
+        EventDate date = event.findEventDate(eventDateID);
 
         Map<String, Map<String, Map<String, Integer>>> seatAvailability = date.getSeatAvailability();
-
         Map<String, Map<String, Map<String, Integer>>> seatMap = event.getSeatMap();
 
         Integer totalQuantity = 0;
@@ -124,9 +90,12 @@ public class TicketService {
         }
 
         if (totalQuantity > event.getTicketLimit())
-            throw new Error("Selected quantity is above purchase limit");
+            throw new SeatSelectionException("Selected quantity is above purchase limit");
 
         List<Ticket> allocatedTickets = new ArrayList<>();
+
+        String orderID = createOrderId();
+        LocalDateTime orderDateTime = createOrderDate();
 
         for (SelectedRow rowObj : selectedRows) {
             String category = rowObj.getCategory();
@@ -134,57 +103,62 @@ public class TicketService {
             String row = rowObj.getRow();
             Integer quantity = rowObj.getQuantity();
 
-            // error prone, to fix in security
-            Integer currentAvailable = seatAvailability.get(category).get(section).get(row);
-            if (currentAvailable == null)
-                throw new Error("Invalid seat selection");
+            Map<String, Integer> sectionMap;
+            int currentAvailable;
+            int maxCapacity;
 
-            // error prone, to fix in security
-            Integer maxCapacity = seatMap.get(category).get(section).get(row);
+            try {
+                sectionMap = seatAvailability.get(category).get(section);
+
+                currentAvailable = sectionMap.get(row);
+                maxCapacity = seatMap.get(category).get(section).get(row);
+            } catch (NullPointerException e) {
+                throw new SeatSelectionException("Invalid seat selection");
+            }
 
             if (currentAvailable == 0)
-                throw new Error("No more seats available");
+                throw new SeatSelectionException("No more seats available");
 
             if (currentAvailable - quantity < 0)
-                throw new Error("Invalid quantity");
+                throw new SeatSelectionException("Invalid quantity");
 
             for (int i = 0; i < quantity; i++) {
                 Integer seatNumber = maxCapacity - currentAvailable + 1;
 
-                Ticket t = new Ticket(new CompositeKey(eventDate.toString(), section, row, seatNumber), user, category);
+                Ticket t = new Ticket(
+                        new CompositeKey(event.getEventID(), eventDateID.toString(),
+                                section, row, seatNumber),
+                        user, category, orderID, orderDateTime);
                 addTicket(t);
                 allocatedTickets.add(t);
                 currentAvailable--;
             }
 
-            Map<String, Map<String, Integer>> categoryMap = seatAvailability.get(category);
-            Map<String, Integer> sectionMap = categoryMap.get(section);
             sectionMap.put(row, currentAvailable);
         }
 
-        try {
-            WebClient.create("http://" + event_host + ":8080/event").put()
-                .body(Mono.just(event), Event.class).retrieve()
-                .bodyToMono(String.class)
-                .block();
-        } catch (WebClientResponseException e) {
-            throw new EventUpdateException();
-        }
+        eventsvc.put(event);
 
         return allocatedTickets;
     }
 
-    public Mono<Object> verifyRecaptcha(RecaptchaRequest recaptchaRequest) {
-        return WebClient.create().post()
-            .uri("https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}",
-                    RecaptchaObject.getSecret(), recaptchaRequest.getRecaptchaToken()
-                )
-            .retrieve()
-            .toEntity(Object.class)
-            .flatMap(responseEntity -> {
-                System.out.println("Verified Recaptcha: " + responseEntity.getBody());
-                return Mono.just(responseEntity.getBody());
-            }
-            ); 
+    public ResponseEntity<?> verifyRecaptcha(RecaptchaRequest recaptchaRequest) {
+        RecaptchaResponse recap = WebClient.create().post()
+                .uri("https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={response}",
+                        RecaptchaObject.getSecret(), recaptchaRequest.getRecaptchaToken())
+                .exchangeToMono(response -> response.bodyToMono(RecaptchaResponse.class)).block();
+
+        if (recap.getSuccess().equals("true"))
+            return ResponseEntity.ok(recap);
+        else
+        return ResponseEntity.badRequest().body(recap);
+    }
+
+    private String createOrderId() {
+        return UUID.randomUUID().toString();
+    }
+
+    private LocalDateTime createOrderDate() {
+        return LocalDateTime.now();
     }
 }

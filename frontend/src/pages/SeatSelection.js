@@ -5,50 +5,79 @@ import { RowData } from "../component/seatselection/RowData";
 import { axiosInstance } from "../api/axios";
 import { useParams } from "react-router-dom";
 import { useEventQuery } from "../api/events.query";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateEventDateID, updateEventID } from "../store/cartSlice";
 
 export const SeatSelection = () => {
   const { id } = useParams();
   const { data: eventData, isLoading, isSuccess, isError } = useEventQuery(id);
+  const { items } = useSelector((state) => state.cart);
   console.log(eventData);
-  const { items, purchasingToken } = useSelector((state) => state.cart);
 
-  const [currEventDateTime, setCurrEventDateTime] = useState("");
+  const [eventDateID, setEventDateID] = useState("");
   const [currSeatAvailability, setCurrSeatAvailability] = useState({});
   const [currCategory, setCurrCategory] = useState("");
   const [currSection, setCurrSection] = useState("");
   const [filteredRows, setFilteredRows] = useState([]);
   const [availableSections, setAvailableSections] = useState({});
   const [eventDateOptions, setEventDateOptions] = useState([]);
+
+  const dispatch = useDispatch();
+  const { socket } = useSelector((state) => state.socket);
+  const { accessToken, purchasingToken } = useSelector((state) => state.user);
   console.log(items);
   console.log(purchasingToken);
 
-  // Countdown timer state
-  const [countdown, setCountdown] = useState(600); // 600 seconds = 10 mins
+  useEffect(() => {
+    const exitSession = () => {
+      socket.emit("exit_session", {
+        type: "CLIENT",
+        room: id,
+        token: accessToken,
+      });
+    };
 
-  // Countdown timer function
-  const startCountdown = () => {
-    if (countdown > 0) {
-      setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000); // Update countdown every 1 second
-    } else {
-      window.location.href = "/"; // Redirect to homepage
-      alert("Error: Time limit exceeded. Please try again.");
-    }
-  };
+    const handleUnload = () => {
+      exitSession();
+      socket.disconnect();
+      console.log("disconnected");
+      return "message";
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      handleUnload();
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, [accessToken, id, socket]);
+
+  // Countdown timer state
+  const [countdown, setCountdown] = useState(300); // 300 seconds = 5 mins
 
   // Start the countdown when the component mounts
   useEffect(() => {
+    // Countdown timer function
+    const startCountdown = () => {
+      if (countdown > 0) {
+        setTimeout(() => {
+          setCountdown(countdown - 1);
+        }, 1000); // Update countdown every 1 second
+      } else {
+        window.location.href = "/"; // Redirect to homepage
+        alert("Error: Time limit exceeded. Please try again.");
+      }
+    };
+
     startCountdown();
   }, [countdown]);
 
   const startCheckoutHandler = async () => {
     const redirectURL = await axiosInstance.post(
-      "/payment/create-checkout-session",
+      "/payment",
       JSON.stringify(items)
     );
-    console.log(redirectURL);
+    dispatch(updateEventID(id))
+    dispatch(updateEventDateID(eventDateID))
     window.location.href = redirectURL.data;
   };
 
@@ -59,18 +88,18 @@ export const SeatSelection = () => {
       eventData.date.map((d) =>
         options.push({
           label: new Date(d.eventDateTime).toUTCString(),
-          value: d.id,
+          value: d.eventDateID,
         })
       );
       setEventDateOptions(options);
     }
   }, [eventData]);
 
-  // set seatAvailability, category and section based on currEventDateTime
+  // set seatAvailability, category and section based on eventDateID
   useEffect(() => {
-    if (currEventDateTime !== "") {
+    if (eventDateID !== "") {
       const seatAvailability = eventData.date.filter(
-        (d) => d.id === currEventDateTime
+        (d) => d.eventDateID === eventDateID
       )[0].seatAvailability;
       setCurrSeatAvailability(seatAvailability);
 
@@ -78,7 +107,7 @@ export const SeatSelection = () => {
       setCurrCategory(category);
       setCurrSection(Object.keys(seatAvailability[category])[0]);
     }
-  }, [currEventDateTime, eventData]);
+  }, [eventDateID, eventData]);
 
   // calculate whether each section is available
   useEffect(() => {
@@ -107,7 +136,7 @@ export const SeatSelection = () => {
   // filter for rows that have seats available
   useEffect(() => {
     if (
-      currEventDateTime &&
+      eventDateID &&
       currSeatAvailability &&
       currCategory &&
       currSection
@@ -122,7 +151,7 @@ export const SeatSelection = () => {
 
       setFilteredRows(output);
     }
-  }, [currCategory, currSection, currEventDateTime, currSeatAvailability]);
+  }, [currCategory, currSection, eventDateID, currSeatAvailability]);
 
   return (
     <>
@@ -174,11 +203,11 @@ export const SeatSelection = () => {
               bordered={false}
               options={eventDateOptions}
               onChange={(value) => {
-                setCurrEventDateTime(value);
+                setEventDateID(value);
               }}
             />
           )}
-          {currEventDateTime.length > 0 && (
+          {eventDateID.length > 0 && (
             <>
               <div className="w-auto flex lg:flex-row lg:gap-x-2 flex-col gap-y-4 lg:my-8 my-4">
                 <div className="bg-white rounded-xl p-8 h-fit w-full">
@@ -248,8 +277,8 @@ export const SeatSelection = () => {
                   </tbody>
                 </table>
                 <button
-                  className={`bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto ${
-                    items.length === 0 ? "opacity-30" : ""}`}
+                  className={`bg-main-yellow text-black px-4 py-1 my-4 rounded-md font-inter text-sm font-semibold w-[150px] mx-auto ${items.length === 0 ? "opacity-30" : ""
+                    }`}
                   disabled={items.length === 0}
                   onClick={startCheckoutHandler}
                 >

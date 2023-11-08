@@ -1,8 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { socket } from "../api/socket.js";
+import { socketURL } from "../api/socket.js";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setPurchasing } from "../store/userSlice.js";
+import { setSocket } from "../store/socketSlice";
+import { io } from "socket.io-client";
 
 export const Queue = () => {
   const { id } = useParams();
@@ -11,28 +13,26 @@ export const Queue = () => {
   const { accessToken } = useSelector((state) => state.user);
   const [queueNumber, setQueueNumber] = useState(null);
   const { userID } = useSelector((state) => state.user);
-
-  const enterSession = () => {
-    try {
-      socket.emit("enter_session", {
-        type: "CLIENT",
-        room: id,
-        token: accessToken,
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const exitSession = () => {
-    socket.emit("exit_session", {
-      type: "CLIENT",
-      room: id,
-      token: accessToken,
-    });
-  };
+  console.log("event id is ", id)
+  const socket = io(socketURL, {
+    query: {
+      room: id, // hardcoded eventID
+    },
+  });
 
   useEffect(() => {
+    const enterSession = () => {
+      try {
+        socket.emit("enter_session", {
+          type: "CLIENT",
+          room: id,
+          token: accessToken,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
     function moveInQueue(res) {
       console.log(res);
       if ("queue_no" in res) {
@@ -55,24 +55,21 @@ export const Queue = () => {
     return () => {
       socket.off(userID);
     };
-  }, [userID]);
+  }, [userID, dispatch, accessToken, id, navigate, socket]);
 
   useEffect(() => {
     socket.connect();
-    return () => {
-      exitSession();
-      socket.disconnect();
-    };
-  }, []);
+    dispatch(setSocket(socket));
+  }, [dispatch, socket]);
 
   return (
     <>
       <p className="font-inter font-black text-white italic text-xl py-5 relative uppercase">
-        Queue for Event {id}
+        Queue to buy tickets...
       </p>
       {queueNumber && (
         <p className="font-inter font-black text-white italic text-xl py-5 relative uppercase">
-          Your Queue Number is {queueNumber}
+          There are {queueNumber} people in front of you in the queue
         </p>
       )}
     </>

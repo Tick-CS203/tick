@@ -1,8 +1,7 @@
 package com.tick.sessionservice.config;
 
 import com.corundumstudio.socketio.SocketIOServer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 
 @Configuration
 public class SocketIOConfig {
