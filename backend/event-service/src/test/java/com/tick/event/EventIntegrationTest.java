@@ -44,16 +44,6 @@ public class EventIntegrationTest extends MongoDBContainer {
      */
     @Autowired
     private TestRestTemplate restTemplate;
-
-    @Autowired
-    private EventRepository eventRepository;
-
-    /* 
-    @AfterAll
-    void tearDown() {
-        eventRepository.deleteAll();
-    }
-    */
     
     @Test
     public void getEvents_Success() throws Exception {
