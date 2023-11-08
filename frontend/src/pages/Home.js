@@ -23,18 +23,19 @@ export const Home = () => {
     MusicalImage,
   ];
 
-  const { eventData } = useEventsQuery();
+  const { data: eventData } = useEventsQuery();
   const events = eventData ?? [];
 
   const [searchString, setSearchString] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  const onEnterKeyPress = async (event) => {
-    if (event.keyCode === 13) {
+  const filterKeyPress = async (event) => {
+    if (!event.key.match(/[a-z0-9]/i)) event.preventDefault()// restrict to letters and numbers
+    if (event.key === "Enter") {
       setSearchString(event.target.value);
       if (event.target.value.length > 0) {
         const response = await axiosInstance
-          .get(`/event/search/${event.target.value}`)
+          .get(`/event/search/${encodeURIComponent(event.target.value)}`)
           .then((res) => res.data);
         setSearchResults(response);
       }
@@ -81,7 +82,7 @@ export const Home = () => {
           <input
             className="sm:w-full w-fit border-2 border-main-yellow bg-black text-main-yellow p-2 m-2 rounded-xl text-center placeholder-main-yellow placeholder-opacity-50"
             placeholder="Search For Events"
-            onKeyDown={onEnterKeyPress}
+            onKeyDown={filterKeyPress}
           ></input>
           <button className="lg:hidden sm:w-full w-fit bg-main-yellow text-black px-3 py-2 rounded-xl font-inter text-sm font-semibold">
             <Link to="/event">Browse All Events</Link>
