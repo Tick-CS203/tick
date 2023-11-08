@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor, act } from '@testing-library/react';
 import { Queue } from '../pages/Queue';
 import * as reactRedux from 'react-redux';
 import * as reactRouterDom from 'react-router-dom';
@@ -41,7 +41,7 @@ describe('Queue Component', () => {
     jest.clearAllMocks();
   });
 
-  it('renders without crashing and handles socket events correctly', () => {
+  it('renders without crashing and handles socket events correctly', async () => {
     reactRedux.useSelector.mockImplementation(callback => callback({
       user: {
         accessToken: 'mockAccessToken',
@@ -49,37 +49,46 @@ describe('Queue Component', () => {
       },
     }));
     reactRouterDom.useParams.mockReturnValue({ id: 'mockId' });
-    render(<Queue />);
 
-    // Simulate a socket event that should update the queue number
-    const moveInQueueResponse = { queue_no: 1 };
+    // Wrap the render method in act to ensure all effects are flushed
+    await act(async () => {
+      render(<Queue />);
+    });
+
+    // Assuming the socket.on method is called immediately when the component mounts
     const moveInQueue = socket.on.mock.calls[0][1];
-    moveInQueue(moveInQueueResponse); // Simulate a socket event being received
 
-    // Simulate a socket event that should trigger navigation
-    const navigateResponse = { token: 'mockPurchasingToken' };
-    moveInQueue(navigateResponse); // Simulate a socket event being received
-    expect(mockDispatch).toHaveBeenCalled();
-    expect(mockNavigate).toHaveBeenCalledWith(`/seatmap/mockId`);
+    // Use act for state updates and wrap assertions in waitFor
+    // Simulate a socket event being received
+    await act(async () => {
+      moveInQueue({ queue_no: 1 });
+    });
 
-    // Simulate a socket event with an error
-    const errorResponse = { error: 'Some error occurred' };
-    moveInQueue(errorResponse); // Simulate a socket event being received with an error
-    // Here you would expect some error handling to have been called, such as logging the error.
+    // Use act and waitFor for the navigation event as well
+    // Simulate a socket event being received
+    await act(async () => {
+      moveInQueue({ token: 'mockPurchasingToken' });
+    });
+
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledTimes(1);
+      expect(mockNavigate).toHaveBeenCalledWith(`/seatmap/mockId`);
+    });
   });
 
-  it('does not call enterSession if userID is not present', () => {
+  it('does not call enterSession if userID is not present', async () => {
     reactRedux.useSelector.mockImplementation(callback => callback({
       user: {
         accessToken: 'mockAccessToken',
-        userID: '', // No userID present
+        userID: '',
       },
     }));
     reactRouterDom.useParams.mockReturnValue({ id: 'mockId' });
-    render(<Queue />);
+
+    await act(async () => {
+      render(<Queue />);
+    });
 
     expect(socket.emit).not.toHaveBeenCalledWith("enter_session", expect.anything());
   });
-
-  // Further tests could be added to simulate and assert behavior when socket emits different messages
 });
