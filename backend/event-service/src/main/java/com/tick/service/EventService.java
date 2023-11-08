@@ -145,10 +145,8 @@ public class EventService {
             System.out.println(recommendedArtists);
 
             for (String recommendedArtist : recommendedArtists) {
-                List<Event> event = eventRepository.findByArtist(recommendedArtist);
-                if (event.size() >= 1) {
-                    recommendedEvents.add(event.get(0));
-                }
+                eventRepository.findFirstByArtistRegex(recommendedArtist)
+                        .ifPresent(event -> recommendedEvents.add(event));
             }
         } catch (WebClientResponseException e) {
             e.printStackTrace();

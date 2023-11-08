@@ -34,11 +34,14 @@ public class Event {
     private String eventID;
     private String name;
     private String description;
+    @NotNull
     private String category;
     private String banner;
+    @NotBlank
     private String artist;
     @Null
     private LocalDateTime lastUpdated;
+    @NotNull
     private List<Price> prices;
     @Min(value = 1)
     @NotNull
