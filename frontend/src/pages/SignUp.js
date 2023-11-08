@@ -266,13 +266,16 @@ export const SignUp = () => {
           >
             Next
           </button>
-          <div className="flex flex-row">
-            <p className="text-white font-inter mr-1">
-              Already have an account?
-            </p>
-            <button type="button" className="text-main-yellow font-inter">
-              <Link to="/login">Login</Link>
-            </button>
+          <div className="flex flex-wrap justify-end">
+            <div>
+              <p className="text-white font-inter mr-1">
+                Already have an account?
+              </p>
+            </div><div>
+              <Link className="text-main-yellow font-inter" to="/login">
+                Login
+              </Link>
+            </div>
           </div>
         </div>
       </form>
