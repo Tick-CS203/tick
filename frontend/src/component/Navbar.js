@@ -61,7 +61,7 @@ export const Navbar = () => {
               <Link to="/ticket">My Tickets</Link>
             </div>
 
-            <button className="lg:flex hidden bg-main-yellow text-black px-3 py-1 rounded-xl font-inter text-sm font-semibold">
+            <button className="lg:flex bg-main-yellow text-black px-3 py-1 rounded-xl font-inter text-sm font-semibold">
               <Link onClick={handleLogout}>Logout</Link>
             </button>
 
