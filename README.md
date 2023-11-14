@@ -1,6 +1,8 @@
 # Tick
 Tick is a dynamic and user-centric concert ticketing website designed to elevate your live music encounters. As a reliable platform for securing tickets to the hottest concerts, Tick offers a range of key features tailored to ensure a seamless and engaging user experience.
 
+View a walkthrough of our app at: https://youtu.be/WmB2tFxle_8
+
 ## Key Features
 1. **Microservices**  
 Leveraging a microservices architecture, Tick’s backend is designed as a network of independent services, providing scalable and flexible functionalities. This design allows for optimized performance, streamlined maintenance, and the ability to adapt swiftly to evolving user demands.
